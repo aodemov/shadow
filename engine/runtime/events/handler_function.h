@@ -2,6 +2,7 @@
 #include "event.h"
 
 namespace Shadow {
+class EventBus;
 
 class HandlerFunctionBase {
 public:
@@ -16,6 +17,7 @@ private:
 template<class T, class EventType>
 class HandlerFunction : public HandlerFunctionBase {
 public:
+    friend class EventBus;
     typedef void (T::*MemberFunction)(EventType const&);
 
     HandlerFunction(MemberFunction memberFunction, T* instance)
