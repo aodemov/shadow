@@ -25,6 +25,19 @@ public:
             ));
     }
 
+    template<class T, class EventType>
+    void removeListener(void (T::*memberFunction)(EventType const&), T* instance) {
+        auto handlerEntries = listeners.equal_range(typeid(EventType));
+
+        for (auto handlerEntry = handlerEntries.first; handlerEntry != handlerEntries.second; ++handlerEntry) {
+            auto const& handler = std::dynamic_pointer_cast<HandlerFunction<T, EventType>>(handlerEntry->second);
+            if (handler.get()->instance == instance && handler.get()->memberFunction == memberFunction) {
+                listeners.erase(handlerEntry);
+                return;
+            }
+        }
+    }
+
     template<typename EventType>
     void emit(EventType const& event) {
         auto handlerEntries = listeners.equal_range(typeid(EventType));
