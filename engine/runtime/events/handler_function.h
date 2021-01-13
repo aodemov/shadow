@@ -19,16 +19,16 @@ public:
     typedef void (T::*MemberFunction)(EventType const&);
 
     HandlerFunction(MemberFunction memberFunction, T* instance)
-        :   _memberFunction(memberFunction),
-            _instance(instance) { }
+        :   memberFunction(memberFunction),
+            instance(instance) { }
 
     void _invoke(Event const& event) override {
-        (_instance->*_memberFunction)(*(static_cast<const EventType*>(&event)));
+        (instance->*memberFunction)(*(static_cast<const EventType*>(&event)));
     }
 
 private:
-    T* _instance;
-    MemberFunction _memberFunction;
+    T* instance;
+    MemberFunction memberFunction;
 };
 
 }
