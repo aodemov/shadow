@@ -14,8 +14,11 @@ namespace Shadow {
 
 class EventBus {
 public:
-    EventBus();
-    ~EventBus();
+    static EventBus& get() {
+        static EventBus instance;
+
+        return instance;
+    }
 
     template<class T, class EventType>
     void addListener(void (T::*memberFunction)(EventType const&), T* instance);
@@ -27,6 +30,12 @@ public:
     void emit(EventType const& event);
 
 private:
+    EventBus() = default;
+    ~EventBus() = default;
+
+    EventBus(const EventBus&) = delete;
+    EventBus& operator=(const EventBus&) = delete;
+
     std::multimap<std::type_index, std::shared_ptr<HandlerFunctionBase>> listeners;
 
     std::mutex mutex;
