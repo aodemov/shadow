@@ -28,3 +28,9 @@ endif()
 add_subdirectory(lib)
 add_subdirectory(engine)
 add_subdirectory(sandbox)
+
+# Tests
+
+enable_testing()
+
+add_subdirectory(tests)
