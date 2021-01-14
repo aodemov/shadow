@@ -10,7 +10,7 @@ Application::Application()
 }
 
 void Application::Init() {
-
+    eventBus.addListener(&Application::OnEvent, this);
 }
 
 void Application::Run() {

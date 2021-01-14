@@ -16,6 +16,10 @@ public:
     virtual void Run();
 
 private:
+    virtual void OnEvent(WindowResizeEvent const& event) {
+        SH_INFO(event.ToString());
+    }
+
     bool running = false;
 
     std::unique_ptr<Window> window;

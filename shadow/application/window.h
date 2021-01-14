@@ -4,6 +4,12 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
+#include "shadow/events/event_bus.h"
+
+#include "shadow/events/application_events.h"
+#include "shadow/events/mouse_events.h"
+#include "shadow/events/keyboard_events.h"
+
 namespace Shadow {
 
 struct WindowOptions {
@@ -25,6 +31,21 @@ public:
 
     void OnUpdate();
 
+    void Close();
+    bool IsClosed() const;
+    void Resize(unsigned int width, unsigned int height);
+    unsigned int GetWidth() const;
+    unsigned int GetHeight() const;
+    void SetTitle(std::string const& title);
+    std::string GetTitle() const;
+
+    void Minimize();
+    void Restore();
+    void Maximize();
+
+    bool IsMaximized() const;
+    bool IsMinimized() const;
+
 private:
     void Init();
     void Shutdown();
@@ -32,6 +53,7 @@ private:
     GLFWwindow* window;
 
     WindowOptions options;
+    EventBus& eventBus;
 };
 
 }
