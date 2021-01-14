@@ -1,27 +1,15 @@
 #include "application.h"
 
+#include "shadow/application/game_loop.h"
 
 namespace Shadow {
 
-Application::Application()
-    : eventBus(EventBus::get())
-{
-    window = std::make_unique<Window>(WindowOptions("Title"));
+void Application::Start() {
+    GameLoop::Instance().Run();
 }
 
-void Application::Init() {
-    eventBus.addListener(&Application::OnEvent, this);
-}
-
-void Application::Run() {
-    running = true;
-
-    while(running) {
-        glClearColor(1, 1, 1, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        window->OnUpdate();
-    }
+void Application::Quit() {
+    GameLoop::Instance().Stop();
 }
 
 }

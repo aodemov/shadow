@@ -29,8 +29,6 @@ public:
     explicit Window(WindowOptions options);
     ~Window();
 
-    void OnUpdate();
-
     void Close();
     bool IsClosed() const;
     void Resize(unsigned int width, unsigned int height);
@@ -49,11 +47,14 @@ public:
 private:
     void Init();
     void Shutdown();
+    void Update();
 
     GLFWwindow* window;
 
     WindowOptions options;
     EventBus& eventBus;
+
+    friend class GameLoop;
 };
 
 }

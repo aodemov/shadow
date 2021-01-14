@@ -14,12 +14,9 @@ Window::Window(WindowOptions options)
     } else {
         glfwSwapInterval(0);
     }
-
-    Init();
 }
 
 Window::~Window() {
-    Shutdown();
 }
 
 void Window::Init() {
@@ -57,6 +54,10 @@ void Window::Init() {
         window.options.Height = height;
 
         window.eventBus.emit(WindowResizeEvent(width, height));
+    });
+
+    glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
+        SH_INFO("MINIMIZED!");
     });
 
     glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
@@ -100,6 +101,11 @@ void Window::Init() {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
         window.eventBus.emit(MouseMovedEvent(x, y));
     });
+
+    // Error callback
+    glfwSetErrorCallback([](int code, const char* message) {
+        SH_ERROR("GLFW Error: {0} (code: {1})", message, code);
+    });
 }
 
 void Window::Shutdown() {
@@ -110,9 +116,9 @@ void Window::Shutdown() {
     }
 }
 
-void Window::OnUpdate() {
-    glfwPollEvents();
+void Window::Update() {
     glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
 void Window::Close() {
