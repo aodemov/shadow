@@ -7,7 +7,7 @@ static bool s_GLFWInitialized = false;
 Window::Window(WindowOptions options)
     : options(options),
       window(nullptr),
-      eventBus(EventBus::get())
+      eventBus(EventBus::Instance())
 {
     if(options.VSync) {
         glfwSwapInterval(1);
