@@ -9,7 +9,7 @@ namespace Shadow {
 
 class EventBus {
 public:
-    static EventBus& get() {
+    static EventBus& Instance() {
         static EventBus instance;
 
         return instance;
