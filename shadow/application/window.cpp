@@ -57,7 +57,6 @@ void Window::Init() {
     });
 
     glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
-        SH_INFO("MINIMIZED!");
     });
 
     glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
