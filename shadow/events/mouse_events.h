@@ -7,11 +7,11 @@ namespace Shadow {
 
 class MouseMovedEvent : public Event {
 public:
-    MouseMovedEvent(const float x, const float y)
+    MouseMovedEvent(const double x, const double y)
             : x(x), y(y) {}
 
-    float GetX() const { return x; }
-    float GetY() const { return y; }
+    double GetX() const { return x; }
+    double GetY() const { return y; }
 
     const char* GetName() const override { return "MouseMovedEvent"; }
     std::string ToString() const override {
@@ -21,16 +21,16 @@ public:
     }
 
 private:
-    float x, y;
+    double x, y;
 };
 
 class MouseScrolledEvent : public Event {
 public:
-    MouseScrolledEvent(const float xOffset, const float yOffset)
+    MouseScrolledEvent(const double xOffset, const double yOffset)
             : x(xOffset), y(yOffset) {}
 
-    float GetXOffset() const { return x; }
-    float GetYOffset() const { return y; }
+    double GetXOffset() const { return x; }
+    double GetYOffset() const { return y; }
 
     const char* GetName() const override { return "MouseScrolledEvent"; }
     std::string ToString() const override {
@@ -40,15 +40,16 @@ public:
     }
 
 private:
-    float x, y;
+    double x, y;
 };
 
 class MousePressedEvent : public Event {
 public:
-    MousePressedEvent(const MouseCode mouseCode)
+    MousePressedEvent(const MouseCode mouseCode, const KeyModifiers = Modifiers::None)
             : mouseCode(mouseCode) {}
 
     MouseCode GetMouseCode() const { return mouseCode; }
+    KeyModifiers GetModifiers() const { return mods; }
 
     const char* GetName() const override { return "MousePressedEvent"; }
     std::string ToString() const override {
@@ -59,14 +60,16 @@ public:
 
 private:
     MouseCode mouseCode;
+    KeyModifiers mods;
 };
 
 class MouseReleasedEvent : public Event {
 public:
-    MouseReleasedEvent(const MouseCode mouseCode)
+    MouseReleasedEvent(const MouseCode mouseCode, const KeyModifiers = Modifiers::None)
             : mouseCode(mouseCode) {}
 
     MouseCode GetMouseCode() const { return mouseCode; }
+    KeyModifiers GetModifiers() const { return mods; }
 
     const char* GetName() const override { return "MouseReleasedEvent"; }
     std::string ToString() const override {
@@ -77,6 +80,7 @@ public:
 
 private:
     MouseCode mouseCode;
+    KeyModifiers mods;
 };
 
 
