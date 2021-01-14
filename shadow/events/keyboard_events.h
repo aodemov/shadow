@@ -1,7 +1,9 @@
 #pragma once
 
-#include "runtime/events/event.h"
-#include "core/input/key_codes.h"
+#include "shadow/shpch.h"
+
+#include "event.h"
+#include "shadow/core/input/key_codes.h"
 
 namespace Shadow {
 
@@ -10,7 +12,7 @@ public:
     KeyPressedEvent(const KeyCode keyCode)
         : keyCode(keyCode) {}
 
-    KeyCode GetKeyCode() const { return keyCode };
+    KeyCode GetKeyCode() const { return keyCode; }
 
     const char* GetName() const override { return "KeyPressedEvent"; }
     std::string ToString() const override {
@@ -28,7 +30,7 @@ public:
     KeyReleasedEvent(const KeyCode keyCode)
             : keyCode(keyCode) {}
 
-    KeyCode GetKeyCode() const { return keyCode };
+    KeyCode GetKeyCode() const { return keyCode; }
 
     const char* GetName() const override { return "KeyReleasedEvent"; }
     std::string ToString() const override {
@@ -46,7 +48,7 @@ public:
     KeyRepeatedEvent(const KeyCode keyCode)
             : keyCode(keyCode) {}
 
-    KeyCode GetKeyCode() const { return keyCode };
+    KeyCode GetKeyCode() const { return keyCode; }
 
     const char* GetName() const override { return "KeyRepeatedEvent"; }
     std::string ToString() const override {

@@ -1,12 +1,7 @@
 #pragma once
 
-#include <list>
-#include <map>
 #include <typeindex>
-#include <memory>
-#include <algorithm>
-#include <functional>
-#include <mutex>
+#include <map>
 
 #include "handler_function.h"
 

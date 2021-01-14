@@ -1,6 +1,5 @@
 #include "application.h"
 
-#include "core/log/log.h"
 
 namespace Shadow {
 

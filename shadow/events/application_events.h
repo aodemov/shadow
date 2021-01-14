@@ -1,8 +1,8 @@
 #pragma once
 
-#include <sstream>
+#include "shadow/shpch.h"
 
-#include "runtime/events/event.h"
+#include "event.h"
 
 namespace Shadow {
 

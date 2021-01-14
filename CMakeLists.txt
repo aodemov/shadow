@@ -25,8 +25,11 @@ if (MINGW)
     endif()
 endif()
 
+# Cmake Precompiled Headers
+include(cmake/precompiled-headers.cmake)
+
 add_subdirectory(lib)
-add_subdirectory(engine)
+add_subdirectory(shadow)
 add_subdirectory(sandbox)
 
 # Tests

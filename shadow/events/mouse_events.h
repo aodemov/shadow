@@ -1,7 +1,7 @@
 #pragma once
 
-#include "runtime/events/event.h"
-#include "core/input/key_codes.h"
+#include "event.h"
+#include "shadow/core/input/key_codes.h"
 
 namespace Shadow {
 

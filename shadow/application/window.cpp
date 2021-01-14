@@ -1,7 +1,5 @@
 #include "window.h"
 
-#include "core/log/log.h"
-
 namespace Shadow {
 
 static bool s_GLFWInitialized = false;

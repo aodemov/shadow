@@ -1,10 +1,7 @@
 #pragma once
 
-#include <string>
-#include <memory>
-
-#include "runtime/events/event_bus.h"
-#include "runtime/application/window.h"
+#include "shadow/events/event_bus.h"
+#include "window.h"
 
 
 namespace Shadow {

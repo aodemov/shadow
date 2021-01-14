@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "core/log/log.h"
-#include "runtime/application/application.h"
+#include "shadow/shadow.h"
 
 using namespace Shadow;
 
@@ -22,4 +21,5 @@ int main() {
     auto app = new Sandbox();
     app->Init();
     app->Run();
+
 }
