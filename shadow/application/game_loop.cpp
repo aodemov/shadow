@@ -1,5 +1,7 @@
 #include "game_loop.h"
 
+#include "shadow/application/application.h"
+
 namespace Shadow {
 
 GameLoop& GameLoop::Instance() {
@@ -13,6 +15,10 @@ GameLoop::GameLoop()
 {
     maxFps = 20;
     window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, false));
+
+    eventBus.addListener<WindowCloseEvent>([&](WindowCloseEvent const& event){
+       Application::Quit();
+    });
 }
 
 GameLoop::~GameLoop() {
