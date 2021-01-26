@@ -22,6 +22,7 @@ GameLoop::GameLoop()
 }
 
 GameLoop::~GameLoop() {
+    gameClock.Pause();
 }
 
 void GameLoop::Run() {
@@ -45,6 +46,8 @@ void GameLoop::Init() {
     interval = 1.0 / maxFps;
 
     window->Init();
+
+    gameClock.Start();
 }
 
 void GameLoop::Shutdown() {
@@ -52,15 +55,23 @@ void GameLoop::Shutdown() {
 }
 
 void GameLoop::MainLoop() {
-    Update();
-    FixedUpdate(0.0);
+    gameClock.Update();
+
+    lag += gameClock.GetDelta();
+
+    while(lag >= interval) {
+        FixedUpdate(interval);
+        lag -= interval;
+    }
+
+    VariableUpdate(gameClock.GetDelta());
 }
 
-void GameLoop::Update() {
+void GameLoop::VariableUpdate(double delta) {
     window->Update();
 }
 
-void GameLoop::FixedUpdate(float delta) {
+void GameLoop::FixedUpdate(double delta) {
 
 }
 

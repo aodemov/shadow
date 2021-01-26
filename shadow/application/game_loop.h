@@ -2,6 +2,7 @@
 
 #include "shadow/events/event_bus.h"
 #include "shadow/application/window.h"
+#include "shadow/core/time/clock.h"
 
 namespace Shadow {
 
@@ -20,14 +21,16 @@ private:
     void MainLoop();
 
     void Init();
-    void FixedUpdate(float delta);
-    void Update();
+    void FixedUpdate(double delta);
+    void VariableUpdate(double delta);
     void Shutdown();
 
     bool running = false;
 
     int maxFps;
-    float interval;
+    double interval;
+    double lag;
+    Clock gameClock;
 
     std::unique_ptr<Window> window;
     EventBus& eventBus;
