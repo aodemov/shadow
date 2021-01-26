@@ -44,7 +44,7 @@ void Window::Init() {
     // Initializing callbacks
     glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.emit(WindowCloseEvent());
+        window.eventBus.push(WindowCloseEvent());
     });
 
     glfwSetWindowSizeCallback(window, [](GLFWwindow* win, int width, int height){
@@ -52,7 +52,7 @@ void Window::Init() {
         window.options.Width = width;
         window.options.Height = height;
 
-        window.eventBus.emit(WindowResizeEvent(width, height));
+        window.eventBus.push(WindowResizeEvent(width, height));
     });
 
     glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
@@ -64,13 +64,13 @@ void Window::Init() {
 
         switch (action) {
             case GLFW_PRESS:
-                window.eventBus.emit(KeyPressedEvent(key, modifiers));
+                window.eventBus.push(KeyPressedEvent(key, modifiers));
                 break;
             case GLFW_RELEASE:
-                window.eventBus.emit(KeyReleasedEvent(key, modifiers));
+                window.eventBus.push(KeyReleasedEvent(key, modifiers));
                 break;
             case GLFW_REPEAT:
-                window.eventBus.emit(KeyRepeatedEvent(key, modifiers));
+                window.eventBus.push(KeyRepeatedEvent(key, modifiers));
                 break;
         }
     });
@@ -82,22 +82,22 @@ void Window::Init() {
 
         switch (action) {
             case GLFW_PRESS:
-                window.eventBus.emit(MousePressedEvent(button, modifiers));
+                window.eventBus.push(MousePressedEvent(button, modifiers));
                 break;
             case GLFW_RELEASE:
-                window.eventBus.emit(MouseReleasedEvent(button, modifiers));
+                window.eventBus.push(MouseReleasedEvent(button, modifiers));
                 break;
         }
     });
 
     glfwSetScrollCallback(window, [](GLFWwindow* win, double xOffset, double yOffset) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.emit(MouseScrolledEvent(xOffset, yOffset));
+        window.eventBus.push(MouseScrolledEvent(xOffset, yOffset));
     });
 
     glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.emit(MouseMovedEvent(x, y));
+        window.eventBus.push(MouseMovedEvent(x, y));
     });
 
     // Error callback

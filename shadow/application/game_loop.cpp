@@ -68,6 +68,8 @@ void GameLoop::MainLoop() {
 }
 
 void GameLoop::VariableUpdate(double delta) {
+    eventBus.processAll();
+
     window->Update();
 }
 
