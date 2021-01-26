@@ -4,8 +4,8 @@ namespace Shadow {
 
 Clock::Clock()
     : deltaTime(),
-      lastTime(HiResClock::now()),
-      paused(false) {}
+      lastTime(),
+      paused(true) {}
 
 Clock::Clock(const Clock &other)
     : deltaTime(other.deltaTime),
@@ -28,6 +28,11 @@ void Clock::Update() {
 }
 
 double Clock::GetDelta() const { return deltaTime.count(); }
+void Clock::Start() {
+    deltaTime = Duration::zero();
+    lastTime = HiResClock::now();
+    paused = false;
+}
 void Clock::Pause() { paused = true; }
 void Clock::Resume() { paused = false; }
 bool Clock::IsPaused() const { return paused; }

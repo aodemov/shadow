@@ -19,6 +19,7 @@ public:
 
     Clock &operator=(Clock &&) = delete;
 
+    void Start();
     void Pause();
     void Resume();
     bool IsPaused() const;
