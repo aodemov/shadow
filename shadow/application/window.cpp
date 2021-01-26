@@ -44,7 +44,6 @@ void Window::Init() {
     // Initializing callbacks
     glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.Shutdown();
         window.eventBus.emit(WindowCloseEvent());
     });
 
