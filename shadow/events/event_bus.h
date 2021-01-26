@@ -24,7 +24,7 @@ public:
 
 
     template<class EventType>
-    void addListener(const Function<EventType> function);
+    void addListener(Function<EventType> function);
 
     template<class T, class EventType>
     void addListener(T* instance, MemberFunction<T, EventType> memberFunction);
@@ -53,7 +53,7 @@ private:
 };
 
 template<class EventType>
-void EventBus::addListener(const Function<EventType> function) {
+void EventBus::addListener(Function<EventType> function) {
     std::lock_guard<std::mutex> lock(mutex);
 
     listeners.insert(std::make_pair<std::type_index, std::shared_ptr<HandlerFunction<EventType>>>(
