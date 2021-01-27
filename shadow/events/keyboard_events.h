@@ -3,7 +3,7 @@
 #include "shadow/shpch.h"
 
 #include "event.h"
-#include "shadow/core/input/key_codes.h"
+#include "shadow/input/key_codes.h"
 
 namespace Shadow {
 

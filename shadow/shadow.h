@@ -1,7 +1,7 @@
 #pragma once
 
 #include "shadow/core/log/log.h"
-#include "shadow/core/input/key_codes.h"
+#include "shadow/input/key_codes.h"
 
 #include "shadow/application/application.h"
 
