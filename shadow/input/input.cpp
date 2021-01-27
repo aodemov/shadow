@@ -19,12 +19,12 @@ bool Input::IsMouseButtonPressed(MouseCode button) {
     return state == GLFW_PRESS;
 }
 
-std::pair<float, float> Input::GetMousePosition() {
+glm::vec2 Input::GetMousePosition() {
     auto window = GameLoop::GetWindow().window;
 
     double x, y;
     glfwGetCursorPos(window, &x, &y);
 
-    return std::make_pair(static_cast<float>(x), static_cast<float>(y));
+    return { static_cast<float>(x), static_cast<float>(y) };
 }
 }
