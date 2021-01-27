@@ -55,6 +55,7 @@ private:
     EventBus& eventBus;
 
     friend class GameLoop;
+    friend class Input;
 };
 
 }

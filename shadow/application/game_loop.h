@@ -10,6 +10,8 @@ class GameLoop {
 public:
     static GameLoop &Instance();
 
+    static Window& GetWindow();
+
 private:
     GameLoop();
 

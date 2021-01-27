@@ -9,6 +9,10 @@ GameLoop& GameLoop::Instance() {
     return instance;
 }
 
+Window& GameLoop::GetWindow() {
+    return *(Instance().window);
+}
+
 
 GameLoop::GameLoop()
     : eventBus(EventBus::Instance())
