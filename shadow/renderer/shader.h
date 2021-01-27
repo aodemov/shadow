@@ -8,6 +8,7 @@ public:
     ~Shader() = default;
 
     void Bind() const;
+    void Unbind() const;
 
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);

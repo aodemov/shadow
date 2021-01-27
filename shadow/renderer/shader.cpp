@@ -90,5 +90,9 @@ void Shader::Bind() const {
     glUseProgram(rendererId);
 }
 
+void Shader::Unbind() const {
+    glUseProgram(0);
+}
+
 
 }
