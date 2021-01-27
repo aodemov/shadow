@@ -2,9 +2,10 @@
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
 
 #include "shadow/events/event_bus.h"
+
+#include "shadow/renderer/graphics_context.h"
 
 #include "shadow/events/application_events.h"
 #include "shadow/events/mouse_events.h"
@@ -50,6 +51,8 @@ private:
     void Update();
 
     GLFWwindow* window;
+
+    std::unique_ptr<GraphicsContext> context;
 
     WindowOptions options;
     EventBus& eventBus;

@@ -37,8 +37,9 @@ void Window::Init() {
         // TODO throw
     }
 
-    glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    context = std::make_unique<GraphicsContext>(window);
+    context->Init();
+
     glfwSetWindowUserPointer(window, this);
 
     // Initializing callbacks
@@ -115,8 +116,8 @@ void Window::Shutdown() {
 }
 
 void Window::Update() {
-    glfwSwapBuffers(window);
     glfwPollEvents();
+    context->SwapBuffers();
 }
 
 void Window::Close() {
