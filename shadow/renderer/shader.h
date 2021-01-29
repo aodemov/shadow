@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace Shadow {
 
 class Shader {
@@ -10,6 +12,7 @@ public:
     void Bind() const;
     void Unbind() const;
 
+    void UploadUniformMat4(std::string const& name, glm::mat4 const& matrix);
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);
 

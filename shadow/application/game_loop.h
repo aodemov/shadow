@@ -4,6 +4,10 @@
 #include "shadow/application/window.h"
 #include "shadow/core/time/clock.h"
 
+#include "shadow/renderer/shader.h"
+#include "shadow/renderer/vertex_array.h"
+#include "shadow/renderer/render.h"
+
 namespace Shadow {
 
 class GameLoop {
@@ -36,6 +40,11 @@ private:
 
     std::unique_ptr<Window> window;
     EventBus& eventBus;
+
+
+    std::shared_ptr<Shader> _shader;
+    std::shared_ptr<VertexArray> _va;
+    Camera _camera;
 
     friend class Application;
 };

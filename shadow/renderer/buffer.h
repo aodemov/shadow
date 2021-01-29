@@ -1,5 +1,7 @@
 #pragma once
 
+#include "shadow/renderer/buffer_layout.h"
+
 namespace Shadow {
 
 class VertexBuffer {
@@ -9,8 +11,12 @@ public:
 
     void Bind() const;
     void Unbind() const;
+
+    const BufferLayout& GetLayout() const { return layout; }
+    void SetLayout(BufferLayout const& lo) { layout = lo; }
 private:
     uint32_t rendererId;
+    BufferLayout layout;
 };
 
 class IndexBuffer {
