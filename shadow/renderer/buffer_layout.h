@@ -31,6 +31,8 @@ static constexpr uint32_t ShaderDataTypeSize(ShaderDataType type) {
         case ShaderDataType::Int4:     return 4 * 4;
         case ShaderDataType::Bool:     return 1;
     }
+
+    return 0;
 }
 
 static constexpr GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
