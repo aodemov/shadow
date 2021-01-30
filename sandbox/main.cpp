@@ -8,10 +8,13 @@ using namespace Shadow;
 class MainScene : public Scene {
 public:
     MainScene()
-        : camera(-1.0f, 1.0f, -1.0f, 1.0f)
+        : camera(-5.0f, 5.0f, -5.0f, 5.0f),
+          cameraPosition(0.0f),
+          cameraSpeed(0.1f)
     {}
 
     void Create() override {
+
         va = std::make_shared<VertexArray>();
 
         float vertices[3 * 7] = {
@@ -70,25 +73,36 @@ public:
     }
 
     void Start() override {
-
+        SH_INFO("Scene start");
     }
 
     void Shutdown() override {
-
+        SH_INFO("Scene shutdown");
     }
     void Destroy() override {
-
+        SH_INFO("Scene destroy");
     }
 
     void FixedUpdate(double delta) override {
-
+        if (Input::IsKeyPressed(Key::W)) {
+            cameraPosition.y += cameraSpeed;
+        }
+        if (Input::IsKeyPressed(Key::A)) {
+            cameraPosition.x -= cameraSpeed;
+        }
+        if (Input::IsKeyPressed(Key::S)) {
+            cameraPosition.y -= cameraSpeed;
+        }
+        if (Input::IsKeyPressed(Key::D)) {
+            cameraPosition.x += cameraSpeed;
+        }
     }
 
     void VariableUpdate(double delta) override {
         Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         Render::Clear();
 
-        camera.SetPosition({0.0f, -0.5f, 0.0f});
+        camera.SetPosition(cameraPosition);
         camera.SetRotation(0.0f);
 
         Render::BeginScene(camera);
@@ -103,6 +117,9 @@ private:
     std::shared_ptr<Shader> shader;
     std::shared_ptr<VertexArray> va;
     Camera camera;
+
+    glm::vec3 cameraPosition;
+    float cameraSpeed;
 };
 
 int main() {
