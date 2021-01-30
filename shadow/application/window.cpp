@@ -148,6 +148,12 @@ unsigned int Window::GetHeight() const {
     return height;
 }
 
+float Window::GetAspectRatio() const {
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+     return (float)width / height;
+}
+
 void Window::SetTitle(const std::string &title) {
     options.Title = title;
     glfwSetWindowTitle(window, title.c_str());

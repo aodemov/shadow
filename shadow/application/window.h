@@ -37,6 +37,7 @@ public:
     unsigned int GetHeight() const;
     void SetTitle(std::string const& title);
     std::string GetTitle() const;
+    float GetAspectRatio() const;
 
     void Minimize();
     void Restore();
