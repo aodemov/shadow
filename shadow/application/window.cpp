@@ -56,6 +56,10 @@ void Window::Init() {
         window.eventBus.push(WindowResizeEvent(width, height));
     });
 
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+        glViewport(0, 0, width, height);
+    });
+
     glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
     });
 
