@@ -1,6 +1,7 @@
 #include "render.h"
 
 #include <glad/gl.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Shadow {
 
@@ -8,7 +9,7 @@ void Render::Init() {
     sceneData = new SceneData;
     sceneData->rectVertexArray = std::make_shared<VertexArray>();
 
-    float rectVertices[4 * 3] = {
+    float rectVertices[4 * 5] = {
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.5f,  0.5f, 0.0f,
@@ -33,14 +34,9 @@ void Render::Init() {
             uniform mat4 u_ViewProjection;
             uniform mat4 u_Transform;
 
-			out vec3 v_Position;
-
-            uniform mat4 u_ViewProjection;
-
 			void main()
 			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -49,11 +45,11 @@ void Render::Init() {
 
 			layout(location = 0) out vec4 color;
 
-			uniform vec3 u_Color;
+			uniform vec4 u_Color;
 
 			void main()
 			{
-				color = vec4(u_Color, 1.0);
+				color = u_Color;
 			}
 		)";
 
@@ -66,17 +62,11 @@ void Render::Shutdown() {
 
 void Render::BeginScene(Camera& camera) {
     sceneData->rectShader->Bind();
-    sceneData->rectShader->UploadUniformMat4("u_ViewProjection", camera.GetProjectionMatrix());
+    sceneData->rectShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 }
 
 void Render::EndScene() {
 
-}
-
-void Render::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray> &vertexArray) {
-
-    vertexArray->Bind();
-    glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void Render::SetClearColor(const glm::vec4 &color) {
@@ -89,6 +79,10 @@ void Render::Clear() {
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color) {
     sceneData->rectShader->UploadUniformFloat4("u_Color", color);
+
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    sceneData->rectShader->UploadUniformMat4("u_Transform", transform);
+
     sceneData->rectVertexArray->Bind();
     glDrawElements(GL_TRIANGLES, sceneData->rectVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 }

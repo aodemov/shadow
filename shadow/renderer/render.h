@@ -16,8 +16,6 @@ public:
     static void BeginScene(Camera& camera);
     static void EndScene();
 
-    static void Submit(std::shared_ptr<Shader> const& shader, std::shared_ptr<VertexArray> const& vertexArray);
-
     static void SetClearColor(glm::vec4 const& color);
     static void Clear();
 
@@ -29,7 +27,7 @@ private:
         std::shared_ptr<VertexArray> rectVertexArray;
     };
 
-    static SceneData* sceneData;
+    inline static SceneData* sceneData;
 };
 
 }
