@@ -4,12 +4,21 @@
 
 namespace Shadow {
 
-void Application::Start() {
+void Application::Init() {
+    Log::Init();
+    GameLoop::Instance().Init();
+}
+
+void Application::Run() {
     GameLoop::Instance().Run();
 }
 
-void Application::Quit() {
+void Application::Stop() {
     GameLoop::Instance().Stop();
+}
+
+void Application::Quit() {
+    GameLoop::Instance().Shutdown();
 }
 
 }

@@ -5,7 +5,7 @@ namespace Shadow {
 class Scene {
 public:
     Scene() = default;
-    virtual ~Scene() {};
+    virtual ~Scene() = default;
 
     virtual void Create() = 0;
     virtual void Start() = 0;

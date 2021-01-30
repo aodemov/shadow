@@ -21,6 +21,7 @@ GameLoop::GameLoop()
     window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, false));
 
     eventBus.addListener<WindowCloseEvent>([&](WindowCloseEvent const& event){
+        Application::Stop();
         Application::Quit();
     });
 }
@@ -33,11 +34,10 @@ void GameLoop::Run() {
     if (running)
         return;
 
-    Init();
+    running = true;
     while(running) {
         MainLoop();
     }
-    Shutdown();
 }
 
 void GameLoop::Stop() {
@@ -45,15 +45,11 @@ void GameLoop::Stop() {
 }
 
 void GameLoop::Init() {
-    running = true;
-
     interval = 1.0 / maxFps;
 
     window->Init();
 
     gameClock.Start();
-
-    SceneManager::Instance().Load();
 }
 
 void GameLoop::Shutdown() {

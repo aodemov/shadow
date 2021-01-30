@@ -8,7 +8,9 @@ namespace Shadow {
 
 class Application {
 public:
-    static void Start();
+    static void Init();
+    static void Run();
+    static void Stop();
     static void Quit();
 };
 

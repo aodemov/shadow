@@ -11,9 +11,7 @@ public:
         : camera(-1.0f, 1.0f, -1.0f, 1.0f)
     {}
 
-    ~MainScene() override = default;
-
-    void Create() {
+    void Create() override {
         va = std::make_shared<VertexArray>();
 
         float vertices[3 * 7] = {
@@ -71,22 +69,22 @@ public:
         shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
     }
 
-    void Start() {
+    void Start() override {
 
     }
 
-    void Shutdown() {
+    void Shutdown() override {
 
     }
-    void Destroy() {
-
-    }
-
-    void FixedUpdate(double delta) {
+    void Destroy() override {
 
     }
 
-    void VariableUpdate(double delta) {
+    void FixedUpdate(double delta) override {
+
+    }
+
+    void VariableUpdate(double delta) override {
         Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         Render::Clear();
 
@@ -108,9 +106,12 @@ private:
 };
 
 int main() {
-    Log::Init();
+    Application::Init();
 
     SceneManager::Instance().Add("main", new MainScene);
+    SceneManager::Instance().Load("main");
 
-    Application::Start();
+    Application::Run();
+
+    Application::Quit();
 }
