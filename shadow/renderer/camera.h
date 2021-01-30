@@ -8,6 +8,8 @@ class Camera {
 public:
     Camera(float left, float right, float bottom, float top);
 
+    void SetProjection(float left, float right, float bottom, float top);
+
     const glm::vec3& GetPosition() const { return position; }
     void SetPosition(const glm::vec3& pos) { position = pos; Recalculate(); }
 

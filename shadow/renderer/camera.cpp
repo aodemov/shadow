@@ -6,11 +6,15 @@ namespace Shadow {
 
 
 Camera::Camera(float left, float right, float bottom, float top)
-    : projectionMatrix(glm::ortho(left, right, bottom, top)),
+    : projectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)),
       viewMatrix(1.0f),
       position(0.0f)
 {
     viewProjectionMatrix = projectionMatrix * viewMatrix;
+}
+
+void Camera::SetProjection(float left, float right, float bottom, float top) {
+    projectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
 }
 
 void Camera::Recalculate() {
