@@ -10,3 +10,11 @@
 #include "shadow/events/keyboard_events.h"
 #include "shadow/events/mouse_events.h"
 
+#include "shadow/renderer/render.h"
+#include "shadow/renderer/shader.h"
+#include "shadow/renderer/vertex_array.h"
+#include "shadow/renderer/camera.h"
+
+#include "shadow/scene/scene_manager.h"
+#include "shadow/scene/scene.h"
+
