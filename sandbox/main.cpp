@@ -10,7 +10,7 @@ public:
     MainScene()
         : camera(-5.0f, 5.0f, -5.0f, 5.0f),
           cameraPosition(0.0f),
-          cameraSpeed(0.1f)
+          cameraSpeed(4.0f)
     {}
 
     void Create() override {
@@ -100,16 +100,16 @@ public:
 
     void FixedUpdate(double delta) override {
         if (Input::IsKeyPressed(Key::W)) {
-            cameraPosition.y += cameraSpeed;
+            cameraPosition.y += cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::A)) {
-            cameraPosition.x -= cameraSpeed;
+            cameraPosition.x -= cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::S)) {
-            cameraPosition.y -= cameraSpeed;
+            cameraPosition.y -= cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::D)) {
-            cameraPosition.x += cameraSpeed;
+            cameraPosition.x += cameraSpeed * delta;
         }
     }
 
