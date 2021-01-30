@@ -25,6 +25,7 @@ void Clock::Update() {
 
     TimePoint now = HiResClock::now();
     deltaTime = now - lastTime;
+    lastTime = now;
 }
 
 double Clock::GetDelta() const { return deltaTime.count(); }
