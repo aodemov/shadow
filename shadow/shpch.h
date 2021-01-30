@@ -15,4 +15,6 @@
 #include <set>
 #include <list>
 
+#include <glm/glm.hpp>
+
 #include "shadow/core/log/log.h"
