@@ -70,6 +70,21 @@ public:
 		)";
 
         shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
+
+//        EventBus::Instance().addListener<KeyPressedEvent>([&](KeyPressedEvent const& event) {
+//            if (event.GetKeyCode() == Key::W) {
+//                cameraPosition.y += cameraSpeed;
+//            }
+//            if (event.GetKeyCode() == Key::A) {
+//                cameraPosition.x -= cameraSpeed;
+//            }
+//            if (event.GetKeyCode() == Key::S) {
+//                cameraPosition.y -= cameraSpeed;
+//            }
+//            if (event.GetKeyCode() == Key::D) {
+//                cameraPosition.x += cameraSpeed;
+//            }
+//        });
     }
 
     void Start() override {
