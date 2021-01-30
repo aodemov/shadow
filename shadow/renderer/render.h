@@ -10,6 +10,9 @@ namespace Shadow {
 
 class Render {
 public:
+    static void Init();
+    static void Shutdown();
+
     static void BeginScene(Camera& camera);
     static void EndScene();
 
@@ -18,9 +21,12 @@ public:
     static void SetClearColor(glm::vec4 const& color);
     static void Clear();
 
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color);
+
 private:
     struct SceneData {
-        glm::mat4 viewProjectionMatrix;
+        std::shared_ptr<Shader> rectShader;
+        std::shared_ptr<VertexArray> rectVertexArray;
     };
 
     static SceneData* sceneData;

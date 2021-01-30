@@ -49,10 +49,13 @@ void GameLoop::Init() {
 
     window->Init();
 
+    Render::Init();
+
     gameClock.Start();
 }
 
 void GameLoop::Shutdown() {
+    Render::Shutdown();
     window->Shutdown();
 }
 
