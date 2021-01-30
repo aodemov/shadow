@@ -15,7 +15,7 @@
 #include "shadow/renderer/render.h"
 #include "shadow/renderer/shader.h"
 #include "shadow/renderer/vertex_array.h"
-#include "shadow/renderer/camera.h"
+#include "shadow/renderer/camera_controller.h"
 
 #include "shadow/scene/scene_manager.h"
 #include "shadow/scene/scene.h"

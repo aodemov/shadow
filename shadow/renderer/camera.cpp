@@ -15,6 +15,7 @@ Camera::Camera(float left, float right, float bottom, float top)
 
 void Camera::SetProjection(float left, float right, float bottom, float top) {
     projectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+    Recalculate();
 }
 
 void Camera::Recalculate() {

@@ -8,9 +8,10 @@ using namespace Shadow;
 class MainScene : public Scene {
 public:
     MainScene()
-        : camera(-5.0f, 5.0f, -5.0f, 5.0f),
-          cameraPosition(0.0f),
-          cameraSpeed(4.0f)
+        : cameraPosition(0.0f),
+          cameraSpeed(4.0f),
+          cameraZoom(1.0f),
+          cameraRotation(0.0f)
     {}
 
     void Create() override {
@@ -41,20 +42,37 @@ public:
         if (Input::IsKeyPressed(Key::D)) {
             cameraPosition.x += cameraSpeed * delta;
         }
+        if (Input::IsKeyPressed(Key::Q)) {
+            cameraRotation -= 1.0f;
+        }
+        if (Input::IsKeyPressed(Key::E)) {
+            cameraRotation += 1.0f;
+        }
+        if (Input::IsKeyPressed(Key::X)) {
+            cameraZoom += 0.1f;
+        }
+        if (Input::IsKeyPressed(Key::Z)) {
+            cameraZoom -= 0.1f;
+        }
     }
 
     void VariableUpdate(double delta) override {
         Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         Render::Clear();
 
-        camera.SetPosition(cameraPosition);
-        camera.SetRotation(0.0f);
+        cameraController.SetPosition(cameraPosition);
+        cameraController.SetRotation(cameraRotation);
+        cameraController.SetZoom(cameraZoom);
 
-        Render::BeginScene(camera);
+        Render::BeginScene(cameraController.GetCamera());
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                Render::DrawRect({ 0.55f * i, 0.55f * j, 0.0f}, { 0.5f, 0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+                Render::DrawRect({ 0.55f * i, 0.55f * j, 0.0f}, { 0.5f, 0.5f },
+                                 {
+                                i % 2 ? 1.0f : 0.0f,
+                                   i % 3 ? 1.0f : 0.0f,
+                                   j % 2 ? 1.0f : 0.0f , 1.0f });
             }
         }
 
@@ -65,10 +83,12 @@ private:
 
     std::shared_ptr<Shader> shader;
     std::shared_ptr<VertexArray> va;
-    Camera camera;
+    CameraController cameraController;
 
     glm::vec3 cameraPosition;
     float cameraSpeed;
+    float cameraZoom;
+    float cameraRotation;
 };
 
 int main() {
