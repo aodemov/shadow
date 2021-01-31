@@ -60,6 +60,7 @@ private:
 
     friend class GameLoop;
     friend class Input;
+    friend class Debugger;
 };
 
 }

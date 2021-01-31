@@ -20,7 +20,8 @@ GameLoop::GameLoop()
     SH_PROFILE_FUNCTION();
 
     maxFps = 20;
-    window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, false));
+    window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
+    debugger = std::make_unique<Debugger>();
 
     eventBus.addListener<WindowCloseEvent>([&](WindowCloseEvent const& event){
         Application::Stop();
@@ -58,6 +59,7 @@ void GameLoop::Init() {
     Render::Init();
 
     gameClock.Start();
+    debugger->Init();
 }
 
 void GameLoop::Shutdown() {
@@ -89,6 +91,7 @@ void GameLoop::VariableUpdate(double delta) {
 
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
 
+    debugger->Update((float)delta);
     window->Update();
 }
 

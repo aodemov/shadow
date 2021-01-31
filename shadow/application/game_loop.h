@@ -9,6 +9,8 @@
 #include "shadow/renderer/vertex_array.h"
 #include "shadow/renderer/render.h"
 
+#include "shadow/core/debug/debugger.h"
+
 namespace Shadow {
 
 class GameLoop {
@@ -40,6 +42,7 @@ private:
     Clock gameClock;
 
     std::unique_ptr<Window> window;
+    std::unique_ptr<Debugger> debugger;
     EventBus& eventBus;
 
     friend class Application;
