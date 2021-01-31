@@ -24,7 +24,7 @@ void Window::Init() {
 
     if (!s_GLFWInitialized) {
         if(!glfwInit()) {
-            SH_ERROR("Could not initialize GLFW");
+            SH_CORE_ERROR("Could not initialize GLFW");
             // TODO throw
         }
 
@@ -33,7 +33,7 @@ void Window::Init() {
 
     window = glfwCreateWindow((int)options.Width, (int)options.Height, options.Title.c_str(), NULL, NULL);
     if(!window) {
-        SH_ERROR("Could not create window");
+        SH_CORE_ERROR("Could not create window");
         // TODO throw
     }
 
@@ -107,7 +107,7 @@ void Window::Init() {
 
     // Error callback
     glfwSetErrorCallback([](int code, const char* message) {
-        SH_ERROR("GLFW Error: {0} (code: {1})", message, code);
+        SH_CORE_ERROR("GLFW Error: {0} (code: {1})", message, code);
     });
 }
 
