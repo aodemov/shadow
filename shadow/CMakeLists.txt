@@ -2,7 +2,7 @@ file(GLOB_RECURSE libsources *.h *.cpp *.hpp *.c *.cc)
 
 add_library(shadow ${libsources} shpch.cpp shpch.h)
 
-target_link_libraries(shadow PUBLIC spdlog glfw glad glm)
+target_link_libraries(shadow PUBLIC spdlog glfw glad glm imgui)
 
 target_include_directories(shadow PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
