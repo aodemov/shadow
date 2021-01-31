@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shadow/core/macros.h"
+#include "shadow/core/debug/profiling.h"
 
 #include "shadow/core/log/log.h"
 

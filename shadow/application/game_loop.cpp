@@ -17,6 +17,8 @@ Window& GameLoop::GetWindow() {
 GameLoop::GameLoop()
     : eventBus(EventBus::Instance())
 {
+    SH_PROFILE_FUNCTION();
+
     maxFps = 20;
     window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, false));
 
@@ -31,6 +33,8 @@ GameLoop::~GameLoop() {
 }
 
 void GameLoop::Run() {
+    SH_PROFILE_FUNCTION();
+
     if (running)
         return;
 
@@ -45,6 +49,8 @@ void GameLoop::Stop() {
 }
 
 void GameLoop::Init() {
+    SH_PROFILE_FUNCTION();
+
     interval = 1.0 / maxFps;
 
     window->Init();
@@ -55,11 +61,15 @@ void GameLoop::Init() {
 }
 
 void GameLoop::Shutdown() {
+    SH_PROFILE_FUNCTION();
+
     Render::Shutdown();
     window->Shutdown();
 }
 
 void GameLoop::MainLoop() {
+    SH_PROFILE_FUNCTION();
+
     gameClock.Update();
 
     lag += gameClock.GetDelta();
@@ -73,6 +83,8 @@ void GameLoop::MainLoop() {
 }
 
 void GameLoop::VariableUpdate(double delta) {
+    SH_PROFILE_FUNCTION();
+
     eventBus.processAll();
 
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
@@ -81,6 +93,8 @@ void GameLoop::VariableUpdate(double delta) {
 }
 
 void GameLoop::FixedUpdate(double delta) {
+    SH_PROFILE_FUNCTION();
+
     SceneManager::Instance().GetCurrentScene().FixedUpdate(delta);
 }
 

@@ -17,4 +17,6 @@
 
 #include <glm/glm.hpp>
 
+#include "shadow/core/macros.h"
 #include "shadow/core/log/log.h"
+#include "shadow/core/debug/profiling.h"
