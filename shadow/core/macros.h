@@ -16,8 +16,13 @@
     #define SH_LINUX
 #endif
 
+
 // Debug
 
 #ifdef DEBUG
     #define SH_DEBUG
 #endif
+
+// Profiling
+
+#define SH_PROFILE
