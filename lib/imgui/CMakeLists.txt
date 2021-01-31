@@ -1,12 +1,12 @@
 file(GLOB libsources
-        imgui/imgui.cpp
-        imgui/imgui_draw.cpp
-        imgui/imgui_demo.cpp
-        imgui/imgui_tables.cpp
-        imgui/imgui_widgets.cpp
-        imgui/*.h
+        imgui.cpp
+        imgui_draw.cpp
+        imgui_demo.cpp
+        imgui_tables.cpp
+        imgui_widgets.cpp
+        *.h
         )
 
 add_library(imgui ${libsources})
 
-target_include_directories(imgui PUBLIC imgui/)
+target_include_directories(imgui PUBLIC /)
