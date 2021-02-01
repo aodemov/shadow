@@ -23,6 +23,10 @@
     #define SH_DEBUG
 #endif
 
+// Debugger
+
+//#define SH_DEBUGGER
+
 // Profiling
 
 #define SH_PROFILE
