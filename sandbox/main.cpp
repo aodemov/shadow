@@ -46,10 +46,10 @@ public:
             cameraPosition.x += cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::Q)) {
-            cameraRotation -= 1.0f;
+            cameraRotation -= 8.0f;
         }
         if (Input::IsKeyPressed(Key::E)) {
-            cameraRotation += 1.0f;
+            cameraRotation += 8.0f;
         }
         if (Input::IsKeyPressed(Key::X)) {
             cameraZoom += 0.1f;
