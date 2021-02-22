@@ -21,15 +21,14 @@ GameLoop::GameLoop()
 
     maxFps = 20;
     window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
+#ifdef SH_DEBUGGER
+    debugger = std::make_unique<Debugger>();
+#endif
 
     eventBus.addListener<WindowCloseEvent>([&](WindowCloseEvent const& event){
         Application::Stop();
         Application::Quit();
     });
-
-    #ifdef SH_DEBUGGER
-    debugger = std::make_unique<Debugger>();
-    #endif
 }
 
 GameLoop::~GameLoop() {
@@ -62,10 +61,9 @@ void GameLoop::Init() {
     Render::Init();
 
     gameClock.Start();
-
-    #ifdef SH_DEBUGGER
+#ifdef SH_DEBUGGER
     debugger->Init();
-    #endif
+#endif
 }
 
 void GameLoop::Shutdown() {
@@ -97,10 +95,9 @@ void GameLoop::VariableUpdate(double delta) {
 
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
 
-    #ifdef SH_DEBUGGER
+#ifdef SH_DEBUGGER
     debugger->Update((float)delta);
-    #endif
-
+#endif
     window->Update();
 }
 

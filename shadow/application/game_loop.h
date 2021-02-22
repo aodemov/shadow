@@ -42,11 +42,10 @@ private:
     Clock gameClock;
 
     std::unique_ptr<Window> window;
-    EventBus& eventBus;
-
-    #ifdef SH_DEBUGGER
+#ifdef SH_DEBUGGER
     std::unique_ptr<Debugger> debugger;
-    #endif
+#endif
+    EventBus& eventBus;
 
     friend class Application;
 };

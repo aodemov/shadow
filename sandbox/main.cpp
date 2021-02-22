@@ -12,7 +12,10 @@ public:
           cameraSpeed(4.0f),
           cameraZoom(1.0f),
           cameraRotation(0.0f)
-    {}
+    {
+        testTexture = std::make_shared<Texture>("assets/textures/test.png");
+        test2Texture = std::make_shared<Texture>("assets/textures/test2.png");
+    }
 
     void Create() override {
 
@@ -43,10 +46,10 @@ public:
             cameraPosition.x += cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::Q)) {
-            cameraRotation -= 1.0f;
+            cameraRotation -= 8.0f;
         }
         if (Input::IsKeyPressed(Key::E)) {
-            cameraRotation += 1.0f;
+            cameraRotation += 8.0f;
         }
         if (Input::IsKeyPressed(Key::X)) {
             cameraZoom += 0.1f;
@@ -76,19 +79,22 @@ public:
             }
         }
 
+        Render::DrawRect({0, 0, 0}, {1, 1}, testTexture);
+        Render::DrawRect({1, 1, 1}, {7.2, 5}, test2Texture);
+
         Render::EndScene();
     }
 
 private:
-
-    std::shared_ptr<Shader> shader;
-    std::shared_ptr<VertexArray> va;
     CameraController cameraController;
 
     glm::vec3 cameraPosition;
     float cameraSpeed;
     float cameraZoom;
     float cameraRotation;
+
+    std::shared_ptr<Texture> testTexture;
+    std::shared_ptr<Texture> test2Texture;
 };
 
 int main() {

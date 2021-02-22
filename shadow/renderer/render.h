@@ -5,6 +5,7 @@
 #include "shadow/renderer/vertex_array.h"
 #include "shadow/renderer/shader.h"
 #include "shadow/renderer/camera.h"
+#include "shadow/renderer/texture.h"
 
 namespace Shadow {
 
@@ -20,10 +21,12 @@ public:
     static void Clear();
 
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color);
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture);
 
 private:
     struct SceneData {
-        std::shared_ptr<Shader> rectShader;
+        std::shared_ptr<Shader> colorShader;
+        std::shared_ptr<Shader> textureShader;
         std::shared_ptr<VertexArray> rectVertexArray;
     };
 
