@@ -1,7 +1,7 @@
 #include "texture.h"
 
 #include <glad/gl.h>
-#include "stb_image.h"
+#include "lib/stb_image/stb_image.h"
 
 namespace Shadow {
 
