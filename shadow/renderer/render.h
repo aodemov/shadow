@@ -20,8 +20,8 @@ public:
     static void SetClearColor(glm::vec4 const& color);
     static void Clear();
 
-    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color);
-    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture);
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color, float rotation = 0.0f);
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation = 0.0f);
 
 private:
     struct SceneData {

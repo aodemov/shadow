@@ -122,21 +122,27 @@ void Render::Clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color) {
+void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
     sceneData->colorShader->Bind();
     sceneData->colorShader->UploadUniformFloat4("u_Color", color);
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                          * glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f })
+                          * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
     sceneData->colorShader->UploadUniformMat4("u_Transform", transform);
 
     sceneData->rectVertexArray->Bind();
     glDrawElements(GL_TRIANGLES, sceneData->rectVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture) {
+void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation) {
     sceneData->textureShader->Bind();
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                          * glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f })
+                          * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
     sceneData->textureShader->UploadUniformMat4("u_Transform", transform);
 
     texture->Bind();

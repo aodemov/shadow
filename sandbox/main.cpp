@@ -75,11 +75,12 @@ public:
                                  {
                                 i % 2 ? 1.0f : 0.0f,
                                    i % 3 ? 1.0f : 0.0f,
-                                   j % 2 ? 1.0f : 0.0f , 1.0f });
+                                   j % 2 ? 1.0f : 0.0f , 1.0f },
+                                   i == 5 && j == 5 ? 45.0f : 0.0f);
             }
         }
 
-        Render::DrawRect({0, 0, 0}, {1, 1}, testTexture);
+        Render::DrawRect({5, 5, 1}, {1, 1}, testTexture, 45);
         Render::DrawRect({1, 1, 1}, {7.2, 5}, test2Texture);
 
         Render::EndScene();
