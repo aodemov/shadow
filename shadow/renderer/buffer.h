@@ -21,7 +21,7 @@ private:
 
 class IndexBuffer {
 public:
-    IndexBuffer(uint32_t* indices, uint32_t size);
+    IndexBuffer(uint32_t* indices, uint32_t count);
     ~IndexBuffer();
 
     void Bind() const;
