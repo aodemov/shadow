@@ -151,5 +151,12 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::sha
     glDrawElements(GL_TRIANGLES, sceneData->rectVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
+void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, glm::vec4 color) {
+    glm::vec3 pos = { (from.x + to.x) / 2, (from.y + to.y) / 2, 0.0f };
+    glm::vec2 size = { fabs(from.x - to.x) + width, fabs(from.y - to.y) + width };
+
+    DrawRect(pos, size, color);
+}
+
 
 }
