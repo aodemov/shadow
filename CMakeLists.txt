@@ -31,6 +31,7 @@ include(cmake/precompiled-headers.cmake)
 add_subdirectory(lib)
 add_subdirectory(shadow)
 add_subdirectory(sandbox)
+add_subdirectory(snake)
 
 # Tests
 
