@@ -67,7 +67,9 @@ public:
         cameraController.SetRotation(cameraRotation);
         cameraController.SetZoom(cameraZoom);
 
+
         Render::BeginScene(cameraController.GetCamera());
+
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -80,8 +82,12 @@ public:
             }
         }
 
+        Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
+
         Render::DrawRect({5, 5, 1}, {1, 1}, testTexture, 45);
         Render::DrawRect({1, 1, 1}, {7.2, 5}, test2Texture);
+
+
 
         Render::EndScene();
     }
