@@ -23,3 +23,5 @@
 #include "shadow/scene/scene_manager.h"
 #include "shadow/scene/scene.h"
 
+#include "shadow/ecs/sprite.h"
+

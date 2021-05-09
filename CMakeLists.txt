@@ -32,7 +32,7 @@ add_subdirectory(lib)
 add_subdirectory(shadow)
 add_subdirectory(sandbox)
 add_subdirectory(demos/snake)
-add_subdirectory(demos/platformer)
+#add_subdirectory(demos/platformer)
 
 # Tests
 

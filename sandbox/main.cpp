@@ -13,8 +13,8 @@ public:
           cameraZoom(1.0f),
           cameraRotation(0.0f)
     {
-        testTexture = std::make_shared<Texture>("assets/textures/test.png");
-        test2Texture = std::make_shared<Texture>("assets/textures/test2.png");
+        sprite1 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test.png"), glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
+        sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{1, 1, 1}, glm::vec2{7.2, 5});
     }
 
     void Create() override {
@@ -84,8 +84,8 @@ public:
 
         Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
 
-        Render::DrawRect({5, 5, 1}, {1, 1}, testTexture, 45);
-        Render::DrawRect({1, 1, 1}, {7.2, 5}, test2Texture);
+        sprite1->Draw();
+        sprite2->Draw();
 
 
 
@@ -100,8 +100,8 @@ private:
     float cameraZoom;
     float cameraRotation;
 
-    std::shared_ptr<Texture> testTexture;
-    std::shared_ptr<Texture> test2Texture;
+    std::unique_ptr<Sprite> sprite1;
+    std::unique_ptr<Sprite> sprite2;
 };
 
 int main() {
