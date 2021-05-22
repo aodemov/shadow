@@ -20,6 +20,15 @@ Shader::Shader(const std::string path) {
             contents.resize(size);
             fs.seekg(0, std::ios::beg);
             fs.read(&contents[0], size);
+            fs.close();
+
+            // TODO: fix
+            size_t vertexPos = contents.find("#shader vertex\n");
+            size_t fragmentPos = contents.find("#shader fragment\n");
+            std::string vertexSrc = contents.substr(vertexPos + 15, fragmentPos - vertexPos - 15);
+            std::string fragmentSrc = contents.substr(fragmentPos + 17);
+
+            Compile(vertexSrc, fragmentSrc);
         }
     } else {
         SH_CORE_ERROR("Could not open file '{0}'", path);
