@@ -1,9 +1,32 @@
 #include "shader.h"
 
+#include <fstream>
+
 #include <glad/gl.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Shadow {
+
+Shader::Shader(const std::string path) {
+    std::ifstream fs(path, std::ios::in | std::ios::binary);
+    std::string contents;
+
+    if(fs) {
+        fs.seekg(0, std::ios::end);
+        size_t size = fs.tellg();
+        if (size == -1) {
+            SH_CORE_ERROR("Could not read from file '{0}'", path);
+        } else {
+            contents.resize(size);
+            fs.seekg(0, std::ios::beg);
+            fs.read(&contents[0], size);
+        }
+    } else {
+        SH_CORE_ERROR("Could not open file '{0}'", path);
+    }
+
+
+}
 
 Shader::Shader(const std::string &vertexSource, const std::string &fragmentSource) {
     Compile(vertexSource, fragmentSource);
