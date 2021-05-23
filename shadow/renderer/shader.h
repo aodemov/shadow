@@ -14,6 +14,8 @@ public:
     void Unbind() const;
 
     void UploadUniformMat4(std::string const& name, glm::mat4 const& value);
+    void UploadUniformFloat1(std::string const& name, float value);
+    void UploadUniformFloat2(std::string const& name, glm::vec2 value);
     void UploadUniformFloat4(std::string const& name, glm::vec4 value);
     void UploadUniformInt(std::string const& name, int value);
 private:

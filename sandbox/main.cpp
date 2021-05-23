@@ -14,7 +14,7 @@ public:
           cameraRotation(0.0f)
     {
         sprite1 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test.png"), glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
-        sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{1, 1, 1}, glm::vec2{7.2, 5});
+        sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
     }
 
     void Create() override {
@@ -70,6 +70,8 @@ public:
 
         Render::BeginScene(cameraController.GetCamera());
 
+//        Render::TestLine();
+
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -84,10 +86,9 @@ public:
 
         Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
 
+
         sprite1->Draw();
         sprite2->Draw();
-
-
 
         Render::EndScene();
     }

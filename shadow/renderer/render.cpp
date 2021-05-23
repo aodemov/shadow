@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <shadow/application/game_loop.h>
 
 namespace Shadow {
 
@@ -34,10 +35,9 @@ void Render::Init() {
 
     sceneData->colorShader = std::make_shared<Shader>("assets/shaders/Color.glsl");
     sceneData->textureShader = std::make_shared<Shader>("assets/shaders/Texture.glsl");
+    sceneData->geometryShader = std::make_shared<Shader>("assets/shaders/Geometry.glsl");
     sceneData->textureShader->Bind();
     sceneData->textureShader->UploadUniformInt("u_Texture", 0);
-
-    Shader s();
 }
 
 void Render::Shutdown() {
@@ -50,6 +50,9 @@ void Render::BeginScene(Camera& camera) {
 
     sceneData->textureShader->Bind();
     sceneData->textureShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+
+    sceneData->geometryShader->Bind();
+    sceneData->geometryShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 }
 
 void Render::EndScene() {
@@ -98,6 +101,40 @@ void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, g
     glm::vec2 size = { fabs(from.x - to.x) + width, fabs(from.y - to.y) + width };
 
     DrawRect(pos, size, color);
+}
+
+void Render::TestLine() {
+    float lineVertices[4 * 7] = {
+        -1.0f, -1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 0.0f, 1.0f,
+    };
+
+//    glm::vec4 p0(-1.0f, -1.0f, 0.0f, 1.0f);
+//    glm::vec4 p1(1.0f, -1.0f, 0.0f, 1.0f);
+//    glm::vec4 p2(1.0f, 1.0f, 0.0f, 1.0f);
+//    glm::vec4 p3(-1.0f, 1.0f, 0.0f, 1.0f);
+//    std::vector<glm::vec4> varray1{ p3, p0, p1, p2, p3, p0, p1 };
+//    GLuint ssbo1 = CreateSSBO(varray1);
+
+    auto lineVertexArray = std::make_shared<VertexArray>();
+
+    auto ssbo = std::make_shared<ShaderStorageBuffer>(lineVertices, sizeof(lineVertices));
+
+    uint32_t lineIndices[] = { 3, 0, 1, 2, 3, 0, 1 };
+    auto indexBuffer = std::make_shared<IndexBuffer>(lineIndices, sizeof(lineIndices));
+    lineVertexArray->SetIndexBuffer(indexBuffer);
+
+    sceneData->geometryShader->Bind();
+
+    sceneData->geometryShader->UploadUniformFloat2("u_resolution", { (float)GameLoop::GetWindow().GetWidth(), (float)GameLoop::GetWindow().GetHeight() });
+    sceneData->geometryShader->UploadUniformFloat1("u_thickness", 20.0f);
+
+    ssbo->Bind();
+    lineVertexArray->Bind();
+//    glDrawElements(GL_TRIANGLES, lineVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+//    glDrawArrays(GL_TRIANGLES, 0, 6 * (4));
 }
 
 

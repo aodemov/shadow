@@ -33,6 +33,22 @@ private:
     uint32_t indicesCount;
 };
 
+
+class ShaderStorageBuffer {
+public:
+    ShaderStorageBuffer(float* vertices, uint32_t size);
+    ~ShaderStorageBuffer();
+
+    void Bind() const;
+    void Unbind() const;
+
+    const BufferLayout& GetLayout() const { return layout; }
+    void SetLayout(BufferLayout const& lo) { layout = lo; }
+private:
+    uint32_t rendererId;
+    BufferLayout layout;
+};
+
 }
 
 

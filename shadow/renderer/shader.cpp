@@ -132,6 +132,16 @@ void Shader::UploadUniformMat4(const std::string &name, const glm::mat4 & value)
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void Shader::UploadUniformFloat1(const std::string &name, float value) {
+    GLint location = glGetUniformLocation(rendererId, name.c_str());
+    glUniform1f(location, value);
+}
+
+void Shader::UploadUniformFloat2(const std::string &name, glm::vec2 value) {
+    GLint location = glGetUniformLocation(rendererId, name.c_str());
+    glUniform2f(location, value.x, value.y);
+}
+
 void Shader::UploadUniformFloat4(const std::string &name, glm::vec4 value) {
     GLint location = glGetUniformLocation(rendererId, name.c_str());
     glUniform4f(location, value.x, value.y, value.z, value.w);

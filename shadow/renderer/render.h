@@ -25,10 +25,13 @@ public:
 
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
 
+    static void TestLine();
+
 private:
     struct SceneData {
         std::shared_ptr<Shader> colorShader;
         std::shared_ptr<Shader> textureShader;
+        std::shared_ptr<Shader> geometryShader;
         std::shared_ptr<VertexArray> rectVertexArray;
     };
 

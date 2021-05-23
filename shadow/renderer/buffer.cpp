@@ -46,4 +46,24 @@ void IndexBuffer::Bind() const {
 void IndexBuffer::Unbind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
+// Shader Storage Buffer
+
+ShaderStorageBuffer::ShaderStorageBuffer(float* vertices, uint32_t size) {
+    glGenBuffers(1, &rendererId);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, rendererId);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, size, vertices, GL_STATIC_DRAW);
+}
+
+ShaderStorageBuffer::~ShaderStorageBuffer() {
+    glDeleteBuffers(1, &rendererId);
+}
+
+void ShaderStorageBuffer::Bind() const {
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, rendererId);
+}
+
+void ShaderStorageBuffer::Unbind() const {
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
 }
