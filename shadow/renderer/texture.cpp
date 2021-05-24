@@ -67,6 +67,10 @@ std::shared_ptr<Texture> Texture::CreateWhiteTexture() {
     return std::shared_ptr<Texture>(new Texture(1, 1, id));
 }
 
+bool Texture::operator==(const Texture &other) {
+    return rendererId == other.rendererId;
+}
+
 Texture::~Texture() {
     glDeleteTextures(1, &rendererId);
 }

@@ -13,6 +13,8 @@ public:
 
     void Bind(uint32_t slot = 0) const;
 
+    bool operator==(const Texture& other);
+
     static std::shared_ptr<Texture> CreateWhiteTexture();
 
 private:
