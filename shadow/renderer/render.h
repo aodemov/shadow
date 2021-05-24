@@ -25,8 +25,6 @@ public:
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation = 0.0f);
 
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
-
-    static void TestLine();
 };
 
 }
