@@ -9,11 +9,14 @@ class MainScene : public Scene {
 public:
     MainScene()
         : cameraPosition(0.0f),
-          cameraSpeed(4.0f),
+          cameraSpeed(8.0f),
           cameraZoom(1.0f),
           cameraRotation(0.0f)
     {
-        sprite1 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test.png"), glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
+        auto tex = std::make_shared<Texture>("assets/textures/test.png");
+        sprite1 = std::make_unique<Sprite>(tex, glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
+        sprite10 = std::make_unique<Sprite>(tex, glm::vec3{0, 6, 1}, glm::vec2{1, 1}, 45);
+        sprite11 = std::make_unique<Sprite>(tex, glm::vec3{2, 6, 1}, glm::vec2{1, 1}, 45);
         sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
     }
 
@@ -46,16 +49,16 @@ public:
             cameraPosition.x += cameraSpeed * delta;
         }
         if (Input::IsKeyPressed(Key::Q)) {
-            cameraRotation -= 8.0f;
+            cameraRotation -= 20.0f;
         }
         if (Input::IsKeyPressed(Key::E)) {
-            cameraRotation += 8.0f;
+            cameraRotation += 20.0f;
         }
         if (Input::IsKeyPressed(Key::X)) {
-            cameraZoom += 0.1f;
+            cameraZoom += 0.4f;
         }
         if (Input::IsKeyPressed(Key::Z)) {
-            cameraZoom -= 0.1f;
+            cameraZoom -= 0.4f;
         }
     }
 
@@ -86,8 +89,13 @@ public:
 
         Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
 
+        static float rot = 0.0f;
+        rot += delta * 100.0f;
 
         sprite1->Draw();
+        sprite10->Draw();
+        sprite11->Draw();
+        sprite1->SetRotation(rot);
         sprite2->Draw();
 
         Render::EndScene();
@@ -102,6 +110,8 @@ private:
     float cameraRotation;
 
     std::unique_ptr<Sprite> sprite1;
+    std::unique_ptr<Sprite> sprite10;
+    std::unique_ptr<Sprite> sprite11;
     std::unique_ptr<Sprite> sprite2;
 };
 

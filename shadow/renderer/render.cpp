@@ -102,8 +102,7 @@ void Render::BeginScene(Camera& camera) {
     sceneData.textureShader->Bind();
     sceneData.textureShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
-    sceneData.rectVertexBufferPtr = sceneData.rectVertexBuffer;
-    sceneData.rectCount = 0;
+    sceneData.rectVertexBufferPtr = sceneData.rectVertexBuffer; // TODO remove
 }
 
 void Render::EndScene() {
@@ -120,6 +119,10 @@ void Render::Flush() {
 
     sceneData.rectVA->Bind();
     glDrawElements(GL_TRIANGLES, sceneData.rectCount * 6, GL_UNSIGNED_INT, nullptr);
+
+    sceneData.rectVertexBufferPtr = sceneData.rectVertexBuffer;
+    sceneData.rectCount = 0;
+    sceneData.textureSlot = 1;
 }
 
 void Render::SetClearColor(const glm::vec4 &color) {
@@ -131,6 +134,9 @@ void Render::Clear() {
 }
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
+    if (sceneData.rectCount >= sceneData.maxRects)
+        Flush();
+
     const float texIndex = 0.0f;
     const float tilingFactor = 1.0f;
 
@@ -170,6 +176,9 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
 }
 
 void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation) {
+    if (sceneData.rectCount >= sceneData.maxRects)
+        Flush();
+
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
     const float tilingFactor = 1.0f;
 
@@ -182,6 +191,9 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::sha
     }
 
     if (textureIndex == 0.0f) {
+        if (sceneData.textureSlot >= sceneData.maxTextureSlots)
+            Flush();
+
         textureIndex = (float)sceneData.textureSlot;
         sceneData.textureSlots[sceneData.textureSlot] = texture;
         sceneData.textureSlot++;
