@@ -134,28 +134,32 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
     const float texIndex = 0.0f;
     const float tilingFactor = 1.0f;
 
-    sceneData.rectVertexBufferPtr->Position = position;
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+            glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
+            glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
+
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, -0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = texIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, -0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = texIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, 0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = texIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, 0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = texIndex;
@@ -183,28 +187,32 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::sha
         sceneData.textureSlot++;
     }
 
-    sceneData.rectVertexBufferPtr->Position = position;
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                          glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
+                          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
+
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, -0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, -0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, 0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
     sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
-    sceneData.rectVertexBufferPtr->Position = { position.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, 0.5f, 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
