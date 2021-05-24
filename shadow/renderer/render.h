@@ -16,6 +16,7 @@ public:
 
     static void BeginScene(Camera& camera);
     static void EndScene();
+    static void Flush();
 
     static void SetClearColor(glm::vec4 const& color);
     static void Clear();
