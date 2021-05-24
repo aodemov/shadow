@@ -6,6 +6,7 @@ namespace Shadow {
 
 class VertexBuffer {
 public:
+    explicit VertexBuffer(uint32_t size);
     VertexBuffer(float* vertices, uint32_t size);
     ~VertexBuffer();
 
@@ -14,6 +15,8 @@ public:
 
     const BufferLayout& GetLayout() const { return layout; }
     void SetLayout(BufferLayout const& lo) { layout = lo; }
+
+    void SetData(const void* data, uint32_t size);
 private:
     uint32_t rendererId;
     BufferLayout layout;
