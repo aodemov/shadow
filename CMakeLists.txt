@@ -24,6 +24,9 @@ if (MINGW)
         add_definitions(-DDEBUG)
     endif()
 endif()
+#if (UNIX)
+#    add_definitions(--no-pie)
+#endif()
 
 # Cmake Precompiled Headers
 include(cmake/precompiled-headers.cmake)
