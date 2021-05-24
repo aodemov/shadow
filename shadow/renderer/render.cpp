@@ -18,11 +18,9 @@ struct SceneData {
     std::shared_ptr<Shader> textureShader;
     std::shared_ptr<Shader> geometryShader;
 
-    std::shared_ptr<Texture> whiteTexture;
-
-    static inline const uint32_t maxRects = 10000;
-    static inline const uint32_t maxVertices = maxRects * 4;
-    static inline const uint32_t maxIndices = maxRects * 6;
+    const uint32_t maxRects = 10000;
+    const uint32_t maxVertices = maxRects * 4;
+    const uint32_t maxIndices = maxRects * 6;
     static inline const uint32_t maxTextureSlots = 16;
 
     std::shared_ptr<VertexArray> rectVA;
@@ -31,6 +29,9 @@ struct SceneData {
 
     RectVertex* rectVertexBuffer = nullptr;
     RectVertex* rectVertexBufferPtr = nullptr;
+
+    std::array<std::shared_ptr<Texture>, maxTextureSlots> textureSlots;
+    uint32_t textureSlot = 1;
 };
 
 static SceneData sceneData;
@@ -77,8 +78,13 @@ void Render::Init() {
     sceneData.textureShader = std::make_shared<Shader>("assets/shaders/Texture.glsl");
     sceneData.geometryShader = std::make_shared<Shader>("assets/shaders/Geometry.glsl");
     sceneData.textureShader->Bind();
-    sceneData.textureShader->UploadUniformInt("u_Texture", 0);
-    sceneData.whiteTexture = Texture::CreateWhiteTexture();
+
+    int32_t samplers[sceneData.maxTextureSlots];
+    for (int i = 0; i < sceneData.maxTextureSlots; i++)
+        samplers[i] = i;
+
+    sceneData.textureShader->UploadUniformIntArray("u_Textures", samplers, sceneData.maxTextureSlots);
+    sceneData.textureSlots[0] = Texture::CreateWhiteTexture();
 }
 
 void Render::Shutdown() {
@@ -91,7 +97,6 @@ void Render::BeginScene(Camera& camera) {
 //    sceneData.geometryShader->Bind();
 //    sceneData.geometryShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
-    sceneData.whiteTexture->Bind();
     sceneData.textureShader->Bind();
     sceneData.textureShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
@@ -104,6 +109,10 @@ void Render::EndScene() {
 }
 
 void Render::Flush() {
+    for (uint32_t i = 0; i < sceneData.textureSlot; i++) {
+        sceneData.textureSlots[i]->Bind(i);
+    }
+
     sceneData.rectVA->GetVertexBuffers()[0]->SetData((const void*)sceneData.rectVertexBuffer,
                                                      (sceneData.rectVertexBufferPtr - sceneData.rectVertexBuffer) * sizeof(RectVertex));
 
@@ -148,6 +157,56 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
 }
 
 void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation) {
+    constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    float textureIndex = 0.0f;
+    for (uint32_t i = 1; i < sceneData.textureSlot; i++) {
+        if (*sceneData.textureSlots[i].get() == *texture.get()) {
+            textureIndex = (float)i;
+            break;
+        }
+    }
+
+    if (textureIndex == 0.0f) {
+        textureIndex = (float)sceneData.textureSlot;
+        sceneData.textureSlots[sceneData.textureSlot] = texture;
+        sceneData.textureSlot++;
+    }
+
+    sceneData.rectVertexBufferPtr->Position = position;
+    sceneData.rectVertexBufferPtr->Color = color;
+    sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
+    sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr++;
+
+    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y, position.z };
+    sceneData.rectVertexBufferPtr->Color = color;
+    sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
+    sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr++;
+
+    sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Color = color;
+    sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
+    sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr++;
+
+    sceneData.rectVertexBufferPtr->Position = { position.x, position.y + size.y, position.z };
+    sceneData.rectVertexBufferPtr->Color = color;
+    sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
+    sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr++;
+
+    sceneData.rectCount++;
+
+
+
+
+
+
+
+
+
 //    sceneData.textureShader->Bind();
 //
 //    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)

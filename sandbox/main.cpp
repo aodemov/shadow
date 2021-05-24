@@ -85,10 +85,10 @@ public:
         }
 
         Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
-//
-//
-//        sprite1->Draw();
-//        sprite2->Draw();
+
+
+        sprite1->Draw();
+        sprite2->Draw();
 
         Render::EndScene();
     }
