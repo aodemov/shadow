@@ -1,5 +1,9 @@
 #include "window.h"
 
+#ifdef SH_DEBUGGER
+#include "shadow/core/debug/debugger.h"
+#endif
+
 namespace Shadow {
 
 static bool s_GLFWInitialized = false;
@@ -14,6 +18,11 @@ Window::Window(WindowOptions options)
     } else {
         glfwSwapInterval(0);
     }
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.WindowTitle = options.Title;
+    Debugger::Stats.VSync = options.VSync;
+#endif
 }
 
 Window::~Window() {
@@ -53,11 +62,20 @@ void Window::Init() {
         window.options.Width = width;
         window.options.Height = height;
 
+#ifdef SH_DEBUGGER
+    Debugger::Stats.WindowSize = { width, height };
+#endif
+
         window.eventBus.push(WindowResizeEvent(width, height));
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
         glViewport(0, 0, width, height);
+
+#ifdef SH_DEBUGGER
+        Debugger::Stats.FrameSize = { width, height };
+        Debugger::Stats.AspectRatio = (float)width / height;
+#endif
     });
 
     glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
@@ -103,6 +121,10 @@ void Window::Init() {
     glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
         window.eventBus.push(MouseMovedEvent(x, y));
+
+#ifdef SH_DEBUGGER
+        Debugger::Stats.MousePosition = { x, y };
+#endif
     });
 
     // Error callback

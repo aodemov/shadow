@@ -88,6 +88,11 @@ void Render::Init() {
 
     // Generating 1x1 white texture for colored rects
     renderData.textureSlots[0] = Texture::CreateWhiteTexture();
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.MaxRects = RenderData::MaxRects;
+    Debugger::Stats.MaxTextureSlots = RenderData::MaxTextureSlots;
+#endif
 }
 
 void Render::Shutdown() {
@@ -116,6 +121,12 @@ void Render::Flush() {
 
     renderData.rectVA->Bind();
     glDrawElements(GL_TRIANGLES, (int)renderData.rectCount * 6, GL_UNSIGNED_INT, nullptr);
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.DrawCalls++;
+    Debugger::Stats.RectCount += renderData.rectCount;
+    Debugger::Stats.TextureCount = renderData.textureSlot;
+#endif
 
     // Resetting iterators
     renderData.rectVertexBufferPtr = renderData.rectVertexBuffer;

@@ -64,6 +64,10 @@ void GameLoop::Init() {
 #ifdef SH_DEBUGGER
     debugger->Init();
 #endif
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.FixedFPS = maxFps;
+#endif
 }
 
 void GameLoop::Shutdown() {
@@ -86,6 +90,12 @@ void GameLoop::MainLoop() {
     }
 
     VariableUpdate(gameClock.GetDelta());
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.ElapsedFrames++;
+    Debugger::Stats.ElapsedTime += gameClock.GetDelta();
+    Debugger::Stats.FrameTime = gameClock.GetDelta();
+#endif
 }
 
 void GameLoop::VariableUpdate(double delta) {
@@ -99,12 +109,20 @@ void GameLoop::VariableUpdate(double delta) {
     debugger->Update((float)delta);
 #endif
     window->Update();
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.VariableUpdateTime = delta;
+#endif
 }
 
 void GameLoop::FixedUpdate(double delta) {
     SH_PROFILE_FUNCTION();
 
     SceneManager::Instance().GetCurrentScene().FixedUpdate(delta);
+
+#ifdef SH_DEBUGGER
+    Debugger::Stats.FixedUpdateTime = delta;
+#endif
 }
 
 }

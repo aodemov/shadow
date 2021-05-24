@@ -1,5 +1,7 @@
 #pragma once
 
+#include "shadow/core/debug/statistics.h"
+
 namespace Shadow {
 class Debugger {
 public:
@@ -10,7 +12,13 @@ public:
     void Shutdown();
 
     void Update(float delta);
-private:
 
+    void Show();
+    void Hide();
+
+    static inline Statistics Stats;
+
+private:
+    bool visible = false;
 };
 }
