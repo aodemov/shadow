@@ -18,6 +18,8 @@ public:
     void UploadUniformFloat2(std::string const& name, glm::vec2 value);
     void UploadUniformFloat4(std::string const& name, glm::vec4 value);
     void UploadUniformInt(std::string const& name, int value);
+    void UploadUniformIntArray(std::string const& name, int* values, uint32_t count);
+
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);
 

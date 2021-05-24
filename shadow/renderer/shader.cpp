@@ -152,5 +152,10 @@ void Shader::UploadUniformInt(const std::string &name, int value) {
     glUniform1i(location, value);
 }
 
+void Shader::UploadUniformIntArray(const std::string &name, int *values, uint32_t count) {
+    GLint location = glGetUniformLocation(rendererId, name.c_str());
+    glUniform1iv(location, count, values);
+}
+
 
 }
