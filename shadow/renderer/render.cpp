@@ -11,6 +11,7 @@ struct RectVertex {
     glm::vec4 Color;
     glm::vec2 TexCoords;
     float TexIndex;
+    float TilingFactor;
 };
 
 struct SceneData {
@@ -51,6 +52,7 @@ void Render::Init() {
             { ShaderDataType::Float4, "a_Color" },
             { ShaderDataType::Float2, "a_TexCoords" },
             { ShaderDataType::Float,  "a_TexIndex" },
+            { ShaderDataType::Float,  "a_TilingFactor" },
     });
     sceneData.rectVA->AddVertexBuffer(rectVB);
 
@@ -129,28 +131,35 @@ void Render::Clear() {
 }
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
+    const float texIndex = 0.0f;
+    const float tilingFactor = 1.0f;
+
     sceneData.rectVertexBufferPtr->Position = position;
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
-    sceneData.rectVertexBufferPtr->TexIndex = 0;
+    sceneData.rectVertexBufferPtr->TexIndex = texIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
-    sceneData.rectVertexBufferPtr->TexIndex = 0;
+    sceneData.rectVertexBufferPtr->TexIndex = texIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
-    sceneData.rectVertexBufferPtr->TexIndex = 0;
+    sceneData.rectVertexBufferPtr->TexIndex = texIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x, position.y + size.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
-    sceneData.rectVertexBufferPtr->TexIndex = 0;
+    sceneData.rectVertexBufferPtr->TexIndex = texIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectCount++;
@@ -158,6 +167,7 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
 
 void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation) {
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    const float tilingFactor = 1.0f;
 
     float textureIndex = 0.0f;
     for (uint32_t i = 1; i < sceneData.textureSlot; i++) {
@@ -177,24 +187,28 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::sha
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectVertexBufferPtr->Position = { position.x, position.y + size.y, position.z };
     sceneData.rectVertexBufferPtr->Color = color;
     sceneData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
     sceneData.rectVertexBufferPtr->TexIndex = textureIndex;
+    sceneData.rectVertexBufferPtr->TilingFactor = tilingFactor;
     sceneData.rectVertexBufferPtr++;
 
     sceneData.rectCount++;
