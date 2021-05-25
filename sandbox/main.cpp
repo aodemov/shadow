@@ -8,11 +8,13 @@ using namespace Shadow;
 class MainScene : public Scene {
 public:
     MainScene()
-        : cameraPosition(0.0f),
-          cameraSpeed(8.0f),
-          cameraZoom(1.0f),
-          cameraRotation(0.0f)
     {
+
+    }
+
+    void Load() override {
+        SH_INFO("Scene load");
+
         auto tex = MakeRef<Texture>("assets/textures/test.png");
         sprite1 = MakeScope<Sprite>(tex, glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
         sprite10 = MakeScope<Sprite>(tex, glm::vec3{0, 6, 1}, glm::vec2{1, 1}, 45);
@@ -21,23 +23,10 @@ public:
 
         auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
         tile1 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
-                                         glm::vec3{-2, -2, 1.0f});
+                                  glm::vec3{-2, -2, 1.0f});
 
         tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
-                                         glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
-    }
-
-    void Load() override {
-        SH_INFO("Scene load");
-
-        Application::GetEventBus().AddListener<KeyPressedEvent>([](auto e) {
-            if (e.GetKeyCode() == Key::Enter) {
-                Application::GetSceneManager().Load("test");
-            }
-            if (e.GetKeyCode() == Key::Space){
-                Application::GetSceneManager().Show("test");
-            }
-        });
+                                  glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
     }
 
     void Show() override {
@@ -123,10 +112,10 @@ public:
 private:
     CameraController cameraController;
 
-    glm::vec3 cameraPosition;
-    float cameraSpeed;
-    float cameraZoom;
-    float cameraRotation;
+    glm::vec3 cameraPosition{0.0f};
+    float cameraSpeed{8.0f};
+    float cameraZoom{1.0f};
+    float cameraRotation{0.0f};
 
     Scope<Sprite> sprite1;
     Scope<Sprite> sprite10;
@@ -136,42 +125,12 @@ private:
     Scope<Sprite> tile2;
 };
 
-class TestScene : public Scene {
-public:
-    TestScene() {
-        SH_INFO("Test constructor");
-    }
-
-    void Load() override {
-        SH_INFO("Test load");
-    }
-
-    void Show() override {
-        SH_INFO("Test show");
-    }
-
-    void Hide() override {
-        SH_INFO("Test hide");
-    }
-    void Destroy() override {
-        SH_INFO("Test unload");
-    }
-
-    void VariableUpdate(float delta) override {
-        Render::Clear();
-    }
-
-    void FixedUpdate(float delta) override {
-
-    }
-};
 
 int main() {
     Application::Init();
 
     Application::GetSceneManager().Add("main", new MainScene);
     Application::GetSceneManager().Show("main");
-    Application::GetSceneManager().Add("test", new TestScene);
 
     Application::Run();
 
