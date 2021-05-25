@@ -8,79 +8,79 @@ namespace Shadow {
 class MouseMovedEvent : public Event {
 public:
     MouseMovedEvent(const double x, const double y)
-            : x(x), y(y) {}
+            : mX(x), mY(y) {}
 
-    double GetX() const { return x; }
-    double GetY() const { return y; }
+    double GetX() const { return mX; }
+    double GetY() const { return mY; }
 
     const char* GetName() const override { return "MouseMovedEvent"; }
     std::string ToString() const override {
         std::stringstream ss;
-        ss << "MouseMovedEvent: " << x << "; " << y;
+        ss << "MouseMovedEvent: " << mX << "; " << mY;
         return ss.str();
     }
 
 private:
-    double x, y;
+    double mX, mY;
 };
 
 class MouseScrolledEvent : public Event {
 public:
     MouseScrolledEvent(const double xOffset, const double yOffset)
-            : x(xOffset), y(yOffset) {}
+            : mX(xOffset), mY(yOffset) {}
 
-    double GetXOffset() const { return x; }
-    double GetYOffset() const { return y; }
+    double GetXOffset() const { return mX; }
+    double GetYOffset() const { return mY; }
 
     const char* GetName() const override { return "MouseScrolledEvent"; }
     std::string ToString() const override {
         std::stringstream ss;
-        ss << "MouseScrolledEvent: " << x << "; " << y;
+        ss << "MouseScrolledEvent: " << mX << "; " << mY;
         return ss.str();
     }
 
 private:
-    double x, y;
+    double mX, mY;
 };
 
 class MousePressedEvent : public Event {
 public:
     MousePressedEvent(const MouseCode mouseCode, const KeyModifiers = Modifiers::None)
-            : mouseCode(mouseCode) {}
+            : mMouseCode(mouseCode) {}
 
-    MouseCode GetMouseCode() const { return mouseCode; }
-    KeyModifiers GetModifiers() const { return mods; }
+    MouseCode GetMouseCode() const { return mMouseCode; }
+    KeyModifiers GetModifiers() const { return mMods; }
 
     const char* GetName() const override { return "MousePressedEvent"; }
     std::string ToString() const override {
         std::stringstream ss;
-        ss << "MousePressedEvent: " << mouseCode;
+        ss << "MousePressedEvent: " << mMouseCode;
         return ss.str();
     }
 
 private:
-    MouseCode mouseCode;
-    KeyModifiers mods;
+    MouseCode mMouseCode;
+    KeyModifiers mMods;
 };
 
 class MouseReleasedEvent : public Event {
 public:
     MouseReleasedEvent(const MouseCode mouseCode, const KeyModifiers = Modifiers::None)
-            : mouseCode(mouseCode) {}
+            : mMouseCode(mouseCode) {}
 
-    MouseCode GetMouseCode() const { return mouseCode; }
-    KeyModifiers GetModifiers() const { return mods; }
+    MouseCode GetMouseCode() const { return mMouseCode; }
+    KeyModifiers GetModifiers() const { return mMods; }
 
     const char* GetName() const override { return "MouseReleasedEvent"; }
     std::string ToString() const override {
         std::stringstream ss;
-        ss << "MouseReleasedEvent: " << mouseCode;
+        ss << "MouseReleasedEvent: " << mMouseCode;
         return ss.str();
     }
 
 private:
-    MouseCode mouseCode;
-    KeyModifiers mods;
+    MouseCode mMouseCode;
+    KeyModifiers mMods;
 };
 
 

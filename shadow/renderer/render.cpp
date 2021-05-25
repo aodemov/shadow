@@ -20,16 +20,16 @@ struct RenderData {
     static inline const uint32_t MaxIndices = MaxRects * 6;
     static inline const uint32_t MaxTextureSlots = 16;
 
-    Ref<Shader> defaultShader;
+    Ref<Shader> DefaultShader;
 
-    Ref<VertexArray> rectVA;
-    RectVertex* rectVertexBuffer = nullptr;
+    Ref<VertexArray> RectVA;
+    RectVertex* RectVertexBuffer = nullptr;
 
-    std::array<Ref<Texture>, MaxTextureSlots> textureSlots;
+    std::array<Ref<Texture>, MaxTextureSlots> TextureSlots;
 
-    uint32_t rectCount = 0;
-    uint32_t textureSlot = 1;
-    RectVertex* rectVertexBufferPtr = nullptr;
+    uint32_t RectCount = 0;
+    uint32_t TextureSlot = 1;
+    RectVertex* RectVertexBufferPtr = nullptr;
 };
 
 static RenderData renderData;
@@ -43,7 +43,7 @@ void Render::Init() {
     glEnable(GL_DEPTH_TEST);
 
     // Preparing rect vertex data
-    renderData.rectVA = MakeRef<VertexArray>();
+    renderData.RectVA = MakeRef<VertexArray>();
 
     auto rectVB = MakeRef<VertexBuffer>(RenderData::MaxVertices * sizeof(RectVertex));
     rectVB->SetLayout({
@@ -53,10 +53,10 @@ void Render::Init() {
             { ShaderDataType::Float,  "a_TexIndex" },
             { ShaderDataType::Float,  "a_TilingFactor" },
     });
-    renderData.rectVA->AddVertexBuffer(rectVB);
+    renderData.RectVA->AddVertexBuffer(rectVB);
 
-    renderData.rectVertexBuffer = new RectVertex[RenderData::MaxVertices];
-    renderData.rectVertexBufferPtr = renderData.rectVertexBuffer;
+    renderData.RectVertexBuffer = new RectVertex[RenderData::MaxVertices];
+    renderData.RectVertexBufferPtr = renderData.RectVertexBuffer;
 
     // Generating indices for rects
     auto* rectIndices = new uint32_t[+RenderData::MaxIndices];
@@ -72,22 +72,22 @@ void Render::Init() {
         offset += 4;
     }
     auto rectIB = MakeRef<IndexBuffer>(rectIndices, RenderData::MaxIndices);
-    renderData.rectVA->SetIndexBuffer(rectIB);
+    renderData.RectVA->SetIndexBuffer(rectIB);
     delete[] rectIndices;
 
     // Compiling Default shader
-    renderData.defaultShader = MakeRef<Shader>("assets/shaders/Default.glsl");
-    renderData.defaultShader->Bind();
+    renderData.DefaultShader = MakeRef<Shader>("assets/shaders/Default.glsl");
+    renderData.DefaultShader->Bind();
 
     // Uploading sampler2d array data to Default shader
     int32_t samplers[RenderData::MaxTextureSlots];
     for (int i = 0; i < RenderData::MaxTextureSlots; i++)
         samplers[i] = i;
 
-    renderData.defaultShader->UploadUniformIntArray("u_Textures", samplers, RenderData::MaxTextureSlots);
+    renderData.DefaultShader->UploadUniformIntArray("u_Textures", samplers, RenderData::MaxTextureSlots);
 
     // Generating 1x1 white texture for colored rects
-    renderData.textureSlots[0] = Texture::CreateWhiteTexture();
+    renderData.TextureSlots[0] = Texture::CreateWhiteTexture();
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.MaxRects = RenderData::MaxRects;
@@ -96,13 +96,13 @@ void Render::Init() {
 }
 
 void Render::Shutdown() {
-    delete[] renderData.rectVertexBuffer;
+    delete[] renderData.RectVertexBuffer;
 }
 
 void Render::BeginScene(Camera& camera) {
     // Uploading ViewProjection matrix to Default shader
-    renderData.defaultShader->Bind();
-    renderData.defaultShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    renderData.DefaultShader->Bind();
+    renderData.DefaultShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 }
 
 void Render::EndScene() {
@@ -111,31 +111,31 @@ void Render::EndScene() {
 
 void Render::Flush() {
     // Binding all textures to corresponding texture slots
-    for (uint32_t i = 0; i < renderData.textureSlot; i++) {
-        renderData.textureSlots[i]->Bind(i);
+    for (uint32_t i = 0; i < renderData.TextureSlot; i++) {
+        renderData.TextureSlots[i]->Bind(i);
     }
 
     // Uploading vertex data to GPU
-    renderData.rectVA->GetVertexBuffers()[0]->SetData((const void*)renderData.rectVertexBuffer,
-                                                     (renderData.rectVertexBufferPtr - renderData.rectVertexBuffer) * sizeof(RectVertex));
+    renderData.RectVA->GetVertexBuffers()[0]->SetData((const void*)renderData.RectVertexBuffer,
+                                                      (renderData.RectVertexBufferPtr - renderData.RectVertexBuffer) * sizeof(RectVertex));
 
-    renderData.rectVA->Bind();
-    glDrawElements(GL_TRIANGLES, (int)renderData.rectCount * 6, GL_UNSIGNED_INT, nullptr);
+    renderData.RectVA->Bind();
+    glDrawElements(GL_TRIANGLES, (int)renderData.RectCount * 6, GL_UNSIGNED_INT, nullptr);
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.DrawCalls++;
-    Debugger::Stats.RectCount += renderData.rectCount;
-    Debugger::Stats.TextureCount = renderData.textureSlot;
+    Debugger::Stats.RectCount += renderData.RectCount;
+    Debugger::Stats.TextureCount = renderData.TextureSlot;
 #endif
 
     // Resetting iterators
-    renderData.rectVertexBufferPtr = renderData.rectVertexBuffer;
-    renderData.rectCount = 0;
-    renderData.textureSlot = 1;
+    renderData.RectVertexBufferPtr = renderData.RectVertexBuffer;
+    renderData.RectCount = 0;
+    renderData.TextureSlot = 1;
 }
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
-    if (renderData.rectCount >= RenderData::MaxRects)
+    if (renderData.RectCount >= RenderData::MaxRects)
         Flush();
 
     const float texIndex = 0.0f;
@@ -145,41 +145,41 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
             glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
             glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, -0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = { 0.0f, 0.0f };
-    renderData.rectVertexBufferPtr->TexIndex = texIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = {0.0f, 0.0f };
+    renderData.RectVertexBufferPtr->TexIndex = texIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, -0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = { 1.0f, 0.0f };
-    renderData.rectVertexBufferPtr->TexIndex = texIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = {1.0f, 0.0f };
+    renderData.RectVertexBufferPtr->TexIndex = texIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, 0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = { 1.0f, 1.0f };
-    renderData.rectVertexBufferPtr->TexIndex = texIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = {1.0f, 1.0f };
+    renderData.RectVertexBufferPtr->TexIndex = texIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, 0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = { 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->TexIndex = texIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = {0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->TexIndex = texIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectCount++;
+    renderData.RectCount++;
 }
 
 void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation) {
     auto texture = subTexture->GetTexture();
 
-    if (renderData.rectCount >= RenderData::MaxRects)
+    if (renderData.RectCount >= RenderData::MaxRects)
         Flush();
 
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -188,55 +188,55 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubT
     // Looking up the texture, if not found, add it to TextureSlots
     // If TextureSlots is full, Flushes the batch
     float textureIndex = 0.0f;
-    for (uint32_t i = 1; i < renderData.textureSlot; i++) {
-        if (*renderData.textureSlots[i].get() == *texture.get()) {
+    for (uint32_t i = 1; i < renderData.TextureSlot; i++) {
+        if (*renderData.TextureSlots[i].get() == *texture.get()) {
             textureIndex = (float)i;
             break;
         }
     }
 
     if (textureIndex == 0.0f) {
-        if (renderData.textureSlot >= RenderData::MaxTextureSlots)
+        if (renderData.TextureSlot >= RenderData::MaxTextureSlots)
             Flush();
 
-        textureIndex = (float)renderData.textureSlot;
-        renderData.textureSlots[renderData.textureSlot] = texture;
-        renderData.textureSlot++;
+        textureIndex = (float)renderData.TextureSlot;
+        renderData.TextureSlots[renderData.TextureSlot] = texture;
+        renderData.TextureSlot++;
     }
 
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
                           glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
                           glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, -0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[0];
-    renderData.rectVertexBufferPtr->TexIndex = textureIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[0];
+    renderData.RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, -0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[1];
-    renderData.rectVertexBufferPtr->TexIndex = textureIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[1];
+    renderData.RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ 0.5f, 0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[2];
-    renderData.rectVertexBufferPtr->TexIndex = textureIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[2];
+    renderData.RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectVertexBufferPtr->Position = transform * glm::vec4{ -0.5f, 0.5f, 0.0f, 1.0f };
-    renderData.rectVertexBufferPtr->Color = color;
-    renderData.rectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[3];
-    renderData.rectVertexBufferPtr->TexIndex = textureIndex;
-    renderData.rectVertexBufferPtr->TilingFactor = tilingFactor;
-    renderData.rectVertexBufferPtr++;
+    renderData.RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 0.0f, 1.0f };
+    renderData.RectVertexBufferPtr->Color = color;
+    renderData.RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[3];
+    renderData.RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData.RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData.RectVertexBufferPtr++;
 
-    renderData.rectCount++;
+    renderData.RectCount++;
 }
 
 void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, glm::vec4 color) {

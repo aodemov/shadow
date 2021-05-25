@@ -32,11 +32,11 @@ public:
     ~System() = default;
 
     void Subscribe() {
-        _eventBus.addListener(&System::CustomEventHandler, this);
+        _eventBus.AddListener(&System::CustomEventHandler, this);
     }
 
     void Unsubscribe() {
-        _eventBus.removeListener(&System::CustomEventHandler, this);
+        _eventBus.RemoveListener(&System::CustomEventHandler, this);
     }
 
     void CustomEventHandler(CustomEvent const& event) {
@@ -54,7 +54,7 @@ TEST(EventBus, EmitTest) {
     System sys(bus);
     sys.Subscribe();
 
-    bus.emit(CustomEvent("foo"));
+    bus.Emit(CustomEvent("foo"));
 
     ASSERT_EQ(flag, "foo");
 }
@@ -66,7 +66,7 @@ TEST(EventBus, RemoveListenerTest) {
     System sys(bus);
     sys.Subscribe();
 
-    bus.emit(CustomEvent("foo"));
+    bus.Emit(CustomEvent("foo"));
 
     ASSERT_EQ(flag, "foo");
 
@@ -74,7 +74,7 @@ TEST(EventBus, RemoveListenerTest) {
 
     sys.Unsubscribe();
 
-    bus.emit(CustomEvent("bar"));
+    bus.Emit(CustomEvent("bar"));
 
     ASSERT_EQ(flag, "");
 }

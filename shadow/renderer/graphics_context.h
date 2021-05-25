@@ -12,7 +12,7 @@ public:
     void Init();
     void SwapBuffers();
 private:
-    GLFWwindow* window;
+    GLFWwindow* mWindow;
 };
 
 }

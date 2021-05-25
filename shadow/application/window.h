@@ -51,12 +51,12 @@ private:
     void Shutdown();
     void Update();
 
-    GLFWwindow* window;
+    GLFWwindow* mWindow;
 
-    std::unique_ptr<GraphicsContext> context;
+    std::unique_ptr<GraphicsContext> mContext;
 
-    WindowOptions options;
-    EventBus& eventBus;
+    WindowOptions mOptions;
+    EventBus& mEventBus;
 
     friend class GameLoop;
     friend class Input;

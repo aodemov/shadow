@@ -28,10 +28,10 @@ public:
 
     double GetDelta() const;
 private:
-    bool paused;
+    bool mPaused;
 
-    Duration deltaTime;
-    TimePoint lastTime;
+    Duration mDeltaTime;
+    TimePoint mLastTime;
 };
 }
 

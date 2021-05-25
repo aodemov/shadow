@@ -19,11 +19,11 @@ Debugger::~Debugger() {
 }
 
 void Debugger::Show() {
-    visible = true;
+    mVisible = true;
 }
 
 void Debugger::Hide() {
-    visible = false;
+    mVisible = false;
 }
 
 void Debugger::Init() {
@@ -34,12 +34,12 @@ void Debugger::Init() {
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-    ImGui_ImplGlfw_InitForOpenGL(GameLoop::GetWindow().window, true);
+    ImGui_ImplGlfw_InitForOpenGL(GameLoop::GetWindow().mWindow, true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
-    EventBus::Instance().addListener<KeyPressedEvent>([&](KeyPressedEvent const& e) {
+    EventBus::Instance().AddListener<KeyPressedEvent>([&](KeyPressedEvent const &e) {
         if (e.GetKeyCode() == Key::Tab) {
-            visible = !visible;
+            mVisible = !mVisible;
         }
     });
 
@@ -54,7 +54,7 @@ void Debugger::Shutdown() {
 }
 
 void Debugger::Update(float delta) {
-    if (!visible)
+    if (!mVisible)
         return;
 
     auto& io = ImGui::GetIO();

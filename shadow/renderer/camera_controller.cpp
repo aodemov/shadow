@@ -5,50 +5,50 @@
 namespace Shadow {
 
 CameraController::CameraController()
-    : aspectRatio(1.0f),
-      zoom(1.0f),
-      camera(0,0,0,0)
+    : mAspectRatio(1.0f),
+      mZoom(1.0f),
+      mCamera(0, 0, 0, 0)
 {
-    aspectRatio = GameLoop::GetWindow().GetAspectRatio();
+    mAspectRatio = GameLoop::GetWindow().GetAspectRatio();
     Recalculate();
 
-    EventBus::Instance().addListener<WindowResizeEvent>([&](WindowResizeEvent const& e) {
-        aspectRatio = GameLoop::GetWindow().GetAspectRatio();
+    EventBus::Instance().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
+        mAspectRatio = GameLoop::GetWindow().GetAspectRatio();
         Recalculate();
     });
 }
 
 void CameraController::Recalculate() {
-    camera.SetProjection(-aspectRatio * zoom, aspectRatio * zoom, -zoom, zoom);
+    mCamera.SetProjection(-mAspectRatio * mZoom, mAspectRatio * mZoom, -mZoom, mZoom);
 }
 
 glm::vec3 const &CameraController::GetPosition() const {
-    return camera.GetPosition();
+    return mCamera.GetPosition();
 }
 
 void CameraController::SetPosition(const glm::vec3 &pos) {
-    camera.SetPosition(pos);
+    mCamera.SetPosition(pos);
 }
 
 float CameraController::GetZoom() const {
-    return zoom;
+    return mZoom;
 }
 
 void CameraController::SetZoom(float z) {
-    zoom = z;
+    mZoom = z;
     Recalculate();
 }
 
 float CameraController::GetRotation() const {
-    return camera.GetRotation();
+    return mCamera.GetRotation();
 }
 
 void CameraController::SetRotation(float rotation) {
-    camera.SetRotation(rotation);
+    mCamera.SetRotation(rotation);
 }
 
 Camera& CameraController::GetCamera() {
-    return camera;
+    return mCamera;
 }
 
 }

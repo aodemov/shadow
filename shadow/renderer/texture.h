@@ -4,12 +4,12 @@ namespace Shadow {
 
 class Texture {
 public:
-    explicit Texture(std::string const& path_);
+    explicit Texture(std::string const& path);
 
     ~Texture();
 
-    uint32_t GetWidth() const { return width; }
-    uint32_t GetHeight() const { return height; }
+    uint32_t GetWidth() const { return mWidth; }
+    uint32_t GetHeight() const { return mHeight; }
 
     void Bind(uint32_t slot = 0) const;
 
@@ -20,10 +20,10 @@ public:
 private:
     Texture(uint32_t width, uint32_t height, uint32_t rendererId);
 
-    std::string path;
-    uint32_t width;
-    uint32_t height;
-    uint32_t rendererId;
+    std::string mPath;
+    uint32_t mWidth;
+    uint32_t mHeight;
+    uint32_t mRendererId;
 };
 
 }

@@ -10,63 +10,63 @@ GameLoop& GameLoop::Instance() {
 }
 
 Window& GameLoop::GetWindow() {
-    return *(Instance().window);
+    return *(Instance().mWindow);
 }
 
 
 GameLoop::GameLoop()
-    : eventBus(EventBus::Instance())
+    : mEventBus(EventBus::Instance())
 {
     SH_PROFILE_FUNCTION();
 
-    maxFps = 20;
-    window = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
+    mMaxFps = 20;
+    mWindow = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
 #ifdef SH_DEBUGGER
-    debugger = std::make_unique<Debugger>();
+    mDebugger = std::make_unique<Debugger>();
 #endif
 
-    eventBus.addListener<WindowCloseEvent>([&](WindowCloseEvent const& event){
+    mEventBus.AddListener<WindowCloseEvent>([&](WindowCloseEvent const &event) {
         Application::Stop();
         Application::Quit();
     });
 }
 
 GameLoop::~GameLoop() {
-    gameClock.Pause();
+    mGameClock.Pause();
 }
 
 void GameLoop::Run() {
     SH_PROFILE_FUNCTION();
 
-    if (running)
+    if (mRunning)
         return;
 
-    running = true;
-    while(running) {
+    mRunning = true;
+    while(mRunning) {
         MainLoop();
     }
 }
 
 void GameLoop::Stop() {
-    running = false;
+    mRunning = false;
 }
 
 void GameLoop::Init() {
     SH_PROFILE_FUNCTION();
 
-    interval = 1.0 / maxFps;
+    mInterval = 1.0 / mMaxFps;
 
-    window->Init();
+    mWindow->Init();
 
     Render::Init();
 
-    gameClock.Start();
+    mGameClock.Start();
 #ifdef SH_DEBUGGER
-    debugger->Init();
+    mDebugger->Init();
 #endif
 
 #ifdef SH_DEBUGGER
-    Debugger::Stats.FixedFPS = maxFps;
+    Debugger::Stats.FixedFPS = mMaxFps;
 #endif
 }
 
@@ -74,41 +74,41 @@ void GameLoop::Shutdown() {
     SH_PROFILE_FUNCTION();
 
     Render::Shutdown();
-    window->Shutdown();
+    mWindow->Shutdown();
 }
 
 void GameLoop::MainLoop() {
     SH_PROFILE_FUNCTION();
 
-    gameClock.Update();
+    mGameClock.Update();
 
-    lag += gameClock.GetDelta();
+    mLag += mGameClock.GetDelta();
 
-    while(lag >= interval) {
-        FixedUpdate(interval);
-        lag -= interval;
+    while(mLag >= mInterval) {
+        FixedUpdate(mInterval);
+        mLag -= mInterval;
     }
 
-    VariableUpdate(gameClock.GetDelta());
+    VariableUpdate(mGameClock.GetDelta());
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.ElapsedFrames++;
-    Debugger::Stats.ElapsedTime += gameClock.GetDelta();
-    Debugger::Stats.FrameTime = gameClock.GetDelta();
+    Debugger::Stats.ElapsedTime += mGameClock.GetDelta();
+    Debugger::Stats.FrameTime = mGameClock.GetDelta();
 #endif
 }
 
 void GameLoop::VariableUpdate(double delta) {
     SH_PROFILE_FUNCTION();
 
-    eventBus.processAll();
+    mEventBus.ProcessAll();
 
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
 
 #ifdef SH_DEBUGGER
-    debugger->Update((float)delta);
+    mDebugger->Update((float)delta);
 #endif
-    window->Update();
+    mWindow->Update();
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.VariableUpdateTime = delta;

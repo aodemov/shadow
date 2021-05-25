@@ -22,78 +22,78 @@ public:
     }
 
     void Init(std::string const &filePath) {
-        file.open(filePath);
+        mFile.open(filePath);
         WriteHeader();
-        resultCount = 0;
+        mResultCount = 0;
     }
 
     void Shutdown() {
         WriteFooter();
-        file.close();
+        mFile.close();
     }
 
     void WriteResult(ProfilerResult const &result) {
-        std::lock_guard<std::mutex> lock(mutex);
+        std::lock_guard<std::mutex> lock(mMutex);
 
-        if (resultCount > 0)
-            file << ",";
+        if (mResultCount > 0)
+            mFile << ",";
 
-        file << "{";
-        file << R"("cat":"function",)";
-        file << R"("dur":)" << (result.End - result.Start) << ",";
-        file << R"("name":")" << result.Name << "\",";
-        file << R"("ph":"X",)";
-        file << R"("pid":0,)";
-        file << R"("tid":)" << result.ThreadID << ",";
-        file << R"("ts":)" << result.Start;
-        file << "}";
+        mFile << "{";
+        mFile << R"("cat":"function",)";
+        mFile << R"("dur":)" << (result.End - result.Start) << ",";
+        mFile << R"("name":")" << result.Name << "\",";
+        mFile << R"("ph":"X",)";
+        mFile << R"("pid":0,)";
+        mFile << R"("tid":)" << result.ThreadID << ",";
+        mFile << R"("ts":)" << result.Start;
+        mFile << "}";
 
-        resultCount++;
+        mResultCount++;
     }
 
 private:
     Profiler()
-        : resultCount(0)
+        : mResultCount(0)
     {
 
     };
     ~Profiler() = default;
 
     void WriteHeader() {
-        file << R"({"otherData": {}, "traceEvents":[)";
+        mFile << R"({"otherData": {}, "traceEvents":[)";
     }
 
     void WriteFooter() {
-        file << R"(]})";
+        mFile << R"(]})";
     }
 
-    std::ofstream file;
-    int resultCount;
-    std::mutex mutex;
+    std::ofstream mFile;
+    int mResultCount;
+    std::mutex mMutex;
 };
 
 class ProfilerTimer {
 public:
     explicit ProfilerTimer(const char* name)
-        : result({name, 0,0})
+        : mResult({name, 0, 0})
     {
-        startTimepoint = std::chrono::high_resolution_clock::now();
+        mStartTimepoint = std::chrono::high_resolution_clock::now();
     }
 
     ~ProfilerTimer() {
         auto endTimepoint = std::chrono::high_resolution_clock::now();
 
-        result.Start = std::chrono::time_point_cast<std::chrono::microseconds>(startTimepoint).time_since_epoch().count();
-        result.End   = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
+        mResult.Start = std::chrono::time_point_cast<std::chrono::microseconds>(mStartTimepoint).time_since_epoch().count();
+        mResult.End   = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
-        result.ThreadID = std::this_thread::get_id();
+        mResult.ThreadID = std::this_thread::get_id();
 
-        Profiler::Instance().WriteResult(result);
+        Profiler::Instance().WriteResult(mResult);
     }
 
 private:
-    ProfilerResult result;
-    std::chrono::time_point<std::chrono::high_resolution_clock> startTimepoint;
+    ProfilerResult mResult;
+    std::chrono::time_point<std::chrono::high_resolution_clock> mStartTimepoint;
 };
 
 }

@@ -13,13 +13,13 @@ public:
     void Bind() const;
     void Unbind() const;
 
-    const BufferLayout& GetLayout() const { return layout; }
-    void SetLayout(BufferLayout const& lo) { layout = lo; }
+    const BufferLayout& GetLayout() const { return mLayout; }
+    void SetLayout(BufferLayout const& layout) { mLayout = layout; }
 
     void SetData(const void* data, uint32_t size);
 private:
-    uint32_t rendererId;
-    BufferLayout layout;
+    uint32_t mRendererId;
+    BufferLayout mLayout;
 };
 
 class IndexBuffer {
@@ -30,10 +30,10 @@ public:
     void Bind() const;
     void Unbind() const;
 
-    uint32_t GetCount() const { return indicesCount; };
+    uint32_t GetCount() const { return mIndicesCount; };
 private:
-    uint32_t rendererId;
-    uint32_t indicesCount;
+    uint32_t mRendererId;
+    uint32_t mIndicesCount;
 };
 
 
@@ -45,11 +45,11 @@ public:
     void Bind() const;
     void Unbind() const;
 
-    const BufferLayout& GetLayout() const { return layout; }
-    void SetLayout(BufferLayout const& lo) { layout = lo; }
+    const BufferLayout& GetLayout() const { return mLayout; }
+    void SetLayout(BufferLayout const& lo) { mLayout = lo; }
 private:
-    uint32_t rendererId;
-    BufferLayout layout;
+    uint32_t mRendererId;
+    BufferLayout mLayout;
 };
 
 }

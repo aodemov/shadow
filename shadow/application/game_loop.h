@@ -34,18 +34,18 @@ private:
     void VariableUpdate(double delta);
     void Shutdown();
 
-    bool running = false;
+    bool mRunning = false;
 
-    int maxFps;
-    double interval;
-    double lag;
-    Clock gameClock;
+    int mMaxFps;
+    double mInterval;
+    double mLag;
+    Clock mGameClock;
 
-    std::unique_ptr<Window> window;
+    std::unique_ptr<Window> mWindow;
 #ifdef SH_DEBUGGER
-    std::unique_ptr<Debugger> debugger;
+    std::unique_ptr<Debugger> mDebugger;
 #endif
-    EventBus& eventBus;
+    EventBus& mEventBus;
 
     friend class Application;
 };

@@ -21,9 +21,9 @@ public:
 private:
     void Recalculate();
 
-    Camera camera;
+    Camera mCamera;
 
-    float aspectRatio;
-    float zoom;
+    float mAspectRatio;
+    float mZoom;
 };
 }

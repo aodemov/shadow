@@ -17,7 +17,7 @@ public:
     SceneManager& operator=(const SceneManager&) = delete;
     ~SceneManager() = default;
 
-    Scene& GetCurrentScene() const { return *currentScene; }
+    Scene& GetCurrentScene() const { return *mCurrentScene; }
 
     void Load(std::string const& name);
 
@@ -25,8 +25,8 @@ public:
 private:
     SceneManager();
 
-    std::map<std::string, Scene*> scenes;
-    Scene* currentScene;
+    std::map<std::string, Scene*> mScenes;
+    Scene* mCurrentScene;
 
     friend class GameLoop;
 };

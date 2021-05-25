@@ -4,16 +4,16 @@
 
 namespace Shadow {
 
-std::shared_ptr<spdlog::logger> Log::coreLogger;
-std::shared_ptr<spdlog::logger> Log::clientLogger;
+std::shared_ptr<spdlog::logger> Log::mCoreLogger;
+std::shared_ptr<spdlog::logger> Log::mClientLogger;
 
 void Log::Init() {
     spdlog::set_pattern("%^[%T] %n: %v%$");
-    coreLogger = spdlog::stdout_color_mt("Core");
-    coreLogger->set_level(spdlog::level::trace);
+    mCoreLogger = spdlog::stdout_color_mt("Core");
+    mCoreLogger->set_level(spdlog::level::trace);
 
-    clientLogger = spdlog::stdout_color_mt("Client");
-    clientLogger->set_level(spdlog::level::trace);
+    mClientLogger = spdlog::stdout_color_mt("Client");
+    mClientLogger->set_level(spdlog::level::trace);
 }
 
 }

@@ -6,24 +6,24 @@
 namespace Shadow {
 
 Texture::Texture(uint32_t width, uint32_t height, uint32_t rendererId)
-    : width(width),
-      height(height),
-      rendererId(rendererId) {}
+    : mWidth(width),
+      mHeight(height),
+      mRendererId(rendererId) {}
 
-Texture::Texture(const std::string &path_)
-    : path(path_),
-      rendererId(0)
+Texture::Texture(const std::string &path)
+    : mPath(path),
+      mRendererId(0)
 {
-    int width_, height_, channels;
+    int w, h, channels;
     stbi_set_flip_vertically_on_load(1);
-    stbi_uc* data = stbi_load(path.c_str(), &width_, &height_, &channels, 0);
+    stbi_uc* data = stbi_load(path.c_str(), &w, &h, &channels, 0);
 
     if (!data) {
         SH_CORE_ERROR("Cannot load image from: {0}", path);
     }
 
-    width = width_;
-    height = height_;
+    mWidth = w;
+    mHeight = h;
 
     GLenum internalFormat = 0, dataFormat = 0;
     if (channels == 4) {
@@ -38,13 +38,13 @@ Texture::Texture(const std::string &path_)
         SH_CORE_ERROR("Image format not supported ({0})", path);
     }
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &rendererId);
-    glTextureStorage2D(rendererId, 1, internalFormat, width, height);
+    glCreateTextures(GL_TEXTURE_2D, 1, &mRendererId);
+    glTextureStorage2D(mRendererId, 1, internalFormat, mWidth, mHeight);
 
-    glTextureParameteri(rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTextureParameteri(rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureSubImage2D(rendererId, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+    glTextureSubImage2D(mRendererId, 0, 0, 0, mWidth, mHeight, dataFormat, GL_UNSIGNED_BYTE, data);
 
     stbi_image_free(data);
 }
@@ -68,14 +68,14 @@ Ref<Texture> Texture::CreateWhiteTexture() {
 }
 
 bool Texture::operator==(const Texture &other) {
-    return rendererId == other.rendererId;
+    return mRendererId == other.mRendererId;
 }
 
 Texture::~Texture() {
-    glDeleteTextures(1, &rendererId);
+    glDeleteTextures(1, &mRendererId);
 }
 
 void Texture::Bind(uint32_t slot) const {
-    glBindTextureUnit(slot, rendererId);
+    glBindTextureUnit(slot, mRendererId);
 }
 }

@@ -9,9 +9,9 @@ namespace Shadow {
 static bool s_GLFWInitialized = false;
 
 Window::Window(WindowOptions options)
-    : options(options),
-      window(nullptr),
-      eventBus(EventBus::Instance())
+    : mOptions(options),
+      mWindow(nullptr),
+      mEventBus(EventBus::Instance())
 {
     if(options.VSync) {
         glfwSwapInterval(1);
@@ -29,7 +29,7 @@ Window::~Window() {
 }
 
 void Window::Init() {
-    SH_INFO("Initializing Window \"{0}\" ({1}, {2})", options.Title, options.Width, options.Height);
+    SH_INFO("Initializing Window \"{0}\" ({1}, {2})", mOptions.Title, mOptions.Width, mOptions.Height);
 
     if (!s_GLFWInitialized) {
         if(!glfwInit()) {
@@ -40,36 +40,36 @@ void Window::Init() {
         s_GLFWInitialized = true;
     }
 
-    window = glfwCreateWindow((int)options.Width, (int)options.Height, options.Title.c_str(), NULL, NULL);
-    if(!window) {
+    mWindow = glfwCreateWindow((int)mOptions.Width, (int)mOptions.Height, mOptions.Title.c_str(), NULL, NULL);
+    if(!mWindow) {
         SH_CORE_ERROR("Could not create window");
         // TODO throw
     }
 
-    context = std::make_unique<GraphicsContext>(window);
-    context->Init();
+    mContext = std::make_unique<GraphicsContext>(mWindow);
+    mContext->Init();
 
-    glfwSetWindowUserPointer(window, this);
+    glfwSetWindowUserPointer(mWindow, this);
 
     // Initializing callbacks
-    glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
+    glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* win) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.push(WindowCloseEvent());
+        window.mEventBus.Push(WindowCloseEvent());
     });
 
-    glfwSetWindowSizeCallback(window, [](GLFWwindow* win, int width, int height){
+    glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* win, int width, int height){
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.options.Width = width;
-        window.options.Height = height;
+        window.mOptions.Width = width;
+        window.mOptions.Height = height;
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.WindowSize = { width, height };
 #endif
 
-        window.eventBus.push(WindowResizeEvent(width, height));
+        window.mEventBus.Push(WindowResizeEvent(width, height));
     });
 
-    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+    glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* win, int width, int height) {
         glViewport(0, 0, width, height);
 
 #ifdef SH_DEBUGGER
@@ -78,49 +78,49 @@ void Window::Init() {
 #endif
     });
 
-    glfwSetWindowIconifyCallback(window, [](GLFWwindow* win, int iconified) {
+    glfwSetWindowIconifyCallback(mWindow, [](GLFWwindow* win, int iconified) {
     });
 
-    glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
+    glfwSetKeyCallback(mWindow, [](GLFWwindow* win, int key, int scancode, int action, int mods){
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
         KeyModifiers modifiers = mods;
 
         switch (action) {
             case GLFW_PRESS:
-                window.eventBus.push(KeyPressedEvent(key, modifiers));
+                window.mEventBus.Push(KeyPressedEvent(key, modifiers));
                 break;
             case GLFW_RELEASE:
-                window.eventBus.push(KeyReleasedEvent(key, modifiers));
+                window.mEventBus.Push(KeyReleasedEvent(key, modifiers));
                 break;
             case GLFW_REPEAT:
-                window.eventBus.push(KeyRepeatedEvent(key, modifiers));
+                window.mEventBus.Push(KeyRepeatedEvent(key, modifiers));
                 break;
         }
     });
 
-    glfwSetMouseButtonCallback(window, [](GLFWwindow* win, int button, int action, int mods){
+    glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* win, int button, int action, int mods){
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
         KeyModifiers modifiers = mods;
 
 
         switch (action) {
             case GLFW_PRESS:
-                window.eventBus.push(MousePressedEvent(button, modifiers));
+                window.mEventBus.Push(MousePressedEvent(button, modifiers));
                 break;
             case GLFW_RELEASE:
-                window.eventBus.push(MouseReleasedEvent(button, modifiers));
+                window.mEventBus.Push(MouseReleasedEvent(button, modifiers));
                 break;
         }
     });
 
-    glfwSetScrollCallback(window, [](GLFWwindow* win, double xOffset, double yOffset) {
+    glfwSetScrollCallback(mWindow, [](GLFWwindow* win, double xOffset, double yOffset) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.push(MouseScrolledEvent(xOffset, yOffset));
+        window.mEventBus.Push(MouseScrolledEvent(xOffset, yOffset));
     });
 
-    glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y) {
+    glfwSetCursorPosCallback(mWindow, [](GLFWwindow* win, double x, double y) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        window.eventBus.push(MouseMovedEvent(x, y));
+        window.mEventBus.Push(MouseMovedEvent(x, y));
 
 #ifdef SH_DEBUGGER
         Debugger::Stats.MousePosition = { x, y };
@@ -134,7 +134,7 @@ void Window::Init() {
 }
 
 void Window::Shutdown() {
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(mWindow);
 
     if (s_GLFWInitialized) {
         glfwTerminate();
@@ -143,65 +143,65 @@ void Window::Shutdown() {
 
 void Window::Update() {
     glfwPollEvents();
-    context->SwapBuffers();
+    mContext->SwapBuffers();
 }
 
 void Window::Close() {
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
+    glfwSetWindowShouldClose(mWindow, GLFW_TRUE);
 }
 
 bool Window::IsClosed() const {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(mWindow);
 }
 
 void Window::Resize(unsigned int width, unsigned int height) {
-    glfwSetWindowSize(window, width, height);
+    glfwSetWindowSize(mWindow, width, height);
 }
 
 unsigned int Window::GetWidth() const {
     int width, height;
-    glfwGetWindowSize(window, &width, &height);
+    glfwGetWindowSize(mWindow, &width, &height);
     return width;
 }
 
 unsigned int Window::GetHeight() const {
     int width, height;
-    glfwGetWindowSize(window, &width, &height);
+    glfwGetWindowSize(mWindow, &width, &height);
     return height;
 }
 
 float Window::GetAspectRatio() const {
     int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
+    glfwGetFramebufferSize(mWindow, &width, &height);
      return (float)width / height;
 }
 
 void Window::SetTitle(const std::string &title) {
-    options.Title = title;
-    glfwSetWindowTitle(window, title.c_str());
+    mOptions.Title = title;
+    glfwSetWindowTitle(mWindow, title.c_str());
 }
 
 std::string Window::GetTitle() const {
-    return options.Title;
+    return mOptions.Title;
 }
 
 void Window::Minimize() {
-    glfwIconifyWindow(window);
+    glfwIconifyWindow(mWindow);
 }
 
 void Window::Restore() {
-    glfwRestoreWindow(window);
+    glfwRestoreWindow(mWindow);
 }
 
 void Window::Maximize() {
-    glfwMaximizeWindow(window);
+    glfwMaximizeWindow(mWindow);
 }
 
 bool Window::IsMinimized() const {
-    return glfwGetWindowAttrib(window, GLFW_ICONIFIED);
+    return glfwGetWindowAttrib(mWindow, GLFW_ICONIFIED);
 }
 
 bool Window::IsMaximized() const {
-    return glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
+    return glfwGetWindowAttrib(mWindow, GLFW_MAXIMIZED);
 }
 }

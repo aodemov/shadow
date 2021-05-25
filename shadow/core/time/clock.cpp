@@ -3,39 +3,39 @@
 namespace Shadow {
 
 Clock::Clock()
-    : deltaTime(),
-      lastTime(),
-      paused(true) {}
+    : mDeltaTime(),
+      mLastTime(),
+      mPaused(true) {}
 
 Clock::Clock(const Clock &other)
-    : deltaTime(other.deltaTime),
-      lastTime(other.lastTime),
-      paused(other.paused) {}
+    : mDeltaTime(other.mDeltaTime),
+      mLastTime(other.mLastTime),
+      mPaused(other.mPaused) {}
 
 Clock::Clock(Clock &&other) noexcept
-    : deltaTime(other.deltaTime),
-      lastTime(other.lastTime),
-      paused(other.paused) {}
+    : mDeltaTime(other.mDeltaTime),
+      mLastTime(other.mLastTime),
+      mPaused(other.mPaused) {}
 
 void Clock::Update() {
-    if (paused) {
-        deltaTime = Duration::zero();
+    if (mPaused) {
+        mDeltaTime = Duration::zero();
         return;
     }
 
     TimePoint now = HiResClock::now();
-    deltaTime = now - lastTime;
-    lastTime = now;
+    mDeltaTime = now - mLastTime;
+    mLastTime = now;
 }
 
-double Clock::GetDelta() const { return deltaTime.count(); }
+double Clock::GetDelta() const { return mDeltaTime.count(); }
 void Clock::Start() {
-    deltaTime = Duration::zero();
-    lastTime = HiResClock::now();
-    paused = false;
+    mDeltaTime = Duration::zero();
+    mLastTime = HiResClock::now();
+    mPaused = false;
 }
-void Clock::Pause() { paused = true; }
-void Clock::Resume() { paused = false; }
-bool Clock::IsPaused() const { return paused; }
+void Clock::Pause() { mPaused = true; }
+void Clock::Resume() { mPaused = false; }
+bool Clock::IsPaused() const { return mPaused; }
 
 }

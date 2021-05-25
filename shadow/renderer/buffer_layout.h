@@ -98,34 +98,34 @@ public:
     BufferLayout() = default;
 
     BufferLayout(std::initializer_list<BufferElement> elements)
-            : elements(elements)
+            : mElements(elements)
     {
         CalculateOffsetsAndStride();
     }
 
-    uint32_t GetStride() const { return stride; }
-    const std::vector<BufferElement>& GetElements() const { return elements; }
+    uint32_t GetStride() const { return mStride; }
+    const std::vector<BufferElement>& GetElements() const { return mElements; }
 
-    std::vector<BufferElement>::iterator begin() { return elements.begin(); }
-    std::vector<BufferElement>::iterator end() { return elements.end(); }
-    std::vector<BufferElement>::const_iterator begin() const { return elements.begin(); }
-    std::vector<BufferElement>::const_iterator end() const { return elements.end(); }
+    std::vector<BufferElement>::iterator begin() { return mElements.begin(); }
+    std::vector<BufferElement>::iterator end() { return mElements.end(); }
+    std::vector<BufferElement>::const_iterator begin() const { return mElements.begin(); }
+    std::vector<BufferElement>::const_iterator end() const { return mElements.end(); }
 
 private:
     void CalculateOffsetsAndStride()
     {
         size_t offset = 0;
-        stride = 0;
-        for (auto& element : elements)
+        mStride = 0;
+        for (auto& element : mElements)
         {
             element.Offset = offset;
             offset += element.Size;
-            stride += element.Size;
+            mStride += element.Size;
         }
     }
 
-    std::vector<BufferElement> elements;
-    uint32_t stride = 0;
+    std::vector<BufferElement> mElements;
+    uint32_t mStride = 0;
 };
 
 

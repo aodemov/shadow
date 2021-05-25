@@ -15,14 +15,14 @@ public:
     void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
     void SetIndexBuffer(const Ref<IndexBuffer>& indexBuf);
 
-    const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return vertexBuffers; }
-    const Ref<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
+    const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return mVertexBuffers; }
+    const Ref<IndexBuffer>& GetIndexBuffer() const { return mIndexBuffer; }
 private:
-    uint32_t rendererId;
-    uint32_t vertexBufferIndex = 0;
+    uint32_t mRendererId;
+    uint32_t mVertexBufferIndex = 0;
 
-    std::vector<Ref<VertexBuffer>> vertexBuffers;
-    Ref<IndexBuffer> indexBuffer;
+    std::vector<Ref<VertexBuffer>> mVertexBuffers;
+    Ref<IndexBuffer> mIndexBuffer;
 };
 
 }

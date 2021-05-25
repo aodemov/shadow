@@ -9,19 +9,19 @@ namespace Shadow {
 class WindowResizeEvent : public Event {
 public:
     WindowResizeEvent(unsigned int width, unsigned int height)
-        : width(width), height(height) {}
+        : mWidth(width), mHeight(height) {}
 
-    unsigned int GetWidth() const { return width; }
-    unsigned int GetHeight() const { return height; }
+    unsigned int GetWidth() const { return mWidth; }
+    unsigned int GetHeight() const { return mHeight; }
 
     const char* GetName() const override { return "WindowResizeEvent"; }
     std::string ToString() const override {
         std::stringstream ss;
-        ss << "WindowResizeEvent: " << width << "; " << height;
+        ss << "WindowResizeEvent: " << mWidth << "; " << mHeight;
         return ss.str();
     }
 private:
-    unsigned int width, height;
+    unsigned int mWidth, mHeight;
 };
 
 class WindowCloseEvent : public Event {

@@ -3,15 +3,15 @@
 namespace Shadow {
 
 GraphicsContext::GraphicsContext(GLFWwindow *window)
-    : window(window) {}
+    : mWindow(window) {}
 
 void GraphicsContext::Init() {
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(mWindow);
     gladLoadGL(glfwGetProcAddress);
 }
 
 void GraphicsContext::SwapBuffers() {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(mWindow);
 }
 
 }

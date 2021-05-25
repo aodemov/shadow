@@ -23,7 +23,7 @@ public:
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);
 
-    uint32_t rendererId;
+    uint32_t mRendererId;
 };
 
 }

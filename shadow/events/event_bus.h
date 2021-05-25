@@ -24,30 +24,30 @@ public:
         return instance;
     }
 
-    void processOne();
-    void processAll();
-    bool hasPending();
+    void ProcessOne();
+    void ProcessAll();
+    bool HasPending();
 
 
     template<class EventType>
-    void addListener(Function<EventType> function);
+    void AddListener(Function<EventType> function);
 
     template<class T, class EventType>
-    void addListener(T* instance, MemberFunction<T, EventType> memberFunction);
+    void AddListener(T* instance, MemberFunction<T, EventType> memberFunction);
 
 
     template<class EventType>
-    void removeListener(Function<EventType> function);
+    void RemoveListener(Function<EventType> function);
 
     template<class T, class EventType>
-    void removeListener(T* instance, MemberFunction<T, EventType> memberFunction);
+    void RemoveListener(T* instance, MemberFunction<T, EventType> memberFunction);
 
 
     template<typename EventType>
-    void emitImmediately(EventType const& event);
+    void EmitImmediately(EventType const& event);
 
     template<typename EventType>
-    void push(EventType const& event);
+    void Push(EventType const& event);
 
 private:
     EventBus() = default;
@@ -56,60 +56,60 @@ private:
     EventBus(const EventBus&) = delete;
     EventBus& operator=(const EventBus&) = delete;
 
-    void emit(std::type_index eventId, Event const& event);
+    void Emit(std::type_index eventId, Event const& event);
 
-    std::multimap<std::type_index, std::shared_ptr<HandlerFunctionBase>> listeners;
-    std::queue<std::pair<std::type_index, std::unique_ptr<Event>>> eventQueue;
+    std::multimap<std::type_index, std::shared_ptr<HandlerFunctionBase>> mListeners;
+    std::queue<std::pair<std::type_index, std::unique_ptr<Event>>> mEventQueue;
 
-    std::mutex mutex;
+    std::mutex mMutex;
 };
 
 template<class EventType>
-void EventBus::addListener(Function<EventType> function) {
-    std::lock_guard<std::mutex> lock(mutex);
+void EventBus::AddListener(Function<EventType> function) {
+    std::lock_guard<std::mutex> lock(mMutex);
 
-    listeners.insert(std::make_pair<std::type_index, std::shared_ptr<HandlerFunction<EventType>>>(
+    mListeners.insert(std::make_pair<std::type_index, std::shared_ptr<HandlerFunction<EventType>>>(
             typeid(EventType),
             std::make_shared<HandlerFunction<EventType>>(function)
     ));
 }
 
 template<class T, class EventType>
-void EventBus::addListener(T* instance, MemberFunction<T, EventType> memberFunction) {
-    addListener<EventType>(std::bind(memberFunction, instance, std::placeholders::_1));
+void EventBus::AddListener(T* instance, MemberFunction<T, EventType> memberFunction) {
+    AddListener<EventType>(std::bind(memberFunction, instance, std::placeholders::_1));
 }
 
 template<class EventType>
-void EventBus::removeListener(Function<EventType> function) {
-    std::lock_guard<std::mutex> lock(mutex);
+void EventBus::RemoveListener(Function<EventType> function) {
+    std::lock_guard<std::mutex> lock(mMutex);
 
-    auto handlerEntries = listeners.equal_range(typeid(EventType));
+    auto handlerEntries = mListeners.equal_range(typeid(EventType));
 
     for (auto handlerEntry = handlerEntries.first; handlerEntry != handlerEntries.second; ++handlerEntry) {
         auto const& handler = std::dynamic_pointer_cast<HandlerFunction<EventType>>(handlerEntry->second);
-        if (handler.get()->function == function) {
-            listeners.erase(handlerEntry);
+        if (handler.get()->mFunction == function) {
+            mListeners.erase(handlerEntry);
             return;
         }
     }
 }
 
 template<class T, class EventType>
-void EventBus::removeListener(T* instance, MemberFunction<T, EventType> memberFunction) {
-    removeListener(std::bind(memberFunction, instance, std::placeholders::_1));
+void EventBus::RemoveListener(T* instance, MemberFunction<T, EventType> memberFunction) {
+    RemoveListener(std::bind(memberFunction, instance, std::placeholders::_1));
 }
 
 template<typename EventType>
-void EventBus::emitImmediately(EventType const& event) {
-    emit(typeid(EventType), event);
+void EventBus::EmitImmediately(EventType const& event) {
+    Emit(typeid(EventType), event);
 }
 
 template<typename EventType>
-void EventBus::push(const EventType &event) {
-    std::lock_guard<std::mutex> lock(mutex);
+void EventBus::Push(const EventType &event) {
+    std::lock_guard<std::mutex> lock(mMutex);
 
-    if (listeners.count(typeid(EventType)) > 0) {
-        eventQueue.push(std::make_pair<std::type_index, std::unique_ptr<Event>>(typeid(EventType), std::unique_ptr<Event>(new EventType(event))));
+    if (mListeners.count(typeid(EventType)) > 0) {
+        mEventQueue.push(std::make_pair<std::type_index, std::unique_ptr<Event>>(typeid(EventType), std::unique_ptr<Event>(new EventType(event))));
     }
 }
 

@@ -19,6 +19,6 @@ public:
     static inline Statistics Stats;
 
 private:
-    bool visible = false;
+    bool mVisible = false;
 };
 }

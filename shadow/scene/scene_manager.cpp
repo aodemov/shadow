@@ -3,21 +3,21 @@
 namespace Shadow {
 
 SceneManager::SceneManager()
-    : scenes(),
-      currentScene()
+    : mScenes(),
+      mCurrentScene()
 {}
 
 void SceneManager::Add(const std::string &name, Scene *scene) {
-    scenes[name] = scene;
+    mScenes[name] = scene;
 }
 
 void SceneManager::Load(const std::string &name) {
-    Scene* previousScene = currentScene;
-    currentScene = scenes.at(name);
+    Scene* previousScene = mCurrentScene;
+    mCurrentScene = mScenes.at(name);
     if (previousScene != nullptr) {
         previousScene->Destroy();
     }
-    currentScene->Create();
+    mCurrentScene->Create();
 }
 
 }

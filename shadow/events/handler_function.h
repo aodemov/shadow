@@ -6,7 +6,7 @@ class EventBus;
 
 class HandlerFunctionBase {
 public:
-    void invoke(Event const& event) {
+    void Invoke(Event const& event) {
         _invoke(event);
     }
 
@@ -20,14 +20,14 @@ public:
     typedef std::function<void(EventType const&)> Function;
 
     explicit HandlerFunction(Function handlerFunction)
-        : function(handlerFunction) {}
+        : mFunction(handlerFunction) {}
 
     void _invoke(Event const& event) override {
-        function(*(static_cast<const EventType*>(&event)));
+        mFunction(*(static_cast<const EventType*>(&event)));
     }
 
 private:
-    Function function;
+    Function mFunction;
 
     friend class EventBus;
 };

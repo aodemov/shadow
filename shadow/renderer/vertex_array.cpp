@@ -5,15 +5,15 @@
 namespace Shadow {
 
 VertexArray::VertexArray() {
-    glCreateVertexArrays(1, &rendererId);
+    glCreateVertexArrays(1, &mRendererId);
 }
 
 VertexArray::~VertexArray() {
-    glDeleteVertexArrays(1, &rendererId);
+    glDeleteVertexArrays(1, &mRendererId);
 };
 
 void VertexArray::Bind() const {
-    glBindVertexArray(rendererId);
+    glBindVertexArray(mRendererId);
 }
 
 void VertexArray::Unbind() const {
@@ -21,12 +21,12 @@ void VertexArray::Unbind() const {
 }
 
 void VertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) {
-    glBindVertexArray(rendererId);
+    glBindVertexArray(mRendererId);
     vertexBuffer->Bind();
     uint32_t index = 0;
     const auto& layout = vertexBuffer->GetLayout();
     for (const auto& element : layout) {
-        glEnableVertexArrayAttrib(rendererId, index);
+        glEnableVertexArrayAttrib(mRendererId, index);
         glVertexAttribPointer(index,
                               element.GetComponentCount(),
                               ShaderDataTypeToOpenGLBaseType(element.Type),
@@ -36,13 +36,13 @@ void VertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) {
         ++index;
     }
 
-    vertexBuffers.push_back(vertexBuffer);
+    mVertexBuffers.push_back(vertexBuffer);
 }
 
 void VertexArray::SetIndexBuffer(const Ref<IndexBuffer> &indexBuf) {
-    glBindVertexArray(rendererId);
+    glBindVertexArray(mRendererId);
     indexBuf->Bind();
 
-    indexBuffer = indexBuf;
+    mIndexBuffer = indexBuf;
 }
 }
