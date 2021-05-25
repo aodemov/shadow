@@ -6,6 +6,7 @@
 #include "shadow/renderer/shader.h"
 #include "shadow/renderer/camera.h"
 #include "shadow/renderer/texture.h"
+#include "shadow/renderer/sub_texture.h"
 
 namespace Shadow {
 
@@ -22,7 +23,7 @@ public:
     static void Clear();
 
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color, float rotation = 0.0f);
-    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<Texture> const& texture, float rotation = 0.0f);
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<SubTexture> const& texture, float rotation = 0.0f);
 
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
 };

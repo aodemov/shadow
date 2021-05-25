@@ -2,12 +2,20 @@
 
 #include <shadow/shadow.h>
 
+#include <utility>
+
 namespace Shadow {
 
 class Sprite {
 public:
-    explicit Sprite(std::shared_ptr<Texture> const& texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
-        : _texture(texture),
+    explicit Sprite(const std::shared_ptr<Texture>& texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
+        : _texture(std::make_shared<SubTexture>(texture)),
+          _position(position),
+          _size(size),
+          _rotation(rotation) {}
+
+    explicit Sprite(std::shared_ptr<SubTexture> texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
+        : _texture(std::move(texture)),
           _position(position),
           _size(size),
           _rotation(rotation) {}
@@ -27,7 +35,7 @@ private:
     glm::vec3 _position;
     glm::vec2 _size;
     float _rotation;
-    std::shared_ptr<Texture> _texture;
+    std::shared_ptr<SubTexture> _texture;
 };
 
 }

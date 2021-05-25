@@ -18,6 +18,13 @@ public:
         sprite10 = std::make_unique<Sprite>(tex, glm::vec3{0, 6, 1}, glm::vec2{1, 1}, 45);
         sprite11 = std::make_unique<Sprite>(tex, glm::vec3{2, 6, 1}, glm::vec2{1, 1}, 45);
         sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
+
+        auto tilemap = std::make_shared<Texture>("assets/textures/tilemap.png");
+        tile1 = std::make_unique<Sprite>(std::make_shared<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
+                                         glm::vec3{-2, -2, 1.0f});
+
+        tile2 = std::make_unique<Sprite>(std::make_shared<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
+                                         glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
     }
 
     void Create() override {
@@ -98,6 +105,9 @@ public:
         sprite1->SetRotation(rot);
         sprite2->Draw();
 
+        tile1->Draw();
+        tile2->Draw();
+
         Render::EndScene();
     }
 
@@ -113,6 +123,8 @@ private:
     std::unique_ptr<Sprite> sprite10;
     std::unique_ptr<Sprite> sprite11;
     std::unique_ptr<Sprite> sprite2;
+    std::unique_ptr<Sprite> tile1;
+    std::unique_ptr<Sprite> tile2;
 };
 
 int main() {
