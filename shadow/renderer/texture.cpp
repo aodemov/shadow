@@ -49,7 +49,7 @@ Texture::Texture(const std::string &path_)
     stbi_image_free(data);
 }
 
-std::shared_ptr<Texture> Texture::CreateWhiteTexture() {
+Ref<Texture> Texture::CreateWhiteTexture() {
     uint32_t id;
     glGenTextures(1, &id);
 
@@ -64,7 +64,7 @@ std::shared_ptr<Texture> Texture::CreateWhiteTexture() {
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-    return std::shared_ptr<Texture>(new Texture(1, 1, id));
+    return Ref<Texture>(new Texture(1, 1, id));
 }
 
 bool Texture::operator==(const Texture &other) {

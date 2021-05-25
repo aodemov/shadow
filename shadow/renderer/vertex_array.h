@@ -12,17 +12,17 @@ public:
     void Bind() const;
     void Unbind() const;
 
-    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuf);
+    void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
+    void SetIndexBuffer(const Ref<IndexBuffer>& indexBuf);
 
-    const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const { return vertexBuffers; }
-    const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
+    const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return vertexBuffers; }
+    const Ref<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
 private:
     uint32_t rendererId;
     uint32_t vertexBufferIndex = 0;
 
-    std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
-    std::shared_ptr<IndexBuffer> indexBuffer;
+    std::vector<Ref<VertexBuffer>> vertexBuffers;
+    Ref<IndexBuffer> indexBuffer;
 };
 
 }

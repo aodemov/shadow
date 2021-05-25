@@ -13,17 +13,17 @@ public:
           cameraZoom(1.0f),
           cameraRotation(0.0f)
     {
-        auto tex = std::make_shared<Texture>("assets/textures/test.png");
-        sprite1 = std::make_unique<Sprite>(tex, glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
-        sprite10 = std::make_unique<Sprite>(tex, glm::vec3{0, 6, 1}, glm::vec2{1, 1}, 45);
-        sprite11 = std::make_unique<Sprite>(tex, glm::vec3{2, 6, 1}, glm::vec2{1, 1}, 45);
-        sprite2 = std::make_unique<Sprite>(std::make_shared<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
+        auto tex = MakeRef<Texture>("assets/textures/test.png");
+        sprite1 = MakeScope<Sprite>(tex, glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);
+        sprite10 = MakeScope<Sprite>(tex, glm::vec3{0, 6, 1}, glm::vec2{1, 1}, 45);
+        sprite11 = MakeScope<Sprite>(tex, glm::vec3{2, 6, 1}, glm::vec2{1, 1}, 45);
+        sprite2 = MakeScope<Sprite>(MakeRef<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
 
-        auto tilemap = std::make_shared<Texture>("assets/textures/tilemap.png");
-        tile1 = std::make_unique<Sprite>(std::make_shared<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
+        auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
+        tile1 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
                                          glm::vec3{-2, -2, 1.0f});
 
-        tile2 = std::make_unique<Sprite>(std::make_shared<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
+        tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
                                          glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
     }
 
@@ -119,12 +119,12 @@ private:
     float cameraZoom;
     float cameraRotation;
 
-    std::unique_ptr<Sprite> sprite1;
-    std::unique_ptr<Sprite> sprite10;
-    std::unique_ptr<Sprite> sprite11;
-    std::unique_ptr<Sprite> sprite2;
-    std::unique_ptr<Sprite> tile1;
-    std::unique_ptr<Sprite> tile2;
+    Scope<Sprite> sprite1;
+    Scope<Sprite> sprite10;
+    Scope<Sprite> sprite11;
+    Scope<Sprite> sprite2;
+    Scope<Sprite> tile1;
+    Scope<Sprite> tile2;
 };
 
 int main() {

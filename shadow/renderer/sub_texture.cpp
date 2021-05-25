@@ -1,7 +1,7 @@
 #include "sub_texture.h"
 
 namespace Shadow {
-SubTexture::SubTexture(const std::shared_ptr<Texture> &texture)
+SubTexture::SubTexture(const Ref<Texture> &texture)
     : _texture(texture) {
     _texCoords[0] = { 0.0f, 0.0f };
     _texCoords[1] = { 1.0f, 0.0f };
@@ -9,7 +9,7 @@ SubTexture::SubTexture(const std::shared_ptr<Texture> &texture)
     _texCoords[3] = { 0.0f, 1.0f };
 }
 
-SubTexture::SubTexture(const std::shared_ptr<Texture> &texture, const glm::vec4& texCoords)
+SubTexture::SubTexture(const Ref<Texture> &texture, const glm::vec4& texCoords)
     : _texture(texture) {
     _texCoords[0] = { texCoords.x, texCoords.y };
     _texCoords[1] = { texCoords.z, texCoords.y };
@@ -17,7 +17,7 @@ SubTexture::SubTexture(const std::shared_ptr<Texture> &texture, const glm::vec4&
     _texCoords[3] = { texCoords.x, texCoords.w };
 }
 
-SubTexture::SubTexture(const std::shared_ptr<Texture> &texture, const glm::vec2 &size, const glm::vec2 &offset)
+SubTexture::SubTexture(const Ref<Texture> &texture, const glm::vec2 &size, const glm::vec2 &offset)
     : _texture(texture) {
     glm::vec4 texCoords = { offset.x / _texture->GetWidth(),
                             offset.y / _texture->GetHeight(),

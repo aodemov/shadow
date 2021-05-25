@@ -20,12 +20,12 @@ struct RenderData {
     static inline const uint32_t MaxIndices = MaxRects * 6;
     static inline const uint32_t MaxTextureSlots = 16;
 
-    std::shared_ptr<Shader> defaultShader;
+    Ref<Shader> defaultShader;
 
-    std::shared_ptr<VertexArray> rectVA;
+    Ref<VertexArray> rectVA;
     RectVertex* rectVertexBuffer = nullptr;
 
-    std::array<std::shared_ptr<Texture>, MaxTextureSlots> textureSlots;
+    std::array<Ref<Texture>, MaxTextureSlots> textureSlots;
 
     uint32_t rectCount = 0;
     uint32_t textureSlot = 1;
@@ -43,9 +43,9 @@ void Render::Init() {
     glEnable(GL_DEPTH_TEST);
 
     // Preparing rect vertex data
-    renderData.rectVA = std::make_shared<VertexArray>();
+    renderData.rectVA = MakeRef<VertexArray>();
 
-    auto rectVB = std::make_shared<VertexBuffer>(RenderData::MaxVertices * sizeof(RectVertex));
+    auto rectVB = MakeRef<VertexBuffer>(RenderData::MaxVertices * sizeof(RectVertex));
     rectVB->SetLayout({
             { ShaderDataType::Float3, "a_Position" },
             { ShaderDataType::Float4, "a_Color" },
@@ -71,12 +71,12 @@ void Render::Init() {
 
         offset += 4;
     }
-    auto rectIB = std::make_shared<IndexBuffer>(rectIndices, RenderData::MaxIndices);
+    auto rectIB = MakeRef<IndexBuffer>(rectIndices, RenderData::MaxIndices);
     renderData.rectVA->SetIndexBuffer(rectIB);
     delete[] rectIndices;
 
     // Compiling Default shader
-    renderData.defaultShader = std::make_shared<Shader>("assets/shaders/Default.glsl");
+    renderData.defaultShader = MakeRef<Shader>("assets/shaders/Default.glsl");
     renderData.defaultShader->Bind();
 
     // Uploading sampler2d array data to Default shader
@@ -176,7 +176,7 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
     renderData.rectCount++;
 }
 
-void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, std::shared_ptr<SubTexture> const& subTexture, float rotation) {
+void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation) {
     auto texture = subTexture->GetTexture();
 
     if (renderData.rectCount >= RenderData::MaxRects)

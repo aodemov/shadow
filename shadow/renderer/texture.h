@@ -15,7 +15,7 @@ public:
 
     bool operator==(const Texture& other);
 
-    static std::shared_ptr<Texture> CreateWhiteTexture();
+    static Ref<Texture> CreateWhiteTexture();
 
 private:
     Texture(uint32_t width, uint32_t height, uint32_t rendererId);
