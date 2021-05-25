@@ -7,7 +7,7 @@ namespace Shadow {
 
 class GraphicsContext {
 public:
-    GraphicsContext(GLFWwindow* window);
+    explicit GraphicsContext(GLFWwindow* window);
 
     void Init();
     void SwapBuffers();
