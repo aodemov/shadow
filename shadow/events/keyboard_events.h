@@ -9,8 +9,9 @@ namespace Shadow {
 
 class KeyPressedEvent : public Event {
 public:
-    KeyPressedEvent(const KeyCode keyCode, const KeyModifiers = Modifiers::None)
-        : mKeyCode(keyCode) {}
+    explicit KeyPressedEvent(const KeyCode keyCode, const KeyModifiers mods = Modifiers::None)
+        : mKeyCode(keyCode),
+          mMods(mods) {}
 
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
@@ -29,8 +30,9 @@ private:
 
 class KeyReleasedEvent : public Event {
 public:
-    KeyReleasedEvent(const KeyCode keyCode, const KeyModifiers = Modifiers::None)
-            : mKeyCode(keyCode) {}
+    explicit KeyReleasedEvent(const KeyCode keyCode, const KeyModifiers mods = Modifiers::None)
+        : mKeyCode(keyCode),
+          mMods(mods) {}
 
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
@@ -49,8 +51,9 @@ private:
 
 class KeyRepeatedEvent : public Event {
 public:
-    KeyRepeatedEvent(const KeyCode keyCode, const KeyModifiers = Modifiers::None)
-            : mKeyCode(keyCode) {}
+    explicit KeyRepeatedEvent(const KeyCode keyCode, const KeyModifiers mods = Modifiers::None)
+        : mKeyCode(keyCode),
+          mMods(mods) {}
 
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
