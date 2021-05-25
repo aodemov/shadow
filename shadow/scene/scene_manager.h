@@ -19,6 +19,9 @@ public:
     SceneManager(const SceneManager&) = delete;
     SceneManager& operator=(const SceneManager&) = delete;
 
+    void Init();
+    void Shutdown();
+
 
     void Add(std::string const& name, Scene* scene);
     void Remove(std::string const& name);

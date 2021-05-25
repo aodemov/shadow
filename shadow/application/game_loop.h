@@ -31,6 +31,8 @@ private:
     void Shutdown();
 
     bool mRunning = false;
+    bool mStopped = true;
+    bool mShouldQuit = false;
 
     int mMaxFps;
     float mInterval;

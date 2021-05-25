@@ -55,6 +55,8 @@ void Window::Init() {
     glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* win) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
         Application::GetEventBus().Push(WindowCloseEvent());
+
+        glfwSetWindowShouldClose(win, GLFW_FALSE);
     });
 
     glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* win, int width, int height){

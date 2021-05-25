@@ -16,10 +16,12 @@ void Application::Run() {
 }
 
 void Application::Stop() {
+    SH_CORE_INFO("Application stop");
     mGameLoop->Stop();
 }
 
 void Application::Quit() {
+    SH_CORE_INFO("Application quit");
     mGameLoop->Shutdown();
     SH_PROFILE_SHUTDOWN();
 }

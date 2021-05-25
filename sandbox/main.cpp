@@ -9,7 +9,11 @@ class MainScene : public Scene {
 public:
     MainScene()
     {
+        SH_CORE_INFO("Scene constructor");
+    }
 
+    ~MainScene() override {
+        SH_CORE_INFO("Scene destructor");
     }
 
     void Load() override {
@@ -131,6 +135,10 @@ int main() {
 
     Application::GetSceneManager().Add("main", new MainScene);
     Application::GetSceneManager().Show("main");
+
+    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
+       Application::Stop();
+    });
 
     Application::Run();
 

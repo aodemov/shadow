@@ -18,11 +18,6 @@ GameLoop::GameLoop()
 #ifdef SH_DEBUGGER
     mDebugger = std::make_unique<Debugger>();
 #endif
-
-    mEventBus->AddListener<WindowCloseEvent>([&](WindowCloseEvent const &event) {
-        Application::Stop();
-        Application::Quit();
-    });
 }
 
 GameLoop::~GameLoop() {
@@ -36,9 +31,15 @@ void GameLoop::Run() {
         return;
 
     mRunning = true;
+    mStopped = false;
     while(mRunning) {
         MainLoop();
     }
+
+    mStopped = true;
+
+    if (mShouldQuit)
+        Shutdown();
 }
 
 void GameLoop::Stop() {
@@ -66,6 +67,17 @@ void GameLoop::Init() {
 
 void GameLoop::Shutdown() {
     SH_PROFILE_FUNCTION();
+
+    if (!mStopped) {
+        mShouldQuit = true;
+        if (mRunning) {
+            Stop();
+        }
+
+        return;
+    }
+
+    mSceneManager->Shutdown();
 
     Render::Shutdown();
     mWindow->Shutdown();

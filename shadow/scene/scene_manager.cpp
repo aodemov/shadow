@@ -7,6 +7,20 @@ SceneManager::SceneManager()
       mCurrentScene()
 {}
 
+void SceneManager::Init() {
+
+}
+
+void SceneManager::Shutdown() {
+    for (auto & scene : mScenes) {
+        Destroy(scene.first);
+        delete scene.second.first;
+    }
+
+    mScenes.clear();
+}
+
+
 void SceneManager::Add(const std::string &name, Scene *scene) {
     mScenes[name] = {scene, SceneState::NotLoaded};
 }
