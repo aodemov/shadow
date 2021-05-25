@@ -20,7 +20,7 @@ public:
         food.Generate(5);
     }
 
-    void Create() override {
+    void Load() override {
         Render::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
         cameraController.SetPosition({ 0, 0, 0 });
@@ -28,10 +28,10 @@ public:
         cameraController.SetZoom(10);
     }
 
-    void Start() override {
+    void Show() override {
     }
 
-    void Shutdown() override {
+    void Hide() override {
     }
     void Destroy() override {
     }
@@ -133,8 +133,12 @@ private:
 int main() {
     Application::Init();
 
-    SceneManager::Instance().Add("main", new MainScene);
-    SceneManager::Instance().Load("main");
+    Application::GetSceneManager().Add("main", new MainScene);
+    Application::GetSceneManager().Show("main");
+
+    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
+        Application::Stop();
+    });
 
     Application::Run();
 
