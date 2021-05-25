@@ -39,6 +39,7 @@ private:
 
     Scope<Window> mWindow;
     Scope<EventBus> mEventBus;
+    Scope<SceneManager> mSceneManager;
 
 #ifdef SH_DEBUGGER
     Scope<Debugger> mDebugger;

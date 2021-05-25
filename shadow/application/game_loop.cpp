@@ -13,6 +13,7 @@ GameLoop::GameLoop()
 
     mWindow = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
     mEventBus = MakeScope<EventBus>();
+    mSceneManager = MakeScope<SceneManager>();
 
 #ifdef SH_DEBUGGER
     mDebugger = std::make_unique<Debugger>();
@@ -96,7 +97,8 @@ void GameLoop::VariableUpdate(float delta) {
 
     mEventBus->ProcessAll();
 
-    SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
+    if (mSceneManager->CurrentScene() != nullptr)
+        mSceneManager->CurrentScene()->VariableUpdate(delta);
 
 #ifdef SH_DEBUGGER
     mDebugger->Update(delta);
@@ -111,7 +113,8 @@ void GameLoop::VariableUpdate(float delta) {
 void GameLoop::FixedUpdate(float delta) {
     SH_PROFILE_FUNCTION();
 
-    SceneManager::Instance().GetCurrentScene().FixedUpdate(delta);
+    if (mSceneManager->CurrentScene() != nullptr)
+        mSceneManager->CurrentScene()->FixedUpdate(delta);
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.FixedUpdateTime = delta;

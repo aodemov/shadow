@@ -8,16 +8,65 @@ SceneManager::SceneManager()
 {}
 
 void SceneManager::Add(const std::string &name, Scene *scene) {
-    mScenes[name] = scene;
+    mScenes[name] = {scene, SceneState::NotLoaded};
+}
+
+void SceneManager::Remove(const std::string &name) {
+    auto& scene = mScenes.at(name);
+    if (scene.second == SceneState::Loaded)
+        Destroy(name);
+
+    delete scene.first;
+    mScenes.erase(name);
 }
 
 void SceneManager::Load(const std::string &name) {
-    Scene* previousScene = mCurrentScene;
-    mCurrentScene = mScenes.at(name);
-    if (previousScene != nullptr) {
-        previousScene->Destroy();
-    }
-    mCurrentScene->Create();
+    auto& scene = mScenes.at(name);
+
+    if (scene.second == SceneState::Loaded)
+        return;
+
+    scene.first->Load();
+    scene.second = SceneState::Loaded;
+}
+
+void SceneManager::Destroy(const std::string &name) {
+    auto& scene = mScenes.at(name);
+
+    if (scene.first == mCurrentScene)
+        Hide(name);
+
+    scene.first->Destroy();
+    scene.second = SceneState::NotLoaded;
+}
+
+void SceneManager::Show(const std::string &name) {
+    auto& scene = mScenes.at(name);
+
+    if (scene.first == mCurrentScene)
+        return;
+
+    if (scene.second == SceneState::NotLoaded)
+        Load(name);
+
+
+    if (mCurrentScene != nullptr)
+        mCurrentScene->Hide();
+
+    mCurrentScene = mScenes.at(name).first;
+    mCurrentSceneName = name;
+    mCurrentScene->Show();
+}
+
+void SceneManager::Hide(const std::string &name) {
+    auto& scene = mScenes.at(name);
+
+    if (scene.first != mCurrentScene)
+        return;
+
+    mCurrentScene->Hide();
+    mCurrentScene = nullptr;
+    mCurrentSceneName = "";
 }
 
 }

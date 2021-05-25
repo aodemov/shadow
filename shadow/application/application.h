@@ -15,8 +15,9 @@ public:
     static void Quit();
 
     static const GameLoop& GetGameLoop() { return *mGameLoop.get(); }
-    static EventBus& GetEventBus() { return *mGameLoop->mEventBus.get(); }
     static const Window& GetWindow() { return *mGameLoop->mWindow.get(); }
+    static EventBus& GetEventBus() { return *mGameLoop->mEventBus.get(); }
+    static SceneManager& GetSceneManager() { return *mGameLoop->mSceneManager.get(); }
 
 private:
     static inline Scope<GameLoop> mGameLoop;

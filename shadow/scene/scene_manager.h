@@ -6,27 +6,37 @@
 
 namespace Shadow {
 
+enum class SceneState {
+    NotLoaded = 0,
+    Loaded,
+};
+
 class SceneManager {
 public:
-    static SceneManager& Instance() {
-        static SceneManager instance;
-        return instance;
-    }
+    SceneManager();
+    ~SceneManager() = default;
 
     SceneManager(const SceneManager&) = delete;
     SceneManager& operator=(const SceneManager&) = delete;
-    ~SceneManager() = default;
 
-    Scene& GetCurrentScene() const { return *mCurrentScene; }
-
-    void Load(std::string const& name);
 
     void Add(std::string const& name, Scene* scene);
-private:
-    SceneManager();
+    void Remove(std::string const& name);
 
-    std::map<std::string, Scene*> mScenes;
+    void Load(std::string const& name);
+    void Destroy(std::string const& name);
+
+    void Show(std::string const& name);
+    void Hide(std::string const& name);
+
+    inline std::string GetCurrentScene() const { return mCurrentSceneName; }
+
+private:
+    std::map<std::string, std::pair<Scene*, SceneState>> mScenes;
     Scene* mCurrentScene;
+    std::string mCurrentSceneName;
+
+    inline Scene* CurrentScene() const { return mCurrentScene; }
 
     friend class GameLoop;
 };

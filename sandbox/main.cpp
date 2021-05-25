@@ -27,19 +27,28 @@ public:
                                          glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
     }
 
-    void Create() override {
+    void Load() override {
+        SH_INFO("Scene load");
 
+        Application::GetEventBus().AddListener<KeyPressedEvent>([](auto e) {
+            if (e.GetKeyCode() == Key::Enter) {
+                Application::GetSceneManager().Load("test");
+            }
+            if (e.GetKeyCode() == Key::Space){
+                Application::GetSceneManager().Show("test");
+            }
+        });
     }
 
-    void Start() override {
-        SH_INFO("Scene start");
+    void Show() override {
+        SH_INFO("Scene show");
     }
 
-    void Shutdown() override {
-        SH_INFO("Scene shutdown");
+    void Hide() override {
+        SH_INFO("Scene hide");
     }
     void Destroy() override {
-        SH_INFO("Scene destroy");
+        SH_INFO("Scene unload");
     }
 
     void FixedUpdate(float delta) override {
@@ -127,11 +136,42 @@ private:
     Scope<Sprite> tile2;
 };
 
+class TestScene : public Scene {
+public:
+    TestScene() {
+        SH_INFO("Test constructor");
+    }
+
+    void Load() override {
+        SH_INFO("Test load");
+    }
+
+    void Show() override {
+        SH_INFO("Test show");
+    }
+
+    void Hide() override {
+        SH_INFO("Test hide");
+    }
+    void Destroy() override {
+        SH_INFO("Test unload");
+    }
+
+    void VariableUpdate(float delta) override {
+        Render::Clear();
+    }
+
+    void FixedUpdate(float delta) override {
+
+    }
+};
+
 int main() {
     Application::Init();
 
-    SceneManager::Instance().Add("main", new MainScene);
-    SceneManager::Instance().Load("main");
+    Application::GetSceneManager().Add("main", new MainScene);
+    Application::GetSceneManager().Show("main");
+    Application::GetSceneManager().Add("test", new TestScene);
 
     Application::Run();
 
