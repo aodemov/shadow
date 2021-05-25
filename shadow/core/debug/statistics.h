@@ -30,6 +30,8 @@ struct Statistics {
     uint32_t MaxRects = 0;
     uint32_t MaxTextureSlots = 0;
 
+    Statistics() noexcept = default;
+
     void Reset() {
         DrawCalls = 0;
         RectCount = 0;

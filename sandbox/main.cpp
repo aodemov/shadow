@@ -42,7 +42,7 @@ public:
         SH_INFO("Scene destroy");
     }
 
-    void FixedUpdate(double delta) override {
+    void FixedUpdate(float delta) override {
         if (Input::IsKeyPressed(Key::W)) {
             cameraPosition.y += cameraSpeed * delta;
         }
@@ -69,7 +69,7 @@ public:
         }
     }
 
-    void VariableUpdate(double delta) override {
+    void VariableUpdate(float delta) override {
         Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         Render::Clear();
 

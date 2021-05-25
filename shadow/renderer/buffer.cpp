@@ -6,13 +6,15 @@ namespace Shadow {
 
 // Vertex buffer
 
-VertexBuffer::VertexBuffer(uint32_t size) {
+VertexBuffer::VertexBuffer(uint32_t size)
+{
     glCreateBuffers(1, &mRendererId);
     glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
     glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 }
 
-VertexBuffer::VertexBuffer(float* vertices, uint32_t size) {
+VertexBuffer::VertexBuffer(float* vertices, uint32_t size)
+{
     glCreateBuffers(1, &mRendererId);
     glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
     glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -39,7 +41,7 @@ void VertexBuffer::SetData(const void* data, uint32_t size) {
 // Index Buffer
 
 IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count)
-    : mIndicesCount(count)
+    : mIndicesCount(count),
 {
     glCreateBuffers(1, &mRendererId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId);
@@ -60,7 +62,8 @@ void IndexBuffer::Unbind() const {
 
 // Shader Storage Buffer
 
-ShaderStorageBuffer::ShaderStorageBuffer(float* vertices, uint32_t size) {
+ShaderStorageBuffer::ShaderStorageBuffer(float* vertices, uint32_t size)
+{
     glGenBuffers(1, &mRendererId);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, mRendererId);
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, vertices, GL_STATIC_DRAW);

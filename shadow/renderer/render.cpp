@@ -189,7 +189,7 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubT
     // If TextureSlots is full, Flushes the batch
     float textureIndex = 0.0f;
     for (uint32_t i = 1; i < renderData.TextureSlot; i++) {
-        if (*renderData.TextureSlots[i].get() == *texture.get()) {
+        if (renderData.TextureSlots[i] == texture) {
             textureIndex = (float)i;
             break;
         }

@@ -18,7 +18,7 @@ public:
 
     void SetData(const void* data, uint32_t size);
 private:
-    uint32_t mRendererId;
+    uint32_t mRendererId = 0;
     BufferLayout mLayout;
 };
 
@@ -32,7 +32,7 @@ public:
 
     uint32_t GetCount() const { return mIndicesCount; };
 private:
-    uint32_t mRendererId;
+    uint32_t mRendererId = 0;
     uint32_t mIndicesCount;
 };
 
@@ -48,7 +48,7 @@ public:
     const BufferLayout& GetLayout() const { return mLayout; }
     void SetLayout(BufferLayout const& lo) { mLayout = lo; }
 private:
-    uint32_t mRendererId;
+    uint32_t mRendererId = 0;
     BufferLayout mLayout;
 };
 

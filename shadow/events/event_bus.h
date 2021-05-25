@@ -14,6 +14,9 @@ public:
     EventBus() = default;
     ~EventBus() = default;
 
+    EventBus(const EventBus&) = delete;
+    EventBus& operator=(const EventBus&) = delete;
+
     template<class EventType>
     using Function = std::function<void(EventType const&)>;
 
@@ -46,9 +49,6 @@ public:
     void Push(EventType const& event);
 
 private:
-    EventBus(const EventBus&) = delete;
-    EventBus& operator=(const EventBus&) = delete;
-
     void Emit(std::type_index eventId, Event const& event);
 
     std::multimap<std::type_index, std::shared_ptr<HandlerFunctionBase>> mListeners;

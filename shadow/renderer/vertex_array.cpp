@@ -10,7 +10,7 @@ VertexArray::VertexArray() {
 
 VertexArray::~VertexArray() {
     glDeleteVertexArrays(1, &mRendererId);
-};
+}
 
 void VertexArray::Bind() const {
     glBindVertexArray(mRendererId);
@@ -28,10 +28,10 @@ void VertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) {
     for (const auto& element : layout) {
         glEnableVertexArrayAttrib(mRendererId, index);
         glVertexAttribPointer(index,
-                              element.GetComponentCount(),
+                              (int)element.GetComponentCount(),
                               ShaderDataTypeToOpenGLBaseType(element.Type),
                               element.Normalized ? GL_TRUE : GL_FALSE,
-                              layout.GetStride(),
+                              (int)layout.GetStride(),
                               (const void*)element.Offset);
         ++index;
     }

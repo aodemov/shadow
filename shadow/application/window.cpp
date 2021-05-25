@@ -10,7 +10,7 @@ namespace Shadow {
 
 static bool s_GLFWInitialized = false;
 
-Window::Window(WindowOptions options)
+Window::Window(const WindowOptions& options)
     : mOptions(options),
       mWindow(nullptr)
 {
@@ -26,8 +26,7 @@ Window::Window(WindowOptions options)
 #endif
 }
 
-Window::~Window() {
-}
+Window::~Window() = default;
 
 void Window::Init() {
     SH_INFO("Initializing Window \"{0}\" ({1}, {2})", mOptions.Title, mOptions.Width, mOptions.Height);
@@ -41,7 +40,7 @@ void Window::Init() {
         s_GLFWInitialized = true;
     }
 
-    mWindow = glfwCreateWindow((int)mOptions.Width, (int)mOptions.Height, mOptions.Title.c_str(), NULL, NULL);
+    mWindow = glfwCreateWindow((int)mOptions.Width, (int)mOptions.Height, mOptions.Title.c_str(), nullptr, nullptr);
     if(!mWindow) {
         SH_CORE_ERROR("Could not create window");
         // TODO throw
@@ -75,7 +74,7 @@ void Window::Init() {
 
 #ifdef SH_DEBUGGER
         Debugger::Stats.FrameSize = { width, height };
-        Debugger::Stats.AspectRatio = (float)width / height;
+        Debugger::Stats.AspectRatio = (float)width / (float)height;
 #endif
     });
 
@@ -96,6 +95,8 @@ void Window::Init() {
             case GLFW_REPEAT:
                 Application::GetEventBus().Push(KeyRepeatedEvent(key, modifiers));
                 break;
+            default:
+                break;
         }
     });
 
@@ -110,6 +111,8 @@ void Window::Init() {
                 break;
             case GLFW_RELEASE:
                 Application::GetEventBus().Push(MouseReleasedEvent(button, modifiers));
+                break;
+            default:
                 break;
         }
     });
@@ -155,7 +158,7 @@ bool Window::IsClosed() const {
     return glfwWindowShouldClose(mWindow);
 }
 
-void Window::Resize(unsigned int width, unsigned int height) {
+void Window::Resize(int width, int height) {
     glfwSetWindowSize(mWindow, width, height);
 }
 
@@ -174,7 +177,7 @@ unsigned int Window::GetHeight() const {
 float Window::GetAspectRatio() const {
     int width, height;
     glfwGetFramebufferSize(mWindow, &width, &height);
-     return (float)width / height;
+     return (float)width / (float)height;
 }
 
 void Window::SetTitle(const std::string &title) {

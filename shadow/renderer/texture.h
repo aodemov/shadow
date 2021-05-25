@@ -13,7 +13,7 @@ public:
 
     void Bind(uint32_t slot = 0) const;
 
-    bool operator==(const Texture& other);
+    bool operator==(const Texture& other) const;
 
     static Ref<Texture> CreateWhiteTexture();
 

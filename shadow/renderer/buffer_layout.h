@@ -56,8 +56,6 @@ static constexpr GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 }
 
 struct BufferElement {
-    BufferElement() = default;
-
     BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
         : Name(name),
           Type(type),

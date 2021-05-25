@@ -5,18 +5,12 @@
 #include "imgui_impl_glfw.h"
 
 #include "shadow/application/application.h"
-#include "shadow/events/event_bus.h"
 
 namespace Shadow {
 
+Debugger::Debugger() = default;
 
-Debugger::Debugger() {
-
-}
-
-Debugger::~Debugger() {
-
-}
+Debugger::~Debugger() = default;
 
 void Debugger::Show() {
     mVisible = true;

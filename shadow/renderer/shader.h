@@ -6,7 +6,7 @@ namespace Shadow {
 
 class Shader {
 public:
-    explicit Shader(const std::string path);
+    explicit Shader(const std::string& path);
     Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
     ~Shader() = default;
 
@@ -23,7 +23,7 @@ public:
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);
 
-    uint32_t mRendererId;
+    uint32_t mRendererId = 0;
 };
 
 }

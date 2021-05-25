@@ -16,10 +16,10 @@ Texture::Texture(const std::string &path)
 {
     int w, h, channels;
     stbi_set_flip_vertically_on_load(1);
-    stbi_uc* data = stbi_load(path.c_str(), &w, &h, &channels, 0);
+    stbi_uc* data = stbi_load(mPath.c_str(), &w, &h, &channels, 0);
 
     if (!data) {
-        SH_CORE_ERROR("Cannot load image from: {0}", path);
+        SH_CORE_ERROR("Cannot load image from: {0}", mPath);
     }
 
     mWidth = w;
@@ -39,12 +39,12 @@ Texture::Texture(const std::string &path)
     }
 
     glCreateTextures(GL_TEXTURE_2D, 1, &mRendererId);
-    glTextureStorage2D(mRendererId, 1, internalFormat, mWidth, mHeight);
+    glTextureStorage2D(mRendererId, 1, internalFormat, (int)mWidth, (int)mHeight);
 
     glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureSubImage2D(mRendererId, 0, 0, 0, mWidth, mHeight, dataFormat, GL_UNSIGNED_BYTE, data);
+    glTextureSubImage2D(mRendererId, 0, 0, 0, (int)mWidth, (int)mHeight, dataFormat, GL_UNSIGNED_BYTE, data);
 
     stbi_image_free(data);
 }
@@ -67,7 +67,7 @@ Ref<Texture> Texture::CreateWhiteTexture() {
     return Ref<Texture>(new Texture(1, 1, id));
 }
 
-bool Texture::operator==(const Texture &other) {
+bool Texture::operator==(const Texture &other) const {
     return mRendererId == other.mRendererId;
 }
 

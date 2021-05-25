@@ -7,7 +7,7 @@
 
 namespace Shadow {
 
-Shader::Shader(const std::string path) {
+Shader::Shader(const std::string& path) {
     std::ifstream fs(path, std::ios::in | std::ios::binary);
     std::string contents;
 
@@ -45,7 +45,7 @@ void Shader::Compile(const std::string &vertexSource, const std::string &fragmen
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     const GLchar* source = vertexSource.c_str();
-    glShaderSource(vertexShader, 1, &source, 0);
+    glShaderSource(vertexShader, 1, &source, nullptr);
 
     glCompileShader(vertexShader);
 
@@ -68,7 +68,7 @@ void Shader::Compile(const std::string &vertexSource, const std::string &fragmen
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     source = fragmentSource.c_str();
-    glShaderSource(fragmentShader, 1, &source, 0);
+    glShaderSource(fragmentShader, 1, &source, nullptr);
 
     glCompileShader(fragmentShader);
 

@@ -27,12 +27,12 @@ struct WindowOptions {
 
 class Window {
 public:
-    explicit Window(WindowOptions options);
+    explicit Window(const WindowOptions& options);
     ~Window();
 
     void Close();
     bool IsClosed() const;
-    void Resize(unsigned int width, unsigned int height);
+    void Resize(int width, int height);
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
     void SetTitle(std::string const& title);
@@ -59,7 +59,10 @@ private:
 
     friend class GameLoop;
     friend class Input;
+
+#ifdef SH_DEBUGGER
     friend class Debugger;
+#endif
 };
 
 }

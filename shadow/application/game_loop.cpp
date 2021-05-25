@@ -47,7 +47,7 @@ void GameLoop::Stop() {
 void GameLoop::Init() {
     SH_PROFILE_FUNCTION();
 
-    mInterval = 1.0 / mMaxFps;
+    mInterval = 1.0f / (float)mMaxFps;
 
     mWindow->Init();
 
@@ -75,23 +75,23 @@ void GameLoop::MainLoop() {
 
     mGameClock.Update();
 
-    mLag += mGameClock.GetDelta();
+    mLag += (float)mGameClock.GetDelta();
 
     while(mLag >= mInterval) {
         FixedUpdate(mInterval);
         mLag -= mInterval;
     }
 
-    VariableUpdate(mGameClock.GetDelta());
+    VariableUpdate((float)mGameClock.GetDelta());
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.ElapsedFrames++;
     Debugger::Stats.ElapsedTime += mGameClock.GetDelta();
-    Debugger::Stats.FrameTime = mGameClock.GetDelta();
+    Debugger::Stats.FrameTime = (float)mGameClock.GetDelta();
 #endif
 }
 
-void GameLoop::VariableUpdate(double delta) {
+void GameLoop::VariableUpdate(float delta) {
     SH_PROFILE_FUNCTION();
 
     mEventBus->ProcessAll();
@@ -99,7 +99,7 @@ void GameLoop::VariableUpdate(double delta) {
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
 
 #ifdef SH_DEBUGGER
-    mDebugger->Update((float)delta);
+    mDebugger->Update(delta);
 #endif
     mWindow->Update();
 
@@ -108,7 +108,7 @@ void GameLoop::VariableUpdate(double delta) {
 #endif
 }
 
-void GameLoop::FixedUpdate(double delta) {
+void GameLoop::FixedUpdate(float delta) {
     SH_PROFILE_FUNCTION();
 
     SceneManager::Instance().GetCurrentScene().FixedUpdate(delta);

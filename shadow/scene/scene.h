@@ -12,8 +12,8 @@ public:
     virtual void Shutdown() = 0;
     virtual void Destroy() = 0;
 
-    virtual void FixedUpdate(double delta) = 0;
-    virtual void VariableUpdate(double delta) = 0;
+    virtual void FixedUpdate(float delta) = 0;
+    virtual void VariableUpdate(float delta) = 0;
 };
 
 }

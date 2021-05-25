@@ -7,10 +7,7 @@ Clock::Clock()
       mLastTime(),
       mPaused(true) {}
 
-Clock::Clock(const Clock &other)
-    : mDeltaTime(other.mDeltaTime),
-      mLastTime(other.mLastTime),
-      mPaused(other.mPaused) {}
+Clock::Clock(const Clock &other) = default;
 
 Clock::Clock(Clock &&other) noexcept
     : mDeltaTime(other.mDeltaTime),

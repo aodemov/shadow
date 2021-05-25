@@ -26,15 +26,15 @@ private:
     void MainLoop();
 
     void Init();
-    void FixedUpdate(double delta);
-    void VariableUpdate(double delta);
+    void FixedUpdate(float delta);
+    void VariableUpdate(float delta);
     void Shutdown();
 
     bool mRunning = false;
 
     int mMaxFps;
-    double mInterval;
-    double mLag;
+    float mInterval;
+    float mLag;
     Clock mGameClock;
 
     Scope<Window> mWindow;
