@@ -41,7 +41,7 @@ void VertexBuffer::SetData(const void* data, uint32_t size) {
 // Index Buffer
 
 IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count)
-    : mIndicesCount(count),
+    : mIndicesCount(count)
 {
     glCreateBuffers(1, &mRendererId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId);

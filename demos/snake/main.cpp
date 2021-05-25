@@ -36,11 +36,11 @@ public:
     void Destroy() override {
     }
 
-    void FixedUpdate(double delta) override {
+    void FixedUpdate(float delta) override {
         
     }
 
-    void VariableUpdate(double delta) override {
+    void VariableUpdate(float delta) override {
         if (gameOver)
             return;
 
