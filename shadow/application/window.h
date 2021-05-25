@@ -56,7 +56,6 @@ private:
     std::unique_ptr<GraphicsContext> mContext;
 
     WindowOptions mOptions;
-    EventBus& mEventBus;
 
     friend class GameLoop;
     friend class Input;

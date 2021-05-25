@@ -1,6 +1,5 @@
 #include "application.h"
 
-#include "shadow/application/game_loop.h"
 #include "shadow/core/debug/profiling.h"
 
 namespace Shadow {
@@ -8,19 +7,20 @@ namespace Shadow {
 void Application::Init() {
     Log::Init();
     SH_PROFILE_INIT("profile-data.json");
-    GameLoop::Instance().Init();
+    mGameLoop = MakeScope<GameLoop>();
+    mGameLoop->Init();
 }
 
 void Application::Run() {
-    GameLoop::Instance().Run();
+    mGameLoop->Run();
 }
 
 void Application::Stop() {
-    GameLoop::Instance().Stop();
+    mGameLoop->Stop();
 }
 
 void Application::Quit() {
-    GameLoop::Instance().Shutdown();
+    mGameLoop->Shutdown();
     SH_PROFILE_SHUTDOWN();
 }
 

@@ -4,28 +4,21 @@
 
 namespace Shadow {
 
-GameLoop& GameLoop::Instance() {
-    static GameLoop instance;
-    return instance;
-}
-
-Window& GameLoop::GetWindow() {
-    return *(Instance().mWindow);
-}
-
-
 GameLoop::GameLoop()
-    : mEventBus(EventBus::Instance())
+    : mMaxFps(20),
+      mLag(0),
+      mInterval(0)
 {
     SH_PROFILE_FUNCTION();
 
-    mMaxFps = 20;
     mWindow = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
+    mEventBus = MakeScope<EventBus>();
+
 #ifdef SH_DEBUGGER
     mDebugger = std::make_unique<Debugger>();
 #endif
 
-    mEventBus.AddListener<WindowCloseEvent>([&](WindowCloseEvent const &event) {
+    mEventBus->AddListener<WindowCloseEvent>([&](WindowCloseEvent const &event) {
         Application::Stop();
         Application::Quit();
     });
@@ -101,7 +94,7 @@ void GameLoop::MainLoop() {
 void GameLoop::VariableUpdate(double delta) {
     SH_PROFILE_FUNCTION();
 
-    mEventBus.ProcessAll();
+    mEventBus->ProcessAll();
 
     SceneManager::Instance().GetCurrentScene().VariableUpdate(delta);
 

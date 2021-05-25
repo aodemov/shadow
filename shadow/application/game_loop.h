@@ -15,14 +15,10 @@ namespace Shadow {
 
 class GameLoop {
 public:
-    static GameLoop &Instance();
-
-    static Window& GetWindow();
+    GameLoop();
+    ~GameLoop();
 
 private:
-    GameLoop();
-
-    ~GameLoop();
 
     void Run();
     void Stop();
@@ -41,11 +37,12 @@ private:
     double mLag;
     Clock mGameClock;
 
-    std::unique_ptr<Window> mWindow;
+    Scope<Window> mWindow;
+    Scope<EventBus> mEventBus;
+
 #ifdef SH_DEBUGGER
-    std::unique_ptr<Debugger> mDebugger;
+    Scope<Debugger> mDebugger;
 #endif
-    EventBus& mEventBus;
 
     friend class Application;
 };

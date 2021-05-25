@@ -1,10 +1,10 @@
 #include "input.h"
-#include "shadow/application/game_loop.h"
+#include "shadow/application/application.h"
 
 namespace Shadow {
 
 bool Input::IsKeyPressed(KeyCode key) {
-    auto window = GameLoop::GetWindow().mWindow;
+    auto window = Application::GetWindow().mWindow;
 
     int state = glfwGetKey(window, key);
 
@@ -12,7 +12,7 @@ bool Input::IsKeyPressed(KeyCode key) {
 }
 
 bool Input::IsMouseButtonPressed(MouseCode button) {
-    auto window = GameLoop::GetWindow().mWindow;
+    auto window = Application::GetWindow().mWindow;
 
     int state = glfwGetMouseButton(window, button);
 
@@ -20,7 +20,7 @@ bool Input::IsMouseButtonPressed(MouseCode button) {
 }
 
 glm::vec2 Input::GetMousePosition() {
-    auto window = GameLoop::GetWindow().mWindow;
+    auto window = Application::GetWindow().mWindow;
 
     double x, y;
     glfwGetCursorPos(window, &x, &y);

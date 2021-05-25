@@ -4,7 +4,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 
-#include "shadow/application/game_loop.h"
+#include "shadow/application/application.h"
 #include "shadow/events/event_bus.h"
 
 namespace Shadow {
@@ -34,10 +34,10 @@ void Debugger::Init() {
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-    ImGui_ImplGlfw_InitForOpenGL(GameLoop::GetWindow().mWindow, true);
+    ImGui_ImplGlfw_InitForOpenGL(Application::GetWindow().mWindow, true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
-    EventBus::Instance().AddListener<KeyPressedEvent>([&](KeyPressedEvent const &e) {
+    Application::GetEventBus().AddListener<KeyPressedEvent>([&](KeyPressedEvent const &e) {
         if (e.GetKeyCode() == Key::Tab) {
             mVisible = !mVisible;
         }
@@ -59,7 +59,7 @@ void Debugger::Update(float delta) {
 
     auto& io = ImGui::GetIO();
     io.DeltaTime = delta;
-    io.DisplaySize = ImVec2((float)GameLoop::GetWindow().GetWidth(), (float)GameLoop::GetWindow().GetHeight());
+    io.DisplaySize = ImVec2((float)Application::GetWindow().GetWidth(), (float)Application::GetWindow().GetHeight());
 
 
     ImGui_ImplOpenGL3_NewFrame();

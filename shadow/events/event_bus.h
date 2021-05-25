@@ -11,18 +11,14 @@ namespace Shadow {
 
 class EventBus {
 public:
+    EventBus() = default;
+    ~EventBus() = default;
+
     template<class EventType>
     using Function = std::function<void(EventType const&)>;
 
     template<class T, class EventType>
     using MemberFunction = void(T::*)(EventType const&);
-
-
-    static EventBus& Instance() {
-        static EventBus instance;
-
-        return instance;
-    }
 
     void ProcessOne();
     void ProcessAll();
@@ -50,9 +46,6 @@ public:
     void Push(EventType const& event);
 
 private:
-    EventBus() = default;
-    ~EventBus() = default;
-
     EventBus(const EventBus&) = delete;
     EventBus& operator=(const EventBus&) = delete;
 

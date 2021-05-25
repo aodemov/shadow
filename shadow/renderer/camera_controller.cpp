@@ -1,6 +1,6 @@
 #include "camera_controller.h"
 
-#include "shadow/application/game_loop.h"
+#include "shadow/application/application.h"
 
 namespace Shadow {
 
@@ -9,11 +9,11 @@ CameraController::CameraController()
       mZoom(1.0f),
       mCamera(0, 0, 0, 0)
 {
-    mAspectRatio = GameLoop::GetWindow().GetAspectRatio();
+    mAspectRatio = Application::GetWindow().GetAspectRatio();
     Recalculate();
 
-    EventBus::Instance().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
-        mAspectRatio = GameLoop::GetWindow().GetAspectRatio();
+    Application::GetEventBus().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
+        mAspectRatio = Application::GetWindow().GetAspectRatio();
         Recalculate();
     });
 }

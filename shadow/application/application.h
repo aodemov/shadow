@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shadow/events/event_bus.h"
+#include "shadow/application/game_loop.h"
 #include "window.h"
 
 
@@ -12,6 +13,13 @@ public:
     static void Run();
     static void Stop();
     static void Quit();
+
+    static const GameLoop& GetGameLoop() { return *mGameLoop.get(); }
+    static EventBus& GetEventBus() { return *mGameLoop->mEventBus.get(); }
+    static const Window& GetWindow() { return *mGameLoop->mWindow.get(); }
+
+private:
+    static inline Scope<GameLoop> mGameLoop;
 };
 
 }
