@@ -257,7 +257,7 @@ void Render::DrawText(const std::string &text, const glm::vec3 &position, const 
     for (auto c : text) {
         auto g = font->GetTexCoords(c, &offset);
 
-        auto texture = font->GetTexture()->GetTexture();
+        auto texture = font->GetTexture();
 
         if (renderData->RectCount >= RenderData::MaxRects)
             Flush();
@@ -284,9 +284,11 @@ void Render::DrawText(const std::string &text, const glm::vec3 &position, const 
             renderData->TextureSlot++;
         }
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+        glm::vec2 scale = { 2.0f / Application::GetWindow().GetHeight(), 2.0f / Application::GetWindow().GetHeight() };
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0, 0, position.z }) *
                               glm::rotate(glm::mat4(1.0f), 0.0f, { 0.0f, 0.0f, 1.0f }) *
-                              glm::scale(glm::mat4(1.0f), { font->scale, font->scale, 1.0f});
+                              glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f});
 
         renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x0, g.y0, 0, 1 };
         renderData->RectVertexBufferPtr->Color = color;

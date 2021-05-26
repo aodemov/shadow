@@ -32,7 +32,7 @@ public:
         tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
                                   glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
 
-        font1 = MakeRef<Font>("assets/fonts/arial.ttf");
+        font1 = MakeRef<Font>("assets/fonts/comic.ttf", 60);
     }
 
     void Show() override {
@@ -109,7 +109,9 @@ public:
         tile1->Draw();
         tile2->Draw();
 
-        Render::DrawText("Hello", { -5, 0, 0.5f }, font1, glm::vec4{1.0f});
+//        Render::DrawRect({ 0, 0, -0.5f }, { 2.0f * 40 / Application::GetWindow().GetHeight(), 2.0f * 40 / Application::GetWindow().GetHeight() }, { 1.0f, 1.0f, 0.0f, 1.0f });
+
+        Render::DrawText("The quick brown fox jumps over the lazy dog", { -1000, 0, 0.5f }, font1, glm::vec4{1.0f});
 
         Render::EndScene();
     }

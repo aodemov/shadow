@@ -29,53 +29,67 @@ std::string readFile(std::string const& path) {
     return "";
 }
 
-Font::Font(const std::string &path) {
+Font::Font(const std::string &path, int fontSize)
+    : mSize(fontSize) {
     auto fontData = readFile(path);
-    auto atlasData = std::make_unique<uint8_t[]>(atlasWidth * atlasHeight);
 
-    charInfo = std::make_unique<stbtt_packedchar[]>(charCount);
+    // Font info
+//    stbtt_InitFont(&mFontInfo, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0);
+//    scale = stbtt_ScaleForPixelHeight(&mFontInfo, mSize);
+//    SH_CORE_WARN("Scale: {0}, {1}", scale);
+//    int StbAscent;
+//    int StbDescent;
+//    int StbLineGap;
+//    stbtt_GetFontVMetrics(&info, &StbAscent, &StbDescent, &StbLineGap);
+//    ascent = StbAscent * scale;
+//    descent = StbDescent * scale;
+//    lineGap = StbLineGap * scale;
+//    lineAdvance = ascent - descent + lineGap;
+
+    // Packing atlas
+    auto atlasData = std::make_unique<uint8_t[]>(cAtlasWidth * cAtlasHeight);
+
+    mCharInfo = std::make_unique<stbtt_packedchar[]>(cCharCount);
 
     stbtt_pack_context context;
-    if (!stbtt_PackBegin(&context, atlasData.get(), atlasWidth, atlasHeight, 0, 1, nullptr))
+    if (!stbtt_PackBegin(&context, atlasData.get(), cAtlasWidth, cAtlasHeight, 0, 1, nullptr))
         SH_CORE_ERROR("Failed to initialize font");
 
-    stbtt_PackSetOversampling(&context, oversampleX, oversampleY);
+    stbtt_PackSetOversampling(&context, cOversampleX, cOversampleY);
     if (!stbtt_PackFontRange(&context, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0,
-                             size, firstChar, charCount, charInfo.get()))
+                             mSize, cFirstChar, cCharCount, mCharInfo.get()))
         SH_CORE_ERROR("Failed to pack font");
-
     stbtt_PackEnd(&context);
 
-    stbtt_InitFont(&info, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0);
-    scale = stbtt_ScaleForPixelHeight(&info, size);
-    SH_INFO("Scale: {0}", scale);
-
+    // Creating texture
     uint32_t tid;
     glGenTextures(1, &tid);
     glBindTexture(GL_TEXTURE_2D, tid);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, atlasWidth, atlasHeight, 0, GL_RED, GL_UNSIGNED_BYTE, atlasData.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, cAtlasWidth, cAtlasHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, atlasData.get());
     glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    mTexture = MakeRef<SubTexture>(MakeRef<Texture>(atlasWidth, atlasHeight, tid));
+    mTexture = MakeRef<Texture>(cAtlasWidth, cAtlasHeight, tid);
 }
 
-stbtt_aligned_quad Font::GetTexCoords(uint32_t c, glm::vec2* offset) {
-    stbtt_aligned_quad quad;
+Font::Glyph Font::GetTexCoords(uint32_t codepoint, glm::vec2* offset) {
+    stbtt_aligned_quad q;
 
-    stbtt_GetPackedQuad(charInfo.get(), atlasWidth, atlasHeight,
-                        c - firstChar, &offset->x, &offset->y, &quad, 0);
+    stbtt_GetPackedQuad(mCharInfo.get(), cAtlasWidth, cAtlasHeight,
+                        codepoint - cFirstChar, &offset->x, &offset->y, &q, 1);
 
-//    int ax;
-//    int lsb;
-//    stbtt_GetCodepointHMetrics(&info, c, &ax, &lsb);
-//    res.texCoords = { quad.s0, quad.t1, quad.s1, quad.t0 };
+    Glyph g{};
+    g.x0 = q.x0;
+    g.x1 = q.x1;
+    g.y0 = -q.y0;
+    g.y1 = -q.y1;
+    g.s0 = q.s0;
+    g.s1 = q.s1;
+    g.t0 = q.t0;
+    g.t1 = q.t1;
 
-    float height = quad.y0 - quad.y1;
-    quad.y0 -= 2 * height;
-
-
-    return quad;
+    return g;
 }
 
 }
