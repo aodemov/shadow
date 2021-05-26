@@ -10,10 +10,10 @@ public:
     SubTexture(Ref<Texture> texture, const glm::vec2& size, const glm::vec2& offset);
 
     Ref<Texture> GetTexture() const { return mTexture; }
-    const glm::vec2* GetTexCoords() const { return mTexCoords; }
+    glm::vec4 const& GetTexCoords() const { return mTexCoords; }
 
 private:
     Ref<Texture> mTexture;
-    glm::vec2 mTexCoords[4]{};
+    glm::vec4 mTexCoords;
 };
 }

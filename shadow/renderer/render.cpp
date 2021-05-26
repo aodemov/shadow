@@ -128,6 +128,7 @@ void Render::Flush() {
     renderData->RectVA->Bind();
     glDrawElements(GL_TRIANGLES, (int)renderData->RectCount * 6, GL_UNSIGNED_INT, nullptr);
 
+
 #ifdef SH_DEBUGGER
     Debugger::Stats.DrawCalls++;
     Debugger::Stats.RectCount += renderData->RectCount;
@@ -182,8 +183,14 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
     renderData->RectCount++;
 }
 
-void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation) {
-    auto texture = subTexture->GetTexture();
+void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<SubTexture> &subTexture,
+                      float rotation) {
+    DrawRect(position, size, subTexture->GetTexture(), subTexture->GetTexCoords(), rotation);
+}
+
+
+void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, glm::vec4 const& texCoords, float rotation) {
+
 
     if (renderData->RectCount >= RenderData::MaxRects)
         Flush();
@@ -216,28 +223,28 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubT
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 0.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[0];
+    renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 0.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[1];
+    renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 0.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[2];
+    renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 0.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = subTexture->GetTexCoords()[3];
+    renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
