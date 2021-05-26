@@ -24,8 +24,11 @@ public:
     static void Clear();
 
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color, float rotation = 0.0f);
-    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, glm::vec4 const& texCoords, float rotation = 0.0f);
+    static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, float rotation = 0.0f);
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation = 0.0f);
+
+    static void DrawRect(glm::vec4 const& box, float z, glm::vec4 const& texCoords, Ref<Texture> const& texture, float rotation = 0.0f);
+
 
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
 

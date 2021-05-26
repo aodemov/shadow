@@ -27,12 +27,12 @@ public:
 
         auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
         tile1 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
-                                  glm::vec3{-2, -2, 1.0f});
+                                  glm::vec3{0, 0, 1.0f});
 
         tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
-                                  glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
+                                  glm::vec3{1.5f, 0, 1.0f}, glm::vec2{ 2, 2 });
 
-        font1 = MakeRef<Font>("assets/fonts/comic.ttf", 60);
+        font1 = MakeRef<Font>("assets/fonts/comic.ttf", 100);
     }
 
     void Show() override {
@@ -84,16 +84,15 @@ public:
 
         Render::BeginScene(cameraController.GetCamera());
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                Render::DrawRect({ 0.55f * i, 0.55f * j, 0.0f}, { 0.5f, 0.5f },
-                                 {
-                                i % 2 ? 1.0f : 0.0f,
-                                   i % 3 ? 1.0f : 0.0f,
-                                   j % 2 ? 1.0f : 0.0f , 1.0f },
-                                   i == 5 && j == 5 ? 45.0f : 0.0f);
+        for (float y = -5.0f; y < 5.0f; y += 0.5f)
+        {
+            for (float x = -5.0f; x < 5.0f; x += 0.5f)
+            {
+                glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
+                Render::DrawRect({ x, y + 7, 0.0f }, { 0.45f, 0.45f }, color);
             }
         }
+
 
         Render::DrawRect({2.5, 2.5, 0.8}, {2.35, 2.5}, {0.0f, 0.0f, 1.0f, 0.5f});
 
@@ -109,9 +108,9 @@ public:
         tile1->Draw();
         tile2->Draw();
 
-//        Render::DrawRect({ 0, 0, -0.5f }, { 2.0f * 40 / Application::GetWindow().GetHeight(), 2.0f * 40 / Application::GetWindow().GetHeight() }, { 1.0f, 1.0f, 0.0f, 1.0f });
+        Render::DrawRect({ -3, 0, 0.5f }, { 2.0f * 40 / Application::GetWindow().GetHeight(), 2.0f * 40 / Application::GetWindow().GetHeight() }, { 1.0f, 1.0f, 0.0f, 1.0f });
 
-        Render::DrawText("The quick brown fox jumps over the lazy dog", { -1000, 0, 0.5f }, font1, glm::vec4{1.0f});
+        Render::DrawText("The quick brown fox jumps over the lazy dog", { 0, 1.2f, 1.0f }, font1, glm::vec4{1.0f});
 
         Render::EndScene();
     }

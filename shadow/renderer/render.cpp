@@ -185,21 +185,26 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<SubTexture> &subTexture,
                       float rotation) {
-    DrawRect(position, size, subTexture->GetTexture(), subTexture->GetTexCoords(), rotation);
+    glm::vec2 halfSize = size / 2.0f;
+    glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
+
+    DrawRect(box, position.z, subTexture->GetTexCoords(), subTexture->GetTexture(), rotation);
 }
 
+void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture> &texture, float rotation) {
+    glm::vec2 halfSize = size / 2.0f;
+    glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
 
-void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, glm::vec4 const& texCoords, float rotation) {
+    DrawRect(box, position.z, { 0.0f, 0.0f, 1.0f, 1.0f }, texture, rotation);
+}
 
-
+void Render::DrawRect(const glm::vec4 &box, float z, const glm::vec4 &texCoords, const Ref<Texture> &texture, float rotation) {
     if (renderData->RectCount >= RenderData::MaxRects)
         Flush();
 
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
     const float tilingFactor = 1.0f;
 
-    // Looking up the texture, if not found, add it to TextureSlots
-    // If TextureSlots is full, Flushes the batch
     float textureIndex = 0.0f;
     for (uint32_t i = 1; i < renderData->TextureSlot; i++) {
         if (renderData->TextureSlots[i] == texture) {
@@ -217,32 +222,39 @@ void Render::DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Text
         renderData->TextureSlot++;
     }
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-                          glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
-                          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
+    glm::mat4 transform(1.0f);
+    if (rotation != 0.0f) {
+        glm::vec2 halfSize = glm::vec2{ box.z - box.x, box.w - box.y } / 2.0f;
+        glm::vec3 origin = { box.x + halfSize.x, box.y + halfSize.y, 0.0f };
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 0.0f, 1.0f };
+        transform = glm::translate(glm::mat4(1.0f), origin) *
+                    glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
+                    glm::translate(glm::mat4(1.0f), -origin);
+    }
+
+
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.x, box.y, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.z, box.y, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.z, box.w, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.x, box.w, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
@@ -260,72 +272,15 @@ void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, g
 }
 
 void Render::DrawText(const std::string &text, const glm::vec3 &position, const Ref<Font>& font, glm::vec4 color) {
-    glm::vec2 offset = {position.x, position.y };
+    glm::vec2 offset = { 0, 0 };
     for (auto c : text) {
         auto g = font->GetTexCoords(c, &offset);
 
-        auto texture = font->GetTexture();
-
-        if (renderData->RectCount >= RenderData::MaxRects)
-            Flush();
-
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        const float tilingFactor = 1.0f;
-
-        // Looking up the texture, if not found, add it to TextureSlots
-        // If TextureSlots is full, Flushes the batch
-        float textureIndex = 0.0f;
-        for (uint32_t i = 1; i < renderData->TextureSlot; i++) {
-            if (renderData->TextureSlots[i] == texture) {
-                textureIndex = (float)i;
-                break;
-            }
-        }
-
-        if (textureIndex == 0.0f) {
-            if (renderData->TextureSlot >= RenderData::MaxTextureSlots)
-                Flush();
-
-            textureIndex = (float)renderData->TextureSlot;
-            renderData->TextureSlots[renderData->TextureSlot] = texture;
-            renderData->TextureSlot++;
-        }
-
         glm::vec2 scale = { 2.0f / Application::GetWindow().GetHeight(), 2.0f / Application::GetWindow().GetHeight() };
+        glm::vec4 box = { position.x + g.x0 * scale.x, position.y + g.y0 * scale.y, position.x + g.x1 * scale.x, position.y + g.y1 * scale.y };
+        glm::vec4 texCoords = { g.s0, g.t0, g.s1, g.t1 };
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0, 0, position.z }) *
-                              glm::rotate(glm::mat4(1.0f), 0.0f, { 0.0f, 0.0f, 1.0f }) *
-                              glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f});
-
-        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x0, g.y0, 0, 1 };
-        renderData->RectVertexBufferPtr->Color = color;
-        renderData->RectVertexBufferPtr->TexCoords = { g.s0, g.t0 };
-        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
-        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
-        renderData->RectVertexBufferPtr++;
-
-        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x1, g.y0, 0, 1 };
-        renderData->RectVertexBufferPtr->Color = color;
-        renderData->RectVertexBufferPtr->TexCoords = { g.s1, g.t0 };
-        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
-        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
-        renderData->RectVertexBufferPtr++;
-
-        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x1, g.y1, 0, 1 };
-        renderData->RectVertexBufferPtr->Color = color;
-        renderData->RectVertexBufferPtr->TexCoords = { g.s1, g.t1 };
-        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
-        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
-        renderData->RectVertexBufferPtr++;
-
-        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x0, g.y1, 0, 1 };
-        renderData->RectVertexBufferPtr->Color = color;
-        renderData->RectVertexBufferPtr->TexCoords = { g.s0, g.t1 };
-        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
-        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
-        renderData->RectVertexBufferPtr++;
-
-        renderData->RectCount++;
+        DrawRect(box, position.z, texCoords, font->GetTexture());
     }
 }
 
