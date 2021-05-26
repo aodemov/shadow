@@ -3,6 +3,10 @@
 #include <glad/gl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <shadow/application/game_loop.h>
+#include <shadow/application/application.h>
+
+#include "lib/stb_truetype/stb_truetype.h"
+
 
 namespace Shadow {
 
@@ -247,6 +251,77 @@ void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, g
 
     DrawRect(pos, size, color);
 }
+
+void Render::DrawText(const std::string &text, const glm::vec3 &position, const Ref<Font>& font, glm::vec4 color) {
+    glm::vec2 offset = {position.x, position.y };
+    for (auto c : text) {
+        auto g = font->GetTexCoords(c, &offset);
+
+        auto texture = font->GetTexture()->GetTexture();
+
+        if (renderData->RectCount >= RenderData::MaxRects)
+            Flush();
+
+        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+        const float tilingFactor = 1.0f;
+
+        // Looking up the texture, if not found, add it to TextureSlots
+        // If TextureSlots is full, Flushes the batch
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < renderData->TextureSlot; i++) {
+            if (renderData->TextureSlots[i] == texture) {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+
+        if (textureIndex == 0.0f) {
+            if (renderData->TextureSlot >= RenderData::MaxTextureSlots)
+                Flush();
+
+            textureIndex = (float)renderData->TextureSlot;
+            renderData->TextureSlots[renderData->TextureSlot] = texture;
+            renderData->TextureSlot++;
+        }
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                              glm::rotate(glm::mat4(1.0f), 0.0f, { 0.0f, 0.0f, 1.0f }) *
+                              glm::scale(glm::mat4(1.0f), { font->scale, font->scale, 1.0f});
+
+        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x0, g.y0, 0, 1 };
+        renderData->RectVertexBufferPtr->Color = color;
+        renderData->RectVertexBufferPtr->TexCoords = { g.s0, g.t0 };
+        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+        renderData->RectVertexBufferPtr++;
+
+        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x1, g.y0, 0, 1 };
+        renderData->RectVertexBufferPtr->Color = color;
+        renderData->RectVertexBufferPtr->TexCoords = { g.s1, g.t0 };
+        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+        renderData->RectVertexBufferPtr++;
+
+        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x1, g.y1, 0, 1 };
+        renderData->RectVertexBufferPtr->Color = color;
+        renderData->RectVertexBufferPtr->TexCoords = { g.s1, g.t1 };
+        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+        renderData->RectVertexBufferPtr++;
+
+        renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ g.x0, g.y1, 0, 1 };
+        renderData->RectVertexBufferPtr->Color = color;
+        renderData->RectVertexBufferPtr->TexCoords = { g.s0, g.t1 };
+        renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+        renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+        renderData->RectVertexBufferPtr++;
+
+        renderData->RectCount++;
+    }
+}
+
+
+
 
 void Render::SetClearColor(const glm::vec4 &color) {
     glClearColor(color.r, color.g, color.b, color.a);

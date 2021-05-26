@@ -31,6 +31,8 @@ public:
 
         tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
                                   glm::vec3{0, -2, 1.0f}, glm::vec2{ 2, 2 });
+
+        font1 = MakeRef<Font>("assets/fonts/arial.ttf");
     }
 
     void Show() override {
@@ -82,9 +84,6 @@ public:
 
         Render::BeginScene(cameraController.GetCamera());
 
-//        Render::TestLine();
-
-
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 Render::DrawRect({ 0.55f * i, 0.55f * j, 0.0f}, { 0.5f, 0.5f },
@@ -110,6 +109,8 @@ public:
         tile1->Draw();
         tile2->Draw();
 
+        Render::DrawText("Hello", { -5, 0, 0.5f }, font1, glm::vec4{1.0f});
+
         Render::EndScene();
     }
 
@@ -127,6 +128,7 @@ private:
     Scope<Sprite> sprite2;
     Scope<Sprite> tile1;
     Scope<Sprite> tile2;
+    Ref<Font> font1;
 };
 
 

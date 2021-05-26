@@ -5,6 +5,7 @@ namespace Shadow {
 class Texture {
 public:
     explicit Texture(std::string const& path);
+    Texture(uint32_t width, uint32_t height, uint32_t rendererId);
 
     ~Texture();
 
@@ -18,8 +19,6 @@ public:
     static Ref<Texture> CreateWhiteTexture();
 
 private:
-    Texture(uint32_t width, uint32_t height, uint32_t rendererId);
-
     std::string mPath;
     uint32_t mWidth;
     uint32_t mHeight;

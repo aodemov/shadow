@@ -7,6 +7,7 @@
 #include "shadow/renderer/camera.h"
 #include "shadow/renderer/texture.h"
 #include "shadow/renderer/sub_texture.h"
+#include "shadow/renderer/font.h"
 
 namespace Shadow {
 
@@ -26,6 +27,8 @@ public:
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& texture, float rotation = 0.0f);
 
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
+
+    static void DrawText(std::string const&  text, glm::vec3 const& position, const Ref<Font>& font, glm::vec4 color);
 };
 
 }
