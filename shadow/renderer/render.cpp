@@ -24,7 +24,9 @@ struct RenderData {
     static inline const uint32_t MaxIndices = MaxRects * 6;
     static inline const uint32_t MaxTextureSlots = 16;
 
-    Ref<Shader> DefaultShader;
+    Scope<Shader> DefaultShader;
+    Scope<Shader> FontShader;
+    Shader* CurrentShader = nullptr;
 
     Ref<VertexArray> RectVA;
     RectVertex* RectVertexBuffer = nullptr;
@@ -80,8 +82,9 @@ void Render::Init() {
     renderData->RectVA->SetIndexBuffer(rectIB);
     delete[] rectIndices;
 
-    // Compiling Default shader
-    renderData->DefaultShader = MakeRef<Shader>("assets/shaders/Default.glsl");
+    // Compiling shaders
+    renderData->DefaultShader = MakeScope<Shader>("assets/shaders/Default.glsl");
+    renderData->FontShader = MakeScope<Shader>("assets/shaders/Font.glsl");
     renderData->DefaultShader->Bind();
 
     // Uploading sampler2d array data to Default shader
@@ -90,6 +93,11 @@ void Render::Init() {
         samplers[i] = i;
 
     renderData->DefaultShader->UploadUniformIntArray("u_Textures", samplers, RenderData::MaxTextureSlots);
+
+    renderData->FontShader->Bind();
+    renderData->FontShader->UploadUniformIntArray("u_Textures", samplers, RenderData::MaxTextureSlots);
+
+    renderData->CurrentShader = renderData->DefaultShader.get();
 
     // Generating 1x1 white texture for colored rects
     renderData->TextureSlots[0] = Texture::CreateWhiteTexture();
@@ -109,6 +117,8 @@ void Render::BeginScene(Camera& camera) {
     // Uploading ViewProjection matrix to Default shader
     renderData->DefaultShader->Bind();
     renderData->DefaultShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    renderData->FontShader->Bind();
+    renderData->FontShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 }
 
 void Render::EndScene() {
@@ -116,6 +126,8 @@ void Render::EndScene() {
 }
 
 void Render::Flush() {
+    renderData->CurrentShader->Bind();
+
     // Binding all textures to corresponding texture slots
     for (uint32_t i = 0; i < renderData->TextureSlot; i++) {
         renderData->TextureSlots[i]->Bind(i);
@@ -141,7 +153,16 @@ void Render::Flush() {
     renderData->TextureSlot = 1;
 }
 
+void Render::UseShader(Shader *shader) {
+    if (shader != nullptr && !(*renderData->CurrentShader == *shader)) {
+        Flush();
+        renderData->CurrentShader = shader;
+    }
+}
+
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
+    UseShader(renderData->DefaultShader.get());
+
     if (renderData->RectCount >= RenderData::MaxRects)
         Flush();
 
@@ -185,6 +206,9 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<SubTexture> &subTexture,
                       float rotation) {
+    UseShader(renderData->DefaultShader.get());
+
+
     glm::vec2 halfSize = size / 2.0f;
     glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
 
@@ -192,17 +216,18 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Re
 }
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture> &texture, float rotation) {
+    UseShader(renderData->DefaultShader.get());
+
     glm::vec2 halfSize = size / 2.0f;
     glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
 
     DrawRect(box, position.z, { 0.0f, 0.0f, 1.0f, 1.0f }, texture, rotation);
 }
 
-void Render::DrawRect(const glm::vec4 &box, float z, const glm::vec4 &texCoords, const Ref<Texture> &texture, float rotation) {
+void Render::DrawRect(const glm::vec4 &box, float z, const glm::vec4 &texCoords, const Ref<Texture> &texture, float rotation, glm::vec4 const& color) {
     if (renderData->RectCount >= RenderData::MaxRects)
         Flush();
 
-    constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
     const float tilingFactor = 1.0f;
 
     float textureIndex = 0.0f;
@@ -272,6 +297,8 @@ void Render::DrawLine(const glm::vec2 &from, const glm::vec2 &to, float width, g
 }
 
 void Render::DrawText(const std::string &text, const glm::vec3 &position, const Ref<Font>& font, glm::vec4 color) {
+    UseShader(renderData->FontShader.get());
+
     glm::vec2 offset = { 0, 0 };
     for (auto c : text) {
         auto g = font->GetTexCoords(c, &offset);
@@ -280,7 +307,7 @@ void Render::DrawText(const std::string &text, const glm::vec3 &position, const 
         glm::vec4 box = { position.x + g.x0 * scale.x, position.y + g.y0 * scale.y, position.x + g.x1 * scale.x, position.y + g.y1 * scale.y };
         glm::vec4 texCoords = { g.s0, g.t0, g.s1, g.t1 };
 
-        DrawRect(box, position.z, texCoords, font->GetTexture());
+        DrawRect(box, position.z, texCoords, font->GetTexture(), 0.0f, color);
     }
 }
 

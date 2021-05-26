@@ -27,12 +27,15 @@ public:
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, float rotation = 0.0f);
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation = 0.0f);
 
-    static void DrawRect(glm::vec4 const& box, float z, glm::vec4 const& texCoords, Ref<Texture> const& texture, float rotation = 0.0f);
-
-
     static void DrawLine(glm::vec2 const& from, glm::vec2 const& to, float width, glm::vec4 color);
 
     static void DrawText(std::string const&  text, glm::vec3 const& position, const Ref<Font>& font, glm::vec4 color);
+
+private:
+    static void UseShader(Shader* shader);
+
+    static void DrawRect(glm::vec4 const& box, float z, glm::vec4 const& texCoords, Ref<Texture> const& texture,
+                         float rotation = 0.0f, glm::vec4 const& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 };
 
 }

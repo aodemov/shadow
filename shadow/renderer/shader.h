@@ -20,6 +20,10 @@ public:
     void UploadUniformInt(std::string const& name, int value);
     void UploadUniformIntArray(std::string const& name, int* values, uint32_t count);
 
+    bool operator==(const Shader& other) const {
+        return mRendererId == other.mRendererId;
+    }
+
 private:
     void Compile(const std::string &vertexSource, const std::string &fragmentSource);
 
