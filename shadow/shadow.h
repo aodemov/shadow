@@ -26,3 +26,5 @@
 
 #include "shadow/ecs/sprite.h"
 
+#include "shadow/ui/ui.h"
+

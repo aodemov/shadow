@@ -113,10 +113,18 @@ public:
         Render::DrawText("The quick brown fox jumps over the lazy dog", { 0, 1.2f, 1.0f }, font1, glm::vec4{1,0,1, 0.5f});
 
         Render::EndScene();
+
+
+        UI::Begin();
+
+        Render::DrawRect({100, 100, 1}, {50, 50}, { 1, 0, 0, 0.5f });
+
+        UI::End();
     }
 
 private:
     CameraController cameraController;
+    Camera uiCam{0,0,0,0};
 
     glm::vec3 cameraPosition{0.0f};
     float cameraSpeed{8.0f};

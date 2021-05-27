@@ -1,6 +1,7 @@
 #include "game_loop.h"
 
 #include "shadow/application/application.h"
+#include "shadow/ui/ui.h"
 
 namespace Shadow {
 
@@ -54,6 +55,7 @@ void GameLoop::Init() {
     mWindow->Init();
 
     Render::Init();
+    UI::Init();
 
     mGameClock.Start();
 #ifdef SH_DEBUGGER
@@ -79,6 +81,7 @@ void GameLoop::Shutdown() {
 
     mSceneManager->Shutdown();
 
+    UI::Shutdown();
     Render::Shutdown();
     mWindow->Shutdown();
 }
