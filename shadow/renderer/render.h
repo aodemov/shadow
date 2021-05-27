@@ -23,6 +23,7 @@ public:
     static void SetClearColor(glm::vec4 const& color);
     static void Clear();
 
+    static void DrawRect(glm::vec4 const& box, glm::vec4 const& color);
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, glm::vec4 const& color, float rotation = 0.0f);
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<Texture> const& texture, float rotation = 0.0f);
     static void DrawRect(glm::vec3 const& position, glm::vec2 const& size, Ref<SubTexture> const& subTexture, float rotation = 0.0f);

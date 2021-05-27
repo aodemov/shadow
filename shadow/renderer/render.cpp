@@ -161,6 +161,45 @@ void Render::UseShader(Shader *shader) {
     }
 }
 
+void Render::DrawRect(const glm::vec4 &box, const glm::vec4 &color) {
+    if (renderData->RectCount >= RenderData::MaxRects)
+        Flush();
+
+    const float textureIndex = 0.0f;
+    const float tilingFactor = 1.0f;
+
+
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.y, 1.0f };
+    renderData->RectVertexBufferPtr->Color = color;
+    renderData->RectVertexBufferPtr->TexCoords = { 0, 0 };
+    renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData->RectVertexBufferPtr++;
+
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.y, 1.0f };
+    renderData->RectVertexBufferPtr->Color = color;
+    renderData->RectVertexBufferPtr->TexCoords = { 1, 0 };
+    renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData->RectVertexBufferPtr++;
+
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.w, 1.0f };
+    renderData->RectVertexBufferPtr->Color = color;
+    renderData->RectVertexBufferPtr->TexCoords = { 1, 1 };
+    renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData->RectVertexBufferPtr++;
+
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.w, 1.0f };
+    renderData->RectVertexBufferPtr->Color = color;
+    renderData->RectVertexBufferPtr->TexCoords = { 0, 1 };
+    renderData->RectVertexBufferPtr->TexIndex = textureIndex;
+    renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
+    renderData->RectVertexBufferPtr++;
+
+    renderData->RectCount++;
+}
+
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color, float rotation) {
     UseShader(renderData->DefaultShader.get());
 
