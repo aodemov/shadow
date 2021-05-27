@@ -20,6 +20,8 @@ public:
 
     void Generate(int amount = 1);
 
+    void Draw();
+
 private:
     float width, height;
 

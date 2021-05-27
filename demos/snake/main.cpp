@@ -17,7 +17,7 @@ public:
         : borders(10, 10),
           food(9, 9)
     {
-        food.Generate(5);
+        NewGame();
     }
 
     void Load() override {
@@ -25,7 +25,15 @@ public:
 
         cameraController.SetPosition({ 0, 0, 0 });
         cameraController.SetRotation(0);
-        cameraController.SetZoom(10);
+        cameraController.SetZoom(6);
+
+        font = MakeRef<Font>("assets/segoeui.ttf", 32 * 2);
+
+        Application::GetEventBus().AddListener<KeyPressedEvent>([&](auto e) {
+           if (gameOver && e.GetKeyCode() == Key::Space) {
+               NewGame();
+           }
+        });
     }
 
     void Show() override {
@@ -40,9 +48,27 @@ public:
         
     }
 
+    void NewGame() {
+        snake = Snake();
+        food = Food(9, 9);
+        food.Generate(3);
+
+        gameOver = false;
+    }
+
     void VariableUpdate(float delta) override {
-        if (gameOver)
+        Render::Clear();
+
+        if (gameOver) {
+            UI::Begin();
+
+            Render::DrawText("Lol, u died",{ Application::GetWindow().GetWidth() / 2 - 50, Application::GetWindow().GetHeight() / 2 - 20, 0 }, font, {0,0,0,1});
+            Render::DrawText("Press space to continue",{ Application::GetWindow().GetWidth() / 2 - 200, Application::GetWindow().GetHeight() / 2 + 20, 0 }, font, {0,0,0,1});
+
+            UI::End();
+
             return;
+        }
 
         // Snake input
         if (Input::IsKeyPressed(Key::Up)) {
@@ -64,7 +90,7 @@ public:
 
                 food.GetPieces().erase(it);
                 food.Generate(1);
-                break;
+//                break;
             }
         }
 
@@ -88,36 +114,19 @@ public:
             }
         }
 
-
-        Render::Clear();
-
         Render::BeginScene(cameraController.GetCamera());
 
-        // Draw borders
-        const float borderWidth = 0.3f;
-        const glm::vec4 borderColor = { 0, 0, 0, 0.8f };
-        auto& bc = borders.GetCorners();
-        Render::DrawLine(bc[0], bc[1], borderWidth, borderColor);
-        Render::DrawLine(bc[1], bc[2], borderWidth, borderColor);
-        Render::DrawLine(bc[2], bc[3], borderWidth, borderColor);
-        Render::DrawLine(bc[3], bc[0], borderWidth, borderColor);
-
-        // Draw snake
-        float snakeWidth = 0.2f;
-        for (int i = 0; i < b.size() - 1; i++) {
-            glm::vec4 color = { 52.0f / 256, 235.0f / 256, 161.0f / 256, 0.8f };
-            Render::DrawLine(b[i], b[i+1], snakeWidth, color);
-        }
-
-        // Draw food
-        const float foodSize = 0.3f;
-        for (auto& p : food.GetPieces()) {
-            glm::vec4 color = { 1.0f, 0, 0, 0.8f};
-            Render::DrawRect({p.position, 0.0f}, (float)sqrt(p.value) * glm::vec2(foodSize, foodSize), color, 45.0f);
-        }
-
+        borders.Draw();
+        snake.Draw();
+        food.Draw();
 
         Render::EndScene();
+
+        UI::Begin();
+
+        Render::DrawText("Score: " + std::to_string((int)round(snake.GetLength() * 10)), { Application::GetWindow().GetWidth() - 300, 100, 0 }, font, {0,0,0,1});
+
+        UI::End();
     }
 
 private:
@@ -126,6 +135,7 @@ private:
     Snake snake;
     Borders borders;
     Food food;
+    Ref<Font> font;
 
     bool gameOver = false;
 };

@@ -4,8 +4,6 @@
 
 #include "shadow/shadow.h"
 
-using namespace Shadow;
-
 class Snake {
 public:
     enum class Direction : uint8_t {
@@ -15,13 +13,16 @@ public:
         Right
     };
 
+    std::vector<glm::vec2> const& GetBody() { return body; }
+    float GetLength() const { return length; }
+
     Snake();
 
-    void Update(float delta);
     void SetDirection(Direction d);
     void Feed(float amount);
 
-    std::vector<glm::vec2> const& GetBody() { return body; }
+    void Update(float delta);
+    void Draw();
 
 private:
     std::vector<glm::vec2> body;
@@ -29,4 +30,6 @@ private:
     Direction newDirection;
     float toAdd = 0;
     float speed;
+
+    float length = 0;
 };

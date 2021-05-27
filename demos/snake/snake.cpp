@@ -1,5 +1,7 @@
 #include "snake.h"
 
+using namespace Shadow;
+
 Snake::Snake()
     : body(),
       direction(Direction::Right),
@@ -49,6 +51,14 @@ void Snake::Update(float delta) {
     body[body.size()-1] = body[body.size()-1] + glm::normalize(segment) * distance;
 }
 
+void Snake::Draw() {
+    float snakeWidth = 0.2f;
+    for (int i = 0; i < body.size() - 1; i++) {
+        glm::vec4 color = { 52.0f / 256, 235.0f / 256, 161.0f / 256, 0.8f };
+        Render::DrawLine(body[i], body[i+1], snakeWidth, color);
+    }
+}
+
 void Snake::SetDirection(Direction d) {
     if (d == direction || ((uint8_t)d % 2) == ((uint8_t)direction % 2))
         return;
@@ -58,5 +68,6 @@ void Snake::SetDirection(Direction d) {
 
 void Snake::Feed(float amount) {
     toAdd += amount;
+    length += amount;
 }
 

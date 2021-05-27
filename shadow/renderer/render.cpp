@@ -304,7 +304,8 @@ void Render::DrawText(const std::string &text, const glm::vec3 &position, const 
     for (auto c : text) {
         auto g = font->GetTexCoords(c, &offset);
 
-        glm::vec2 scale = { 2.0f / Application::GetWindow().GetHeight(), 2.0f / Application::GetWindow().GetHeight() };
+//        glm::vec2 scale = { 2.0f / Application::GetWindow().GetHeight(), 2.0f / Application::GetWindow().GetHeight() };
+        glm::vec2 scale = {1, -1};
         glm::vec4 box = { position.x + g.x0 * scale.x, position.y + g.y0 * scale.y, position.x + g.x1 * scale.x, position.y + g.y1 * scale.y };
         glm::vec4 texCoords = { g.s0, g.t0, g.s1, g.t1 };
 
