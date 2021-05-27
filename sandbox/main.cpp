@@ -2,6 +2,7 @@
 #include <string>
 
 #include "shadow/shadow.h"
+#include "shadow/ui/ui_block.h"
 
 using namespace Shadow;
 
@@ -117,7 +118,25 @@ public:
 
         UI::Begin();
 
-        Render::DrawRect({100, 100, 1}, {50, 50}, { 1, 0, 0, 0.5f });
+        UIBlock b1;
+        b1.MarginLeft(20).MarginTop(20).MarginBottom(20).Width(25, true);
+        b1.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
+        b1.Draw();
+
+        UIBlock b2;
+        b2.MarginTop(10, true).MarginRight(20).Width(300).Height(200);
+        b2.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
+        b2.Draw();
+
+        UIBlock b3;
+        b3.MarginBottom(0).Width(50, true).Height(30).CenterX();
+        b3.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
+        b3.Draw();
+
+        UIBlock b4;
+        b4.MarginLeft(100).MarginBottom(50, true).Width(50).Height(50).CenterBoth();
+        b4.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
+        b4.Draw();
 
         UI::End();
     }
