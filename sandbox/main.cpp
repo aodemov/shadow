@@ -2,8 +2,8 @@
 #include <string>
 
 #include "shadow/shadow.h"
-#include "shadow/ui/ui_block.h"
-#include "shadow/ui/label.h"
+
+#include "progress_bar.h"
 
 using namespace Shadow;
 
@@ -36,7 +36,9 @@ public:
 
         font1 = MakeRef<Font>("assets/fonts/comic.ttf", 50);
 
-        SH_WARN(font1->GetStringWidth("The quick brown fox jumps over the lazy dog"));
+        bar = MakeRef<ProgressBar>(MakeRef<Font>("assets/fonts/arial.ttf", 25));
+        bar->Width(50, true).Height(30).CenterX().MarginBottom(5, true);
+        UI::Add(std::dynamic_pointer_cast<UiBlock, ProgressBar>(bar));
     }
 
     void Show() override {
@@ -112,6 +114,8 @@ public:
         tile1->Draw();
         tile2->Draw();
 
+        bar->SetValue(fmod(rot, 100.0f));
+
         Render::DrawRect({ -3, 0, 0.5f }, { 2.0f * 40 / Application::GetWindow().GetHeight(), 2.0f * 40 / Application::GetWindow().GetHeight() }, { 1.0f, 1.0f, 0.0f, 1.0f });
 
         Render::DrawText("The quick brown fox jumps over the lazy dog", { 0, 1.2f, 1.0f }, font1, glm::vec4{1,0,1, 0.5f});
@@ -123,13 +127,15 @@ public:
         float w = Application::GetWindow().GetWidth();
         float h = Application::GetWindow().GetHeight();
 
-        UIBlock b1;
-        b1.MarginLeft(20).MarginTop(20).MarginBottom(20).Width(25, true);
-        b1.Calculate(w, h);
-        b1.Draw();
 
-        Label l1("The quick brown fox jumps over the lazy dog", { w / 2, 100 }, font1, { 1, 0, 1, 0.5f });
-        l1.Draw();
+
+//        UiBlock b1;
+//        b1.MarginLeft(20).MarginTop(20).MarginBottom(20).Width(25, true);
+//        b1.Calculate(w, h);
+//        b1.Draw();
+//
+//        Label l1("The quick brown fox jumps over the lazy dog", { w / 2, 100 }, font1, { 1, 0, 1, 0.5f });
+//        l1.Draw();
 //        Render::DrawText("The quick brown fox jumps over the lazy dog", { (w - tw) / 2, 100, 1.0f }, font1, glm::vec4{1,0,1, 0.5f});
 
 //        UIBlock b2;
@@ -166,6 +172,8 @@ private:
     Scope<Sprite> tile1;
     Scope<Sprite> tile2;
     Ref<Font> font1;
+
+    Ref<ProgressBar> bar;
 };
 
 
