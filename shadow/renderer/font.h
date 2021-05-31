@@ -19,16 +19,22 @@ public:
 
     Glyph GetTexCoords(uint32_t c, glm::vec2* offset);
     float GetStringWidth(std::string const& str);
+
+    float GetSize() const { return mSize; };
+    float GetAscent() const { return mAscent; }
+    float GetDescent() const { return mDescent; }
+    float GetLineGap() const { return mLineGap; }
+    float GetLineAdvance() const { return mLineAdvance; }
 private:
     Ref<Texture> mTexture;
     std::unique_ptr<stbtt_packedchar[]> mCharInfo;
     uint32_t mSize;
-//    stbtt_fontinfo mFontInfo;
-//    float scale;
-//    float ascent;
-//    float descent;
-//    float lineGap;
-//    float lineAdvance;
+    stbtt_fontinfo mFontInfo;
+    float mScale;
+    float mAscent;
+    float mDescent;
+    float mLineGap;
+    float mLineAdvance;
 
     const uint32_t cAtlasWidth = 1024;
     const uint32_t cAtlasHeight = 1024;

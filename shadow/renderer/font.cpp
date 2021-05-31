@@ -34,17 +34,16 @@ Font::Font(const std::string &path, int fontSize)
     auto fontData = readFile(path);
 
     // Font info
-//    stbtt_InitFont(&mFontInfo, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0);
-//    scale = stbtt_ScaleForPixelHeight(&mFontInfo, mSize);
-//    SH_CORE_WARN("Scale: {0}, {1}", scale);
-//    int StbAscent;
-//    int StbDescent;
-//    int StbLineGap;
-//    stbtt_GetFontVMetrics(&info, &StbAscent, &StbDescent, &StbLineGap);
-//    ascent = StbAscent * scale;
-//    descent = StbDescent * scale;
-//    lineGap = StbLineGap * scale;
-//    lineAdvance = ascent - descent + lineGap;
+    stbtt_InitFont(&mFontInfo, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0);
+    mScale = stbtt_ScaleForPixelHeight(&mFontInfo, mSize);
+    int StbAscent;
+    int StbDescent;
+    int StbLineGap;
+    stbtt_GetFontVMetrics(&mFontInfo, &StbAscent, &StbDescent, &StbLineGap);
+    mAscent = StbAscent * mScale;
+    mDescent = StbDescent * mScale;
+    mLineGap = StbLineGap * mScale;
+    mLineAdvance = mAscent - mDescent + mLineGap;
 
     // Packing atlas
     auto atlasData = std::make_unique<uint8_t[]>(cAtlasWidth * cAtlasHeight);
