@@ -27,4 +27,6 @@
 #include "shadow/ecs/sprite.h"
 
 #include "shadow/ui/ui.h"
+#include "shadow/ui/ui_block.h"
+#include "shadow/ui/label.h"
 

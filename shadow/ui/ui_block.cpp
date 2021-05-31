@@ -10,7 +10,10 @@ inline bool isRel(float v) {
     return v < 0 && isSet(v);
 }
 
-void UIBlock::Calculate(float vw, float vh) {
+void UiBlock::Calculate() {
+    float vw = parent->box.p - parent->box.x;
+    float vh = parent->box.q - parent->box.y;
+
     glm::vec4 m = margins;
     glm::vec2 s = size;
     // Translating relative values to absolute
@@ -61,10 +64,24 @@ void UIBlock::Calculate(float vw, float vh) {
     if (!isSet(m.q))
         m.q = vh - m.y - s.y;
 
-    box = { m.x, m.y, vw - m.p, vh - m.q };
+    box = { parent->box.x + m.x, parent->box.y +  m.y, parent->box.x +  vw - m.p, parent->box.y +  vh - m.q };
+
+    for (auto& child : mChildren) {
+        child->Calculate();
+    }
 }
 
-void UIBlock::Draw() {
-    Render::DrawRect(box, { 1, 1, 1, 1});
+void UiBlock::Draw() {
+    Render::DrawRect(box, mColor);
+
+    for (auto& child : mChildren) {
+        child->Draw();
+    }
+}
+
+void UiBlock::Add(Ref<UiBlock> child) {
+    child->parent = this;
+
+    mChildren.push_back(std::move(child));
 }
 }
