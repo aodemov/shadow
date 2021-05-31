@@ -3,6 +3,7 @@
 
 #include "shadow/shadow.h"
 #include "shadow/ui/ui_block.h"
+#include "shadow/ui/label.h"
 
 using namespace Shadow;
 
@@ -33,7 +34,9 @@ public:
         tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
                                   glm::vec3{1.5f, 0, 1.0f}, glm::vec2{ 2, 2 });
 
-        font1 = MakeRef<Font>("assets/fonts/comic.ttf", 100);
+        font1 = MakeRef<Font>("assets/fonts/comic.ttf", 50);
+
+        SH_WARN(font1->GetStringWidth("The quick brown fox jumps over the lazy dog"));
     }
 
     void Show() override {
@@ -117,26 +120,32 @@ public:
 
 
         UI::Begin();
+        float w = Application::GetWindow().GetWidth();
+        float h = Application::GetWindow().GetHeight();
 
         UIBlock b1;
         b1.MarginLeft(20).MarginTop(20).MarginBottom(20).Width(25, true);
-        b1.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
+        b1.Calculate(w, h);
         b1.Draw();
 
-        UIBlock b2;
-        b2.MarginTop(10, true).MarginRight(20).Width(300).Height(200);
-        b2.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
-        b2.Draw();
+        Label l1("The quick brown fox jumps over the lazy dog", { w / 2, 100 }, font1, { 1, 0, 1, 0.5f });
+        l1.Draw();
+//        Render::DrawText("The quick brown fox jumps over the lazy dog", { (w - tw) / 2, 100, 1.0f }, font1, glm::vec4{1,0,1, 0.5f});
 
-        UIBlock b3;
-        b3.MarginBottom(0).Width(50, true).Height(30).CenterX();
-        b3.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
-        b3.Draw();
-
-        UIBlock b4;
-        b4.MarginLeft(100).MarginBottom(50, true).Width(50).Height(50).CenterBoth();
-        b4.Calculate(Application::GetWindow().GetWidth(), Application::GetWindow().GetHeight());
-        b4.Draw();
+//        UIBlock b2;
+//        b2.MarginTop(10, true).MarginRight(20).Width(300).Height(200);
+//        b2.Calculate(w, h);
+//        b2.Draw();
+//
+//        UIBlock b3;
+//        b3.MarginBottom(0).Width(50, true).Height(30).CenterX();
+//        b3.Calculate(w, h);
+//        b3.Draw();
+//
+//        UIBlock b4;
+//        b4.MarginLeft(100).MarginBottom(50, true).Width(50).Height(50).CenterBoth();
+//        b4.Calculate(w, h);
+//        b4.Draw();
 
         UI::End();
     }
