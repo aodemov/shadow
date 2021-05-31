@@ -3,22 +3,22 @@
 #include "shadow/renderer/render.h"
 
 namespace Shadow {
-Label::Label(const std::string &text, glm::vec2 const& position, Ref<Font> font, glm::vec4 const& color)
+Label::Label(const std::string &text, Ref<Font> font, glm::vec4 const& color)
     : mText(text),
-      mPosition(position),
       mFont(std::move(font)),
-      mColor(color)
-{
-    Calculate();
-}
+      mColor(color) {}
 
 void Label::Calculate() {
     float width = mFont->GetStringWidth(mText);
-    mPosition.x -= width / 2;
+    float height = mFont->GetSize();
+    Width(width);
+    Height(height);
+    UiBlock::Calculate();
 }
 
 void Label::Draw() {
-    Render::DrawText(mText, { mPosition, 1.0f }, mFont, mColor);
+//    Render::DrawRect(box, {1,1,1, 0.5f});
+    Render::DrawText(mText, { box.x, box.q + mFont->GetDescent(), 1.0f }, mFont, mColor);
 }
 
 }
