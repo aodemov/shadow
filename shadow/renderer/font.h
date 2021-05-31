@@ -18,7 +18,7 @@ public:
     Ref<Texture> GetTexture() const { return mTexture; }
 
     Glyph GetTexCoords(uint32_t c, glm::vec2* offset);
-    float GetStringWidth(std::string str);
+    float GetStringWidth(std::string const& str);
 private:
     Ref<Texture> mTexture;
     std::unique_ptr<stbtt_packedchar[]> mCharInfo;

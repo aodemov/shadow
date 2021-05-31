@@ -92,7 +92,7 @@ Font::Glyph Font::GetTexCoords(uint32_t codepoint, glm::vec2* offset) {
     return g;
 }
 
-float Font::GetStringWidth(std::string str) {
+float Font::GetStringWidth(std::string const& str) {
     float width = 0;
 
     for (auto c : str) {
