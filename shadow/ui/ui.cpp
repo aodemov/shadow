@@ -41,7 +41,6 @@ void UI::Shutdown() {
 void UI::Begin() {
     Render::BeginScene(*uiData->UiCamera);
     uiData->MousePosition = Input::GetMousePosition();
-    uiData->Container->Calculate();
     uiData->Container->Draw();
 }
 
