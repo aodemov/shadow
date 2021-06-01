@@ -22,14 +22,9 @@ public:
 
     void Draw();
 
-    glm::vec3 const& GetPosition() const { return mPosition; }
-    void SetPosition(glm::vec3 position) { mPosition = position; }
-
-    glm::vec2 const& GetSize() const { return mSize; }
-    void SetSize(glm::vec2 size) { mSize = size; }
-
-    float GetRotation() const { return mRotation; }
-    void SetRotation(float rotation) { mRotation = rotation; }
+    glm::vec3& Position() { return mPosition; }
+    glm::vec2& Size() { return mSize; }
+    float& Rotation() { return mRotation; }
 
 private:
     glm::vec3 mPosition;
