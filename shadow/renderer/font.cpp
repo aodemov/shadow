@@ -2,36 +2,14 @@
 
 #include <glad/gl.h>
 
+#include "shadow/core/utils/file.h"
+
 
 namespace Shadow {
 
-std::string readFile(std::string const& path) {
-    std::ifstream fs(path, std::ios::in | std::ios::binary);
-    std::string contents;
-
-    if(fs) {
-        fs.seekg(0, std::ios::end);
-        size_t size = fs.tellg();
-        if (size == -1) {
-            SH_CORE_ERROR("Could not read from file '{0}'", path);
-        } else {
-            contents.resize(size);
-            fs.seekg(0, std::ios::beg);
-            fs.read(&contents[0], size);
-            fs.close();
-
-            return contents;
-        }
-    } else {
-        SH_CORE_ERROR("Could not open file '{0}'", path);
-    }
-
-    return "";
-}
-
 Font::Font(const std::string &path, int fontSize)
     : mSize(fontSize) {
-    auto fontData = readFile(path);
+    auto fontData = File::Read(path);
 
     // Font info
     stbtt_InitFont(&mFontInfo, reinterpret_cast<const unsigned char *>(fontData.c_str()), 0);

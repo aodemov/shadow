@@ -5,36 +5,19 @@
 #include <glad/gl.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "shadow/core/utils/file.h"
+
 namespace Shadow {
 
 Shader::Shader(const std::string& path) {
-    std::ifstream fs(path, std::ios::in | std::ios::binary);
-    std::string contents;
+    std::string shaderLibrarySource = File::Read(path);
+    // TODO: fix
+    size_t vertexPos = shaderLibrarySource.find("#shader vertex");
+    size_t fragmentPos = shaderLibrarySource.find("#shader fragment");
+    std::string vertexSrc = shaderLibrarySource.substr(vertexPos + 14, fragmentPos - vertexPos - 14);
+    std::string fragmentSrc = shaderLibrarySource.substr(fragmentPos + 16);
 
-    if(fs) {
-        fs.seekg(0, std::ios::end);
-        size_t size = fs.tellg();
-        if (size == -1) {
-            SH_CORE_ERROR("Could not read from file '{0}'", path);
-        } else {
-            contents.resize(size);
-            fs.seekg(0, std::ios::beg);
-            fs.read(&contents[0], size);
-            fs.close();
-
-            // TODO: fix
-            size_t vertexPos = contents.find("#shader vertex\n");
-            size_t fragmentPos = contents.find("#shader fragment\n");
-            std::string vertexSrc = contents.substr(vertexPos + 15, fragmentPos - vertexPos - 15);
-            std::string fragmentSrc = contents.substr(fragmentPos + 17);
-
-            Compile(vertexSrc, fragmentSrc);
-        }
-    } else {
-        SH_CORE_ERROR("Could not open file '{0}'", path);
-    }
-
-
+    Compile(vertexSrc, fragmentSrc);
 }
 
 Shader::Shader(const std::string &vertexSource, const std::string &fragmentSource) {
