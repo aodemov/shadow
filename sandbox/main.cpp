@@ -122,7 +122,6 @@ public:
 
         Render::EndScene();
 
-
         UI::Begin();
         float w = Application::GetWindow().GetWidth();
         float h = Application::GetWindow().GetHeight();
