@@ -8,6 +8,8 @@
 #include "borders.h"
 #include "food.h"
 
+#include "scoreboard.h"
+
 
 using namespace Shadow;
 
@@ -27,13 +29,17 @@ public:
         cameraController.SetRotation(0);
         cameraController.SetZoom(6);
 
-        font = MakeRef<Font>("assets/segoeui.ttf", 32 * 2);
-
         Application::GetEventBus().AddListener<KeyPressedEvent>([&](auto e) {
            if (gameOver && e.GetKeyCode() == Key::Space) {
                NewGame();
            }
         });
+
+        font = MakeRef<Font>("assets/segoeui.ttf", 32 * 2);
+
+        mScoreboard = MakeRef<Scoreboard>();
+        mScoreboard->MarginRight(20).MarginTop(20).Width(300).Height(120);
+        UI::Add(mScoreboard);
     }
 
     void Show() override {
@@ -122,9 +128,11 @@ public:
 
         Render::EndScene();
 
+        mScoreboard->SetScore((int)round(snake.GetLength() * 10));
+
         UI::Begin();
 
-        Render::DrawText("Score: " + std::to_string((int)round(snake.GetLength() * 10)), { Application::GetWindow().GetWidth() - 300, 100, 0 }, font, {0,0,0,1});
+//        Render::DrawText("Score: " + std::to_string((int)round(snake.GetLength() * 10)), { Application::GetWindow().GetWidth() - 300, 100, 0 }, font, {0,0,0,1});
 
         UI::End();
     }
@@ -135,8 +143,9 @@ private:
     Snake snake;
     Borders borders;
     Food food;
-    Ref<Font> font;
 
+    Ref<Scoreboard> mScoreboard;
+    Ref<Font> font;
     bool gameOver = false;
 };
 
