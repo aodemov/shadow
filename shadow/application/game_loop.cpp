@@ -2,6 +2,7 @@
 
 #include "shadow/application/application.h"
 #include "shadow/ui/ui.h"
+#include "shadow/core/math/random.h"
 
 namespace Shadow {
 
@@ -56,6 +57,7 @@ void GameLoop::Init() {
 
     Render::Init();
     UI::Init();
+    Random::Init();
 
     mGameClock.Start();
 #ifdef SH_DEBUGGER

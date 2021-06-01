@@ -30,3 +30,5 @@
 #include "shadow/ui/ui_block.h"
 #include "shadow/ui/label.h"
 
+#include "shadow/core/math/random.h"
+
