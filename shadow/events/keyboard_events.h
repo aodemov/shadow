@@ -16,7 +16,7 @@ public:
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
 
-    const char* GetName() const override { return "KeyPressedEvent"; }
+    EventType GetType() const override { return Event::KeyPressed; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "KeyPressedEvent: " << mKeyCode;
@@ -37,7 +37,7 @@ public:
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
 
-    const char* GetName() const override { return "KeyReleasedEvent"; }
+    EventType GetType() const override { return Event::KeyReleased; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "KeyReleasedEvent: " << mKeyCode;
@@ -58,7 +58,7 @@ public:
     KeyCode GetKeyCode() const { return mKeyCode; }
     KeyModifiers GetModifiers() const { return mMods; }
 
-    const char* GetName() const override { return "KeyRepeatedEvent"; }
+    EventType GetType() const override { return Event::KeyRepeated; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "KeyRepeatedEvent: " << mKeyCode;

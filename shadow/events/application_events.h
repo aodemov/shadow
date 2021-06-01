@@ -14,7 +14,7 @@ public:
     unsigned int GetWidth() const { return mWidth; }
     unsigned int GetHeight() const { return mHeight; }
 
-    const char* GetName() const override { return "WindowResizeEvent"; }
+    EventType GetType() const override { return Event::WindowResize; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "WindowResizeEvent: " << mWidth << "; " << mHeight;
@@ -28,7 +28,8 @@ class WindowCloseEvent : public Event {
 public:
     WindowCloseEvent() = default;
 
-    const char* GetName() const override { return "WindowCloseEvent"; }
+    EventType GetType() const override { return Event::WindowClose; }
+
 };
 
 

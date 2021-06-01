@@ -2,10 +2,24 @@
 
 namespace Shadow {
 
+using EventType = uint16_t;
+
 class Event {
 public:
-    virtual const char* GetName() const = 0;
-    virtual std::string ToString() const { return GetName(); }
+    virtual EventType GetType() const = 0;
+    virtual std::string ToString() const { return std::to_string(GetType()); }
+
+    enum : EventType {
+        WindowClose = 0,
+        WindowResize,
+        KeyPressed,
+        KeyReleased,
+        KeyRepeated,
+        MouseMoved,
+        MousePressed,
+        MouseReleased,
+        MouseScrolled,
+    };
 };
 
 }

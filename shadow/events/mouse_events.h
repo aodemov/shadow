@@ -13,7 +13,7 @@ public:
     double GetX() const { return mX; }
     double GetY() const { return mY; }
 
-    const char* GetName() const override { return "MouseMovedEvent"; }
+    EventType GetType() const override { return Event::MouseMoved; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseMovedEvent: " << mX << "; " << mY;
@@ -32,7 +32,7 @@ public:
     double GetXOffset() const { return mX; }
     double GetYOffset() const { return mY; }
 
-    const char* GetName() const override { return "MouseScrolledEvent"; }
+    EventType GetType() const override { return Event::MouseScrolled; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseScrolledEvent: " << mX << "; " << mY;
@@ -51,7 +51,7 @@ public:
     MouseCode GetMouseCode() const { return mMouseCode; }
     KeyModifiers GetModifiers() const { return mMods; }
 
-    const char* GetName() const override { return "MousePressedEvent"; }
+    EventType GetType() const override { return Event::MousePressed; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MousePressedEvent: " << mMouseCode;
@@ -71,7 +71,7 @@ public:
     MouseCode GetMouseCode() const { return mMouseCode; }
     KeyModifiers GetModifiers() const { return mMods; }
 
-    const char* GetName() const override { return "MouseReleasedEvent"; }
+    EventType GetType() const override { return Event::MouseReleased; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseReleasedEvent: " << mMouseCode;
