@@ -84,4 +84,12 @@ void UiBlock::Add(Ref<UiBlock> child) {
 
     mChildren.push_back(std::move(child));
 }
+
+bool UiBlock::OnEvent(const Event *e) {
+    for (auto& child : mChildren) {
+        if (child->OnEvent(e))
+            return true;
+    }
+    return false;
+}
 }

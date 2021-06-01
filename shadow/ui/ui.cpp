@@ -32,6 +32,28 @@ void UI::Init() {
         uiData->Container->SetSize(uiData->ScreenDimensions.x, uiData->ScreenDimensions.y);
         uiData->Container->Calculate();
     });
+
+    Application::GetEventBus().AddListener<MouseMovedEvent>([&](auto e) {
+       uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<MouseScrolledEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<MousePressedEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<MouseReleasedEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<KeyPressedEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<KeyReleasedEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
+    Application::GetEventBus().AddListener<KeyRepeatedEvent>([&](auto e) {
+        uiData->Container->OnEvent(static_cast<const Event*>(&e));
+    });
 }
 
 void UI::Shutdown() {

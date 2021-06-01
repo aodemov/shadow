@@ -1,6 +1,14 @@
 #pragma once
 
+#include "shadow/events/mouse_events.h"
+#include "shadow/events/keyboard_events.h"
+
 namespace Shadow {
+
+inline bool isInBox(float x, float y, glm::vec4 const& box) {
+    return (x >= box.x) && (x <= box.p) && (y >= box.y) && (y <= box.q);
+}
+
 class UiBlock {
 public:
     UiBlock() = default;
@@ -32,6 +40,8 @@ protected:
     glm::vec4 mColor {0.0f};
 
     std::vector<Ref<UiBlock>> mChildren;
+
+    virtual bool OnEvent(const Event* e);
 private:
     glm::vec4 margins {1e7};
     glm::vec2 size {1e7};

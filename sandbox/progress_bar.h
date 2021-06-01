@@ -25,8 +25,27 @@ public:
         mLine->Width(value, true);
         mLine->Calculate();
     }
+
+    bool OnEvent(const Event* e) override {
+        if (e->GetType() == Event::MouseMoved) {
+            auto event = static_cast<const MouseMovedEvent*>(e);
+            mouseOver = isInBox(event->GetX(), event->GetY(), box);
+
+            if (mouseOver) {
+                mLine->Color({0, 1, 0, 1});
+            } else {
+                mLine->Color({1, 0, 0, 1});
+            }
+
+            return mouseOver;
+        }
+
+        return false;
+    }
 private:
     float mValue = 0.0f;
+
+    bool mouseOver = false;
 
     Ref<Label> mLabel;
     Ref<UiBlock> mLine;

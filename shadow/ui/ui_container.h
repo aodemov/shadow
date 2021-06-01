@@ -18,5 +18,7 @@ public:
             child->Calculate();
         }
     }
+
+    friend class UI;
 };
 }
