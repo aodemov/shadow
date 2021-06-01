@@ -31,4 +31,5 @@
 #include "shadow/ui/label.h"
 
 #include "shadow/core/math/random.h"
+#include "shadow/core/utils/file.h"
 
