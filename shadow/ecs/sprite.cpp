@@ -2,7 +2,7 @@
 
 namespace Shadow {
     void Sprite::Draw() {
-        Render::DrawRect(mPosition, mSize, mTexture, mRotation + mTexture->GetRotation());
+        Render::DrawRect(mPosition, mSize, mTexture, mRotation);
     }
 
 }
