@@ -12,7 +12,7 @@ SubTexture::SubTexture(Ref<Texture> texture, const glm::vec4& texCoords)
     : mTexture(std::move(texture)),
       mTexCoords(texCoords) {}
 
-SubTexture::SubTexture(Ref<Texture> texture, const glm::vec2 &size, const glm::vec2 &offset)
+SubTexture::SubTexture(Ref<Texture> texture, const glm::vec2 &offset, const glm::vec2 &size)
     : mTexture(std::move(texture)) {
     mTexCoords = {offset.x / (float)mTexture->GetWidth(),
                            offset.y / (float)mTexture->GetHeight(),
