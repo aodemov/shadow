@@ -28,10 +28,10 @@ public:
         sprite2 = MakeScope<Sprite>(MakeRef<Texture>("assets/textures/test2.png"), glm::vec3{7, 1, 1}, glm::vec2{7.2, 5});
 
         auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
-        tile1 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{16, 16},glm::vec2{3 * 16, 1 * 16}),
+        tile1 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{3 * 16, 1 * 16}, glm::vec2{16, 16}),
                                   glm::vec3{0, 0, 1.0f});
 
-        tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{2 * 16, 2 * 16},glm::vec2{6 * 16, 3 * 16}),
+        tile2 = MakeScope<Sprite>(MakeRef<SubTexture>(tilemap, glm::vec2{6 * 16, 3 * 16}, glm::vec2{2 * 16, 2 * 16}),
                                   glm::vec3{1.5f, 0, 1.0f}, glm::vec2{ 2, 2 });
 
         font1 = MakeRef<Font>("assets/fonts/comic.ttf", 50);
@@ -157,7 +157,6 @@ public:
 
 private:
     CameraController cameraController;
-    Camera uiCam{0,0,0,0};
 
     glm::vec3 cameraPosition{0.0f};
     float cameraSpeed{8.0f};

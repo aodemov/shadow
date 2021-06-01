@@ -25,6 +25,7 @@
 #include "shadow/scene/scene.h"
 
 #include "shadow/ecs/sprite.h"
+#include "shadow/ecs/texture_atlas.h"
 
 #include "shadow/ui/ui.h"
 #include "shadow/ui/ui_block.h"
