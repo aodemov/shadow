@@ -13,7 +13,7 @@ public:
     glm::vec3 const& GetPosition() { return mSprite->Position(); }
 
 private:
-    Ref<Sprite> mSprite;
+    Scope<AnimatedSprite> mSprite;
 
     float mSpeed = 5;
 };
