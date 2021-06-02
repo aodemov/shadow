@@ -16,6 +16,11 @@ struct compareAnimationState {
 namespace Shadow {
 class AnimationController {
 public:
+    AnimationController(const AnimationController& other) {
+        mStates = other.mStates;
+        mCurrentAnimation = mStates.begin() + (other.mCurrentAnimation - other.mStates.begin());
+    }
+
     AnimationController(std::initializer_list<std::pair<std::string, Animation const&>> states, std::string const& defaultAnimation);
 
     void Update(float delta);
