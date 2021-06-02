@@ -41,7 +41,8 @@ std::vector<LevelData> LoadLevelData(std::string const& filePath) {
 static const uint32_t TILE_SIZE = 16;
 
 void Level::Load() {
-    TextureAtlas atlas(MakeRef<Texture>("assets/textures/tilemap.png"),
+    auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
+    TextureAtlas atlas(tilemap,
                        {
 
                                {{ 0 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 1 Wall top left
@@ -114,10 +115,41 @@ void Level::Load() {
             }
         }
     }
+
+    // Animated torches
+    Animation torchAnimation(tilemap, 1.5f, {
+            { { 8  * 16, 5 * 16 }, { 16, 32 } },
+            { { 9  * 16, 5 * 16 }, { 16, 32 } },
+            { { 10 * 16, 5 * 16 }, { 16, 32 } },
+            { { 11 * 16, 5 * 16 }, { 16, 32 } },
+            { { 12 * 16, 5 * 16 }, { 16, 32 } },
+            { { 13 * 16, 5 * 16 }, { 16, 32 } },
+            { { 14 * 16, 5 * 16 }, { 16, 32 } },
+            { { 15 * 16, 5 * 16 }, { 16, 32 } },
+    });
+
+    AnimationController controller({
+        { "default", torchAnimation }
+    }, "default");
+
+    mObjects.push_back(AnimatedSprite(controller, glm::vec3{ 8,  22, 1.0f }, glm::vec2{ 1, 2 }));
+    mObjects.push_back(AnimatedSprite(controller, glm::vec3{ 11, 22, 1.0f }, glm::vec2{ 1, 2 }));
+    mObjects.push_back(AnimatedSprite(controller, glm::vec3{ 8,  17, 1.0f }, glm::vec2{ 1, 2 }));
+    mObjects.push_back(AnimatedSprite(controller, glm::vec3{ 11, 17, 1.0f }, glm::vec2{ 1, 2 }));
+}
+
+void Level::Update(float delta) {
+    for (auto& object : mObjects) {
+        object.Update(delta);
+    }
 }
 
 void Level::Draw() {
     for (auto& tile : mTiles) {
         tile.Draw();
+    }
+
+    for (auto& object : mObjects) {
+        object.Draw();
     }
 }

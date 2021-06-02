@@ -45,6 +45,7 @@ public:
 
     void VariableUpdate(float delta) override {
         mPlayer.Update(delta);
+        mLevel.Update(delta);
 
         Render::Clear();
 
