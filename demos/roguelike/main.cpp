@@ -26,7 +26,7 @@ public:
         mPlayer.Load();
 
         Application::GetEventBus().AddListener<KeyPressedEvent>([&](auto e) {
-           if (e.GetKeyCode() == Key::Space) {
+           if (e.GetKeyCode() == Key::R) {
                mLevel.Load();
            }
         });
