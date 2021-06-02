@@ -252,7 +252,7 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Su
     glm::vec2 halfSize = size / 2.0f;
     glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
 
-    DrawRect(box, position.z, subTexture.GetTexCoords(), subTexture.GetTexture(), rotation);
+    DrawRect(box, position.z, subTexture.GetTexture(), subTexture.GetTexCoords(),  rotation);
 }
 
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture> &texture, float rotation) {
@@ -261,10 +261,12 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Re
     glm::vec2 halfSize = size / 2.0f;
     glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
 
-    DrawRect(box, position.z, { 0.0f, 0.0f, 1.0f, 1.0f }, texture, rotation);
+    DrawRect(box, position.z, texture, { 0.0f, 0.0f, 1.0f, 1.0f }, rotation);
 }
 
-void Render::DrawRect(const glm::vec4 &box, float z, const glm::vec4 &texCoords, const Ref<Texture> &texture, float rotation, glm::vec4 const& color) {
+void Render::DrawRect(const glm::vec4 &box, float z, const Ref<Texture> &texture, const glm::vec4 &texCoords,
+                      float rotation, bool flipX, bool flipY,
+                      glm::vec4 const& color) {
     if (renderData->RectCount >= RenderData::MaxRects)
         Flush();
 
@@ -297,31 +299,37 @@ void Render::DrawRect(const glm::vec4 &box, float z, const glm::vec4 &texCoords,
                     glm::translate(glm::mat4(1.0f), -origin);
     }
 
+    glm::vec4 tc = texCoords;
+    if (flipX)
+        std::swap(tc.x, tc.z);
+    if (flipY)
+        std::swap(tc.y, tc.w);
+
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.x, box.y, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.y };
+    renderData->RectVertexBufferPtr->TexCoords = { tc.x, tc.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.z, box.y, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.y };
+    renderData->RectVertexBufferPtr->TexCoords = { tc.z, tc.y };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.z, box.w, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = { texCoords.z, texCoords.w };
+    renderData->RectVertexBufferPtr->TexCoords = { tc.z, tc.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
     renderData->RectVertexBufferPtr->Position = transform * glm::vec4{ box.x, box.w, z, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
-    renderData->RectVertexBufferPtr->TexCoords = { texCoords.x, texCoords.w };
+    renderData->RectVertexBufferPtr->TexCoords = { tc.x, tc.w };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
@@ -348,7 +356,7 @@ void Render::DrawText(const std::string &text, const glm::vec3 &position, const 
         glm::vec4 box = { position.x + g.x0 * scale.x, position.y + g.y0 * scale.y, position.x + g.x1 * scale.x, position.y + g.y1 * scale.y };
         glm::vec4 texCoords = { g.s0, g.t0, g.s1, g.t1 };
 
-        DrawRect(box, position.z, texCoords, font->GetTexture(), 0.0f, color);
+        DrawRect(box, position.z, font->GetTexture(), texCoords, 0.0f, false, false, color);
     }
 }
 
