@@ -108,7 +108,7 @@ public:
         sprite1->Draw();
         sprite10->Draw();
         sprite11->Draw();
-        sprite1->SetRotation(rot);
+        sprite1->Rotation() = rot;
         sprite2->Draw();
 
         tile1->Draw();
