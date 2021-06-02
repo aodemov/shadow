@@ -9,13 +9,13 @@ namespace Shadow {
 class Sprite {
 public:
     explicit Sprite(Ref<Texture> texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
-        : mTexture(MakeRef<SubTexture>(std::move(texture))),
+        : mTexture((std::move(texture))),
           mPosition(position),
           mSize(size),
           mRotation(rotation) {}
 
-    explicit Sprite(Ref<SubTexture> texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
-        : mTexture(std::move(texture)),
+    explicit Sprite(SubTexture const& texture, glm::vec3 position = {0,0,0}, glm::vec2 size = {1,1}, float rotation = 0)
+        : mTexture(texture),
           mPosition(position),
           mSize(size),
           mRotation(rotation) {}
@@ -30,7 +30,7 @@ private:
     glm::vec3 mPosition;
     glm::vec2 mSize;
     float mRotation;
-    Ref<SubTexture> mTexture;
+    SubTexture mTexture;
 };
 
 }
