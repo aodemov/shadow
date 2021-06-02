@@ -28,6 +28,7 @@
 #include "shadow/ecs/texture_atlas.h"
 #include "shadow/ecs/animation.h"
 #include "shadow/ecs/animated_sprite.h"
+#include "shadow/ecs/animation_controller.h"
 
 #include "shadow/ui/ui.h"
 #include "shadow/ui/ui_block.h"
