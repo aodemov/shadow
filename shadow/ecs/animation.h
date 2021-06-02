@@ -28,7 +28,7 @@ private:
     };
 
     std::vector<AnimationFrame> mFrames;
-    float currentTime;
+    float currentTime = 0;
     int currentFrame = 0;
 };
 }
