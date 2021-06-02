@@ -249,8 +249,8 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Su
     UseShader(renderData->DefaultShader.get());
 
 
-    glm::vec2 halfSize = size / 2.0f;
-    glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
+//    glm::vec2 halfSize = size / 2.0f;
+    glm::vec4 box = { position.x, position.y, position.x + size.x, position.y + size.y };
 
     DrawRect(box, position.z, subTexture.GetTexture(), subTexture.GetTexCoords(),  rotation);
 }
@@ -258,8 +258,8 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Su
 void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture> &texture, float rotation) {
     UseShader(renderData->DefaultShader.get());
 
-    glm::vec2 halfSize = size / 2.0f;
-    glm::vec4 box = { position.x - halfSize.x, position.y - halfSize.y, position.x + halfSize.x, position.y + halfSize.y };
+//    glm::vec2 halfSize = size / 2.0f;
+    glm::vec4 box = { position.x, position.y, position.x + size.x, position.y + size.y };
 
     DrawRect(box, position.z, texture, { 0.0f, 0.0f, 1.0f, 1.0f }, rotation);
 }
