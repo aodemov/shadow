@@ -11,7 +11,7 @@ public:
         glm::vec2 size;
     };
 
-    TextureAtlas(Ref<Texture> texture, std::initializer_list<AtlasTile> tiles);
+    TextureAtlas(Ref<Texture> const& texture, std::initializer_list<AtlasTile> tiles);
 
     const SubTexture& operator[](size_t i) {
         return mTiles[i];
