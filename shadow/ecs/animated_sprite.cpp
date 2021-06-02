@@ -8,11 +8,13 @@ void AnimatedSprite::Draw() {
     glm::vec4 box = { mPosition.x - halfSize.x, mPosition.y - halfSize.y,
                       mPosition.x + halfSize.x, mPosition.y + halfSize.y };
 
-    Render::DrawRect(box, mPosition.z, mAnimation.GetTexture().GetTexture(), mAnimation.GetTexture().GetTexCoords(),
+    // TODO refactor
+    Render::DrawRect(box, mPosition.z, mAnimationController.GetAnimation().GetTexture().GetTexture(),
+                     mAnimationController.GetAnimation().GetTexture().GetTexCoords(),
                      mRotation, mFlipX, mFlipY, mTint);
 }
 
 void AnimatedSprite::Update(float delta) {
-    mAnimation.Update(delta);
+    mAnimationController.Update(delta);
 }
 }

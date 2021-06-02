@@ -20,7 +20,7 @@ public:
     Animation(Ref<Texture> const& texture, float duration, std::initializer_list<AnimationTile> tiles);
 
     void Update(float delta);
-    const SubTexture& GetTexture() { return mFrames[currentFrame].texture; }
+    const SubTexture& GetTexture() const { return mFrames[currentFrame].texture; }
 private:
     struct AnimationFrame {
         SubTexture texture;
