@@ -39,6 +39,20 @@ public:
         bar = MakeRef<ProgressBar>(MakeRef<Font>("assets/fonts/arial.ttf", 25));
         bar->Width(50, true).Height(30).CenterX().MarginBottom(5, true);
         UI::Add(std::dynamic_pointer_cast<UiBlock, ProgressBar>(bar));
+
+
+        Animation animation(tilemap, 1.5f, {
+                { { 8  * 16, 5 * 16 }, { 16, 32 } },
+                { { 9  * 16, 5 * 16 }, { 16, 32 } },
+                { { 10 * 16, 5 * 16 }, { 16, 32 } },
+                { { 11 * 16, 5 * 16 }, { 16, 32 } },
+                { { 12 * 16, 5 * 16 }, { 16, 32 } },
+                { { 13 * 16, 5 * 16 }, { 16, 32 } },
+                { { 14 * 16, 5 * 16 }, { 16, 32 } },
+                { { 15 * 16, 5 * 16 }, { 16, 32 } },
+        });
+
+        animatedSprite = MakeScope<AnimatedSprite>(animation, glm::vec3{ -1, -1, 1.0f }, glm::vec2{ 1, 2 });
     }
 
     void Show() override {
@@ -87,6 +101,8 @@ public:
         cameraController.SetRotation(cameraRotation);
         cameraController.SetZoom(cameraZoom);
 
+        animatedSprite->Update(delta);
+
 
         Render::BeginScene(cameraController.GetCamera());
 
@@ -115,6 +131,8 @@ public:
         tile2->Draw();
 
         bar->SetValue(fmod(rot, 100.0f));
+
+        animatedSprite->Draw();
 
         Render::DrawRect({ -3, 0, 0.5f }, { 2.0f * 40 / Application::GetWindow().GetHeight(), 2.0f * 40 / Application::GetWindow().GetHeight() }, { 1.0f, 1.0f, 0.0f, 1.0f });
 
@@ -170,6 +188,8 @@ private:
     Scope<Sprite> tile1;
     Scope<Sprite> tile2;
     Ref<Font> font1;
+
+    Scope<AnimatedSprite> animatedSprite;
 
     Ref<ProgressBar> bar;
 };
