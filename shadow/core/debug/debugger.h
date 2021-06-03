@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shadow/core/debug/statistics.h"
+#include "shadow/events/event_bus.h"
 
 namespace Shadow {
 class Debugger {
@@ -20,5 +21,7 @@ public:
 
 private:
     bool mVisible = false;
+    EventBus mEventBus;
+    friend class GameLoop;
 };
 }

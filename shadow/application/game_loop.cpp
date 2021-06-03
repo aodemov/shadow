@@ -115,7 +115,13 @@ void GameLoop::VariableUpdate(float delta) {
     while (mEventQueue->HasPending()) {
         const auto& event = mEventQueue->Front();
         mSceneManager->CurrentScene().mEventBus.Emit(event);
+
+#ifdef SH_DEBUGGER
+        mDebugger->mEventBus.Emit(event);
+#endif
+
         mEventQueue->Pop();
+
     }
 
     mSceneManager->CurrentScene().VariableUpdate(delta);
