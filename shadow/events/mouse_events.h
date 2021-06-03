@@ -14,6 +14,7 @@ public:
     double GetY() const { return mY; }
 
     EventType GetType() const override { return Event::MouseMoved; }
+    static EventType GetStaticType() { return Event::MouseMoved; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseMovedEvent: " << mX << "; " << mY;
@@ -33,6 +34,7 @@ public:
     double GetYOffset() const { return mY; }
 
     EventType GetType() const override { return Event::MouseScrolled; }
+    static EventType GetStaticType() { return Event::MouseScrolled; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseScrolledEvent: " << mX << "; " << mY;
@@ -52,6 +54,7 @@ public:
     KeyModifiers GetModifiers() const { return mMods; }
 
     EventType GetType() const override { return Event::MousePressed; }
+    static EventType GetStaticType() { return Event::MousePressed; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MousePressedEvent: " << mMouseCode;
@@ -72,6 +75,7 @@ public:
     KeyModifiers GetModifiers() const { return mMods; }
 
     EventType GetType() const override { return Event::MouseReleased; }
+    static EventType GetStaticType() { return Event::MouseReleased; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "MouseReleasedEvent: " << mMouseCode;

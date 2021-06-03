@@ -12,10 +12,10 @@ CameraController::CameraController()
     mAspectRatio = Application::GetWindow().GetAspectRatio();
     Recalculate();
 
-    Application::GetEventBus().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
-        mAspectRatio = Application::GetWindow().GetAspectRatio();
-        Recalculate();
-    });
+//    Application::GetEventBus().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
+//        mAspectRatio = Application::GetWindow().GetAspectRatio();
+//        Recalculate();
+//    });
 }
 
 void CameraController::Recalculate() {

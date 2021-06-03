@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shadow/events/event_bus.h"
+#include "shadow/events/event_queue.h"
 #include "shadow/application/window.h"
 #include "shadow/core/time/clock.h"
 #include "shadow/scene/scene_manager.h"
@@ -40,8 +40,8 @@ private:
     Clock mGameClock;
 
     Scope<Window> mWindow;
-    Scope<EventBus> mEventBus;
     Scope<SceneManager> mSceneManager;
+    Scope<EventQueue> mEventQueue;
 
 #ifdef SH_DEBUGGER
     Scope<Debugger> mDebugger;

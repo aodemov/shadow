@@ -15,6 +15,7 @@ public:
     unsigned int GetHeight() const { return mHeight; }
 
     EventType GetType() const override { return Event::WindowResize; }
+    static EventType GetStaticType() { return Event::WindowResize; }
     std::string ToString() const override {
         std::stringstream ss;
         ss << "WindowResizeEvent: " << mWidth << "; " << mHeight;
@@ -29,7 +30,7 @@ public:
     WindowCloseEvent() = default;
 
     EventType GetType() const override { return Event::WindowClose; }
-
+    static EventType GetStaticType() { return Event::WindowClose; }
 };
 
 

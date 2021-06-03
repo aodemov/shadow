@@ -25,7 +25,7 @@ public:
         mLevel.Load();
         mPlayer.Load();
 
-        Application::GetEventBus().AddListener<KeyPressedEvent>([&](auto e) {
+        On<KeyPressedEvent>([&](auto e) {
            if (e.GetKeyCode() == Key::R) {
                mLevel.Load();
            }
@@ -76,10 +76,6 @@ int main() {
 
     Application::GetSceneManager().Add("main", new MainScene);
     Application::GetSceneManager().Show("main");
-
-    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
-        Application::Stop();
-    });
 
     Application::Run();
 

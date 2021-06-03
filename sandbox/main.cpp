@@ -52,7 +52,11 @@ public:
                 { { 15 * 16, 5 * 16 }, { 16, 32 } },
         });
 
-        animatedSprite = MakeScope<AnimatedSprite>(animation, glm::vec3{ -1, -1, 1.0f }, glm::vec2{ 1, 2 });
+        AnimationController animationController({
+            { "default", animation }
+        }, "default");
+
+        animatedSprite = MakeScope<AnimatedSprite>(animationController, glm::vec3{ -1, -1, 1.0f }, glm::vec2{ 1, 2 });
     }
 
     void Show() override {
@@ -201,9 +205,9 @@ int main() {
     Application::GetSceneManager().Add("main", new MainScene);
     Application::GetSceneManager().Show("main");
 
-    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
-       Application::Stop();
-    });
+//    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
+//       Application::Stop();
+//    });
 
     Application::Run();
 

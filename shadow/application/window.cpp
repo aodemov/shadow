@@ -54,9 +54,9 @@ void Window::Init() {
     // Initializing callbacks
     glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* win) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        Application::GetEventBus().Push(WindowCloseEvent());
-
+        Application::GetEventQueue().Push(WindowCloseEvent());
         glfwSetWindowShouldClose(win, GLFW_FALSE);
+        Application::Stop();
     });
 
     glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* win, int width, int height){
@@ -68,7 +68,7 @@ void Window::Init() {
     Debugger::Stats.WindowSize = { width, height };
 #endif
 
-        Application::GetEventBus().Push(WindowResizeEvent(width, height));
+        Application::GetEventQueue().Push(WindowResizeEvent(width, height));
     });
 
     glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* win, int width, int height) {
@@ -89,13 +89,13 @@ void Window::Init() {
 
         switch (action) {
             case GLFW_PRESS:
-                Application::GetEventBus().Push(KeyPressedEvent(key, modifiers));
+                Application::GetEventQueue().Push(KeyPressedEvent(key, modifiers));
                 break;
             case GLFW_RELEASE:
-                Application::GetEventBus().Push(KeyReleasedEvent(key, modifiers));
+                Application::GetEventQueue().Push(KeyReleasedEvent(key, modifiers));
                 break;
             case GLFW_REPEAT:
-                Application::GetEventBus().Push(KeyRepeatedEvent(key, modifiers));
+                Application::GetEventQueue().Push(KeyRepeatedEvent(key, modifiers));
                 break;
             default:
                 break;
@@ -109,10 +109,10 @@ void Window::Init() {
 
         switch (action) {
             case GLFW_PRESS:
-                Application::GetEventBus().Push(MousePressedEvent(button, modifiers));
+                Application::GetEventQueue().Push(MousePressedEvent(button, modifiers));
                 break;
             case GLFW_RELEASE:
-                Application::GetEventBus().Push(MouseReleasedEvent(button, modifiers));
+                Application::GetEventQueue().Push(MouseReleasedEvent(button, modifiers));
                 break;
             default:
                 break;
@@ -121,12 +121,12 @@ void Window::Init() {
 
     glfwSetScrollCallback(mWindow, [](GLFWwindow* win, double xOffset, double yOffset) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        Application::GetEventBus().Push(MouseScrolledEvent(xOffset, yOffset));
+        Application::GetEventQueue().Push(MouseScrolledEvent(xOffset, yOffset));
     });
 
     glfwSetCursorPosCallback(mWindow, [](GLFWwindow* win, double x, double y) {
         Window& window = *(Window*)glfwGetWindowUserPointer(win);
-        Application::GetEventBus().Push(MouseMovedEvent(x, y));
+        Application::GetEventQueue().Push(MouseMovedEvent(x, y));
 
 #ifdef SH_DEBUGGER
         Debugger::Stats.MousePosition = { x, y };

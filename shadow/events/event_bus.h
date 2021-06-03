@@ -17,69 +17,50 @@ public:
     EventBus(const EventBus&) = delete;
     EventBus& operator=(const EventBus&) = delete;
 
-    template<class EventType>
-    using Function = std::function<void(EventType const&)>;
+    template<class EventT>
+    using Function = std::function<void(EventT const&)>;
 
-    template<class T, class EventType>
-    using MemberFunction = void(T::*)(EventType const&);
+    template<class T, class EventT>
+    using MemberFunction = void(T::*)(EventT const&);
 
-    void ProcessOne();
-    void ProcessAll();
-    bool HasPending();
+    template<class EventT>
+    void AddListener(Function<EventT> function);
 
-
-    template<class EventType>
-    void AddListener(Function<EventType> function);
-
-    template<class T, class EventType>
-    void AddListener(T* instance, MemberFunction<T, EventType> memberFunction);
+    template<class T, class EventT>
+    void AddListener(T* instance, MemberFunction<T, EventT> memberFunction);
 
 
-    template<class EventType>
-    void RemoveListener(Function<EventType> function);
+    template<class EventT>
+    void RemoveListener(Function<EventT> function);
 
-    template<class T, class EventType>
-    void RemoveListener(T* instance, MemberFunction<T, EventType> memberFunction);
+    template<class T, class EventT>
+    void RemoveListener(T* instance, MemberFunction<T, EventT> memberFunction);
 
-
-    template<typename EventType>
-    void EmitImmediately(EventType const& event);
-
-    template<typename EventType>
-    void Push(EventType const& event);
-
+    void Emit(Event const& event);
+    
 private:
-    void Emit(std::type_index eventId, Event const& event);
-
-    std::multimap<std::type_index, std::shared_ptr<HandlerFunctionBase>> mListeners;
-    std::queue<std::pair<std::type_index, std::unique_ptr<Event>>> mEventQueue;
-
-    std::mutex mMutex;
+    std::multimap<EventType, std::shared_ptr<HandlerFunctionBase>> mListeners;
 };
 
-template<class EventType>
-void EventBus::AddListener(Function<EventType> function) {
-    std::lock_guard<std::mutex> lock(mMutex);
-
-    mListeners.insert(std::make_pair<std::type_index, std::shared_ptr<HandlerFunction<EventType>>>(
-            typeid(EventType),
-            std::make_shared<HandlerFunction<EventType>>(function)
+template<class EventT>
+void EventBus::AddListener(Function<EventT> function) {
+    mListeners.insert(std::make_pair<EventType, std::shared_ptr<HandlerFunction<EventT>>>(
+            EventT::GetStaticType(),
+            std::make_shared<HandlerFunction<EventT>>(function)
     ));
 }
 
-template<class T, class EventType>
-void EventBus::AddListener(T* instance, MemberFunction<T, EventType> memberFunction) {
-    AddListener<EventType>(std::bind(memberFunction, instance, std::placeholders::_1));
+template<class T, class EventT>
+void EventBus::AddListener(T* instance, MemberFunction<T, EventT> memberFunction) {
+    AddListener<EventT>(std::bind(memberFunction, instance, std::placeholders::_1)); // TODO don't use bind
 }
 
-template<class EventType>
-void EventBus::RemoveListener(Function<EventType> function) {
-    std::lock_guard<std::mutex> lock(mMutex);
-
-    auto handlerEntries = mListeners.equal_range(typeid(EventType));
+template<class EventT>
+void EventBus::RemoveListener(Function<EventT> function) {
+    auto handlerEntries = mListeners.equal_range(EventT::GetStaticType());
 
     for (auto handlerEntry = handlerEntries.first; handlerEntry != handlerEntries.second; ++handlerEntry) {
-        auto const& handler = std::dynamic_pointer_cast<HandlerFunction<EventType>>(handlerEntry->second);
+        auto const& handler = std::dynamic_pointer_cast<HandlerFunction<EventT>>(handlerEntry->second);
         if (handler.get()->mFunction == function) {
             mListeners.erase(handlerEntry);
             return;
@@ -87,23 +68,9 @@ void EventBus::RemoveListener(Function<EventType> function) {
     }
 }
 
-template<class T, class EventType>
-void EventBus::RemoveListener(T* instance, MemberFunction<T, EventType> memberFunction) {
+template<class T, class EventT>
+void EventBus::RemoveListener(T* instance, MemberFunction<T, EventT> memberFunction) {
     RemoveListener(std::bind(memberFunction, instance, std::placeholders::_1));
-}
-
-template<typename EventType>
-void EventBus::EmitImmediately(EventType const& event) {
-    Emit(typeid(EventType), event);
-}
-
-template<typename EventType>
-void EventBus::Push(const EventType &event) {
-    std::lock_guard<std::mutex> lock(mMutex);
-
-    if (mListeners.count(typeid(EventType)) > 0) {
-        mEventQueue.push(std::make_pair<std::type_index, std::unique_ptr<Event>>(typeid(EventType), std::unique_ptr<Event>(new EventType(event))));
-    }
 }
 
 }

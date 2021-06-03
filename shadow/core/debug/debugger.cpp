@@ -31,11 +31,11 @@ void Debugger::Init() {
     ImGui_ImplGlfw_InitForOpenGL(Application::GetWindow().mWindow, true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
-    Application::GetEventBus().AddListener<KeyPressedEvent>([&](KeyPressedEvent const &e) {
-        if (e.GetKeyCode() == Key::Tab) {
-            mVisible = !mVisible;
-        }
-    });
+//    Application::GetEventBus().AddListener<KeyPressedEvent>([&](KeyPressedEvent const &e) { // TODO fix
+//        if (e.GetKeyCode() == Key::Tab) {
+//            mVisible = !mVisible;
+//        }
+//    });
 
     ImGui::SetWindowPos("Debug", { 0, 0 });
     ImGui::SetWindowSize("Debug", { 0, 0});

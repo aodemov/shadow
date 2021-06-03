@@ -13,8 +13,8 @@ GameLoop::GameLoop()
 {
     SH_PROFILE_FUNCTION();
 
-    mWindow = std::make_unique<Window>(WindowOptions("Shadow", 1000, 600, true));
-    mEventBus = MakeScope<EventBus>();
+    mEventQueue = MakeScope<EventQueue>();
+    mWindow = MakeScope<Window>(WindowOptions("Shadow", 1000, 600, true));
     mSceneManager = MakeScope<SceneManager>();
 
 #ifdef SH_DEBUGGER
@@ -112,10 +112,13 @@ void GameLoop::MainLoop() {
 void GameLoop::VariableUpdate(float delta) {
     SH_PROFILE_FUNCTION();
 
-    mEventBus->ProcessAll();
+    while (mEventQueue->HasPending()) {
+        const auto& event = mEventQueue->Front();
+        mSceneManager->CurrentScene().mEventBus.Emit(event);
+        mEventQueue->Pop();
+    }
 
-    if (mSceneManager->CurrentScene() != nullptr)
-        mSceneManager->CurrentScene()->VariableUpdate(delta);
+    mSceneManager->CurrentScene().VariableUpdate(delta);
 
 #ifdef SH_DEBUGGER
     mDebugger->Update(delta);
@@ -130,8 +133,7 @@ void GameLoop::VariableUpdate(float delta) {
 void GameLoop::FixedUpdate(float delta) {
     SH_PROFILE_FUNCTION();
 
-    if (mSceneManager->CurrentScene() != nullptr)
-        mSceneManager->CurrentScene()->FixedUpdate(delta);
+    mSceneManager->CurrentScene().FixedUpdate(delta);
 
 #ifdef SH_DEBUGGER
     Debugger::Stats.FixedUpdateTime = delta;
