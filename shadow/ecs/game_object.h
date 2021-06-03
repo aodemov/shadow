@@ -5,14 +5,20 @@
 namespace Shadow {
 class GameObject {
 public:
-    virtual void OnLoad() = 0;
-    virtual void OnDestroy() = 0;
+    GameObject() = default;
+    ~GameObject() = default;
 
-    virtual void FixedUpdate(float delta) = 0;
-    virtual void VariableUpdate(float delta) = 0;
+    GameObject(const GameObject&) = default;
+    GameObject& operator=(const GameObject&) = default;
 
-    virtual void OnEnable() = 0;
-    virtual void OnDisable() = 0;
+    virtual void OnLoad() {};
+    virtual void OnDestroy() {};
+
+    virtual void FixedUpdate(float delta) {};
+    virtual void VariableUpdate(float delta) {};
+
+    virtual void OnEnable() {};
+    virtual void OnDisable() {};
 
     glm::vec2 position { 0.0f, 0.0f };
     glm::vec2 scale { 1.0f, 1.0f };
