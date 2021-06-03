@@ -65,11 +65,11 @@ void SceneManager::Show(const std::string &name) {
 
 
     if (mCurrentScene != nullptr)
-        mCurrentScene->Hide();
+        mCurrentScene->OnDisable();
 
     mCurrentScene = mScenes.at(name).first;
     mCurrentSceneName = name;
-    mCurrentScene->Show();
+    mCurrentScene->OnEnable();
 }
 
 void SceneManager::Hide(const std::string &name) {
@@ -78,7 +78,7 @@ void SceneManager::Hide(const std::string &name) {
     if (scene.first != mCurrentScene)
         return;
 
-    mCurrentScene->Hide();
+    mCurrentScene->OnDisable();
     mCurrentScene = nullptr;
     mCurrentSceneName = "";
 }

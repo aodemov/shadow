@@ -62,11 +62,11 @@ public:
         animatedSprite = MakeScope<AnimatedSprite>(animationController, glm::vec3{ -1, -1, 1.0f }, glm::vec2{ 1, 2 });
     }
 
-    void Show() override {
+    void OnEnable() override {
         SH_INFO("Scene show");
     }
 
-    void Hide() override {
+    void OnDisable() override {
         SH_INFO("Scene hide");
     }
     void Destroy() override {
