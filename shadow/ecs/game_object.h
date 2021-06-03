@@ -8,8 +8,8 @@ public:
     virtual void OnLoad() = 0;
     virtual void OnDestroy() = 0;
 
-    virtual void FixedUpdate() = 0;
-    virtual void VariableUpdate() = 0;
+    virtual void FixedUpdate(float delta) = 0;
+    virtual void VariableUpdate(float delta) = 0;
 
     virtual void OnEnable() = 0;
     virtual void OnDisable() = 0;
