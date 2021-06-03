@@ -18,8 +18,8 @@ public:
     void SetRotation(float rotation);
 
     Camera& GetCamera();
-private:
     void Recalculate();
+private:
 
     Camera mCamera;
 

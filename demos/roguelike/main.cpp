@@ -18,6 +18,10 @@ public:
     void Load() override {
         Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 
+        On<WindowResizeEvent>([&](auto& e) {
+            cameraController.Recalculate();
+        });
+
         cameraController.SetPosition({ 0, 0, 0 });
         cameraController.SetRotation(0);
         cameraController.SetZoom(6);
@@ -61,11 +65,6 @@ public:
 
 private:
     CameraController cameraController;
-
-    glm::vec3 cameraPosition{0.0f};
-    float cameraSpeed{8.0f};
-    float cameraZoom{1.0f};
-    float cameraRotation{0.0f};
 
     Level mLevel;
     Player mPlayer;

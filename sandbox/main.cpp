@@ -20,6 +20,9 @@ public:
 
     void Load() override {
         SH_INFO("Scene load");
+        On<WindowResizeEvent>([&](auto& e) {
+            cameraController.Recalculate();
+        });
 
         auto tex = MakeRef<Texture>("assets/textures/test.png");
         sprite1 = MakeScope<Sprite>(tex, glm::vec3{5, 5, 1}, glm::vec2{1, 1}, 45);

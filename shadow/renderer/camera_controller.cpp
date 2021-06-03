@@ -9,16 +9,11 @@ CameraController::CameraController()
       mZoom(1.0f),
       mCamera(0, 0, 0, 0)
 {
-    mAspectRatio = Application::GetWindow().GetAspectRatio();
     Recalculate();
-
-//    Application::GetEventBus().AddListener<WindowResizeEvent>([&](WindowResizeEvent const &e) {
-//        mAspectRatio = Application::GetWindow().GetAspectRatio();
-//        Recalculate();
-//    });
 }
 
 void CameraController::Recalculate() {
+    mAspectRatio = Application::GetWindow().GetAspectRatio();
     mCamera.SetProjection(-mAspectRatio * mZoom, mAspectRatio * mZoom, -mZoom, mZoom);
 }
 
