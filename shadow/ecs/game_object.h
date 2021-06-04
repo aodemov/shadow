@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shadow/scene/scene.h"
+#include "scene.h"
 
 namespace Shadow {
 class GameObject {

@@ -3,7 +3,7 @@
 #include "shadow/events/event_queue.h"
 #include "shadow/application/window.h"
 #include "shadow/core/time/clock.h"
-#include "shadow/scene/scene_manager.h"
+#include "shadow/ecs/scene_manager.h"
 
 #include "shadow/renderer/shader.h"
 #include "shadow/renderer/vertex_array.h"

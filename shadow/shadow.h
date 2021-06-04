@@ -21,15 +21,15 @@
 #include "shadow/renderer/camera_controller.h"
 #include "shadow/renderer/font.h"
 
-#include "shadow/scene/scene_manager.h"
-#include "shadow/scene/scene.h"
-
+#include "shadow/ecs/scene_manager.h"
+#include "shadow/ecs/scene.h"
 #include "shadow/ecs/game_object.h"
-#include "shadow/ecs/sprite.h"
-#include "shadow/ecs/texture_atlas.h"
-#include "shadow/ecs/animation.h"
-#include "shadow/ecs/animated_sprite.h"
-#include "shadow/ecs/animation_controller.h"
+
+#include "shadow/components/sprite.h"
+#include "shadow/components/texture_atlas.h"
+#include "shadow/components/animation.h"
+#include "shadow/components/animated_sprite.h"
+#include "shadow/components/animation_controller.h"
 
 #include "shadow/ui/ui.h"
 #include "shadow/ui/ui_block.h"

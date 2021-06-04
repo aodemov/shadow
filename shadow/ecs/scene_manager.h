@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "shadow/scene/scene.h"
+#include "scene.h"
 
 namespace Shadow {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shadow/ecs/animation.h"
+#include "animation.h"
 
 struct compareAnimationState {
     bool operator()(const std::pair<std::string, Shadow::Animation> &a, const std::string& b)

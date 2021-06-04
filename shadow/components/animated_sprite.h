@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shadow/ecs/animation_controller.h"
+#include "animation_controller.h"
 
 namespace Shadow {
 class AnimatedSprite {
