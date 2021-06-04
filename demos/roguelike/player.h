@@ -4,11 +4,10 @@
 
 using namespace Shadow;
 
-class Player {
+class Player : public GameObject {
 public:
-    void Load();
-    void Update(float delta);
-    void Draw();
+    void OnLoad() override;
+    void VariableUpdate(float delta) override;
 
     glm::vec3 const& GetPosition() { return mSprite->Position(); }
 

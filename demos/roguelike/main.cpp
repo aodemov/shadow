@@ -13,6 +13,10 @@ class MainScene : public Scene {
 public:
     MainScene()
     {
+        mLevel = MakeRef<Level>();
+        mPlayer = MakeRef<Player>();
+        Add(mLevel);
+        Add(mPlayer);
     }
 
     void Load() override {
@@ -26,39 +30,23 @@ public:
         cameraController.SetRotation(0);
         cameraController.SetZoom(6);
 
-        mLevel.Load();
-        mPlayer.Load();
-
         On<KeyPressedEvent>([&](auto e) {
            if (e.GetKeyCode() == Key::R) {
-               mLevel.Load();
+               mLevel->OnLoad();
            }
         });
-    }
 
-    void Show() override {
-    }
-    void Hide() override {
-    }
-    void Destroy() override {
-    }
-
-    void FixedUpdate(float delta) override {
-
+        Scene::Load();
     }
 
     void VariableUpdate(float delta) override {
-        mPlayer.Update(delta);
-        mLevel.Update(delta);
-
         Render::Clear();
 
-        cameraController.SetPosition(mPlayer.GetPosition());
+        cameraController.SetPosition(mPlayer->GetPosition());
 
         Render::BeginScene(cameraController.GetCamera());
 
-        mLevel.Draw();
-        mPlayer.Draw();
+        Scene::VariableUpdate(delta);
 
         Render::EndScene();
     }
@@ -66,8 +54,8 @@ public:
 private:
     CameraController cameraController;
 
-    Level mLevel;
-    Player mPlayer;
+    Ref<Level> mLevel;
+    Ref<Player> mPlayer;
 };
 
 int main() {

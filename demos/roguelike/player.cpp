@@ -1,6 +1,6 @@
 #include "player.h"
 
-void Player::Load() {
+void Player::OnLoad() {
     auto tilemap = MakeRef<Texture>("assets/textures/tilemap2.png");
 
     const int P = 28;
@@ -26,7 +26,7 @@ void Player::Load() {
     mSprite = MakeScope<AnimatedSprite>(animationController, glm::vec3{ 10, 17, 0.0f }, glm::vec2{ 1, 2 });
 }
 
-void Player::Update(float delta) {
+void Player::VariableUpdate(float delta) {
     mSprite->Update(delta);
 
     glm::vec2 velocity(0.0f);
@@ -49,8 +49,5 @@ void Player::Update(float delta) {
 
     mSprite->FlipX() = velocity.x < 0;
 
-}
-
-void Player::Draw() {
     mSprite->Draw();
 }

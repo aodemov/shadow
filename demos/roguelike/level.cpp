@@ -40,7 +40,7 @@ std::vector<LevelData> LoadLevelData(std::string const& filePath) {
 
 static const uint32_t TILE_SIZE = 16;
 
-void Level::Load() {
+void Level::OnLoad() {
     auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
     TextureAtlas atlas(tilemap,
                        {
@@ -138,13 +138,11 @@ void Level::Load() {
     mObjects.push_back(AnimatedSprite(controller, glm::vec3{ 11, 17, 1.0f }, glm::vec2{ 1, 2 }));
 }
 
-void Level::Update(float delta) {
+void Level::VariableUpdate(float delta) {
     for (auto& object : mObjects) {
         object.Update(delta);
     }
-}
 
-void Level::Draw() {
     for (auto& tile : mTiles) {
         tile.Draw();
     }

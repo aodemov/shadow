@@ -4,11 +4,10 @@
 
 using namespace Shadow;
 
-class Level {
+class Level : public GameObject {
 public:
-    void Load();
-    void Update(float delta);
-    void Draw();
+    void OnLoad() override;
+    void VariableUpdate(float delta) override;
 
 private:
     std::vector<Sprite> mTiles{};

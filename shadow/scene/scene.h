@@ -11,13 +11,13 @@ public:
     Scene() = default;
     virtual ~Scene() = default;
 
-    virtual void Load() = 0;
-    virtual void OnEnable() = 0;
-    virtual void OnDisable() = 0;
-    virtual void Destroy() = 0;
+    virtual void Load();
+    virtual void OnEnable();
+    virtual void OnDisable();
+    virtual void Destroy();
 
-    virtual void FixedUpdate(float delta) = 0;
-    virtual void VariableUpdate(float delta) = 0;
+    virtual void FixedUpdate(float delta);
+    virtual void VariableUpdate(float delta);
 
 protected:
     template<class EventType>

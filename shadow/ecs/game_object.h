@@ -29,6 +29,7 @@ protected:
         mScene->mEventBus.AddListener(function);
     }
 private:
+    friend class Scene;
     Scene* mScene {nullptr};
 };
 }
