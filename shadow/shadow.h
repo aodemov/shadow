@@ -27,6 +27,7 @@
 #include "shadow/ecs/component.h"
 #include "shadow/components/transform.h"
 #include "shadow/components/sprite_component.h"
+#include "shadow/components/camera_component.h"
 
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"

@@ -216,7 +216,11 @@ int main() {
     cameraController.SetZoom(cameraZoom);
     cameraController.SetRotation(cameraRotation);
     cameraController.Recalculate();
+
+    auto cam = MakeRef<GameObject>();
+    cam->AddComponent<CameraComponent>(cameraController);
     mainScene->SetCamera(&cameraController.GetCamera());
+    mainScene->Add(cam);
 
 
     auto tex = MakeRef<Texture>("assets/textures/test.png");
