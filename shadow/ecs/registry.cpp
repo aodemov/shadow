@@ -3,13 +3,15 @@
 #include "game_object.h"
 
 namespace Shadow {
-void Registry::AddObject(Ref<GameObject> object) {
+GameObject& Registry::CreateObject() {
+    auto object = MakeRef<GameObject>(); // TODO ref -> scope
     object->mScene = mScene;
 
-    mObjects.emplace_back(std::move(object));
+    mObjects.emplace_back(object);
+    return *object;
 }
 
-void Registry::RemoveObject(const Ref<GameObject>& object) {
-    mObjects.erase(std::remove(mObjects.begin(), mObjects.end(), object));
+void Registry::RemoveObject(GameObject& object) {
+    mObjects.erase(std::remove(mObjects.begin(), mObjects.end(), Ref<GameObject>(&object)));
 }
 }

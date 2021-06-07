@@ -10,8 +10,8 @@ public:
     Registry(Scene* scene)
         : mScene(scene) {}
 
-    void AddObject(Ref<GameObject> object);
-    void RemoveObject(const Ref<GameObject>& object);
+    GameObject& CreateObject();
+    void RemoveObject(GameObject& object);
 
     std::vector<Ref<GameObject>> GetObjects() { return mObjects; }
 private:

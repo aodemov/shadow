@@ -10,5 +10,9 @@ public:
     static ComponentType GetComponentType() {
         return typeid(T);
     }
+
+protected:
+    friend class GameObject;
+    GameObject* mObject = nullptr;
 };
 }

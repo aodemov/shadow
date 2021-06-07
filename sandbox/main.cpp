@@ -4,6 +4,7 @@
 #include "shadow/shadow.h"
 
 #include "progress_bar.h"
+#include "sample_script.h"
 
 using namespace Shadow;
 
@@ -207,6 +208,9 @@ int main() {
 
     auto mainScene = new Scene();
 
+
+    auto& cam = mainScene->Create();
+
     CameraController cameraController;
     glm::vec3 cameraPosition{0.0f};
     float cameraSpeed{8.0f};
@@ -217,19 +221,19 @@ int main() {
     cameraController.SetRotation(cameraRotation);
     cameraController.Recalculate();
 
-    auto cam = MakeRef<GameObject>();
-    cam->AddComponent<CameraComponent>(cameraController);
+    cam.AddComponent<CameraComponent>(cameraController);
     mainScene->SetCamera(&cameraController.GetCamera());
-    mainScene->Add(cam);
 
 
     auto tex = MakeRef<Texture>("assets/textures/test.png");
     Sprite sprite(tex);
 
-    auto rect = MakeRef<GameObject>();
-    rect->AddComponent<Transform>(glm::vec2{5, 5}, 45, glm::vec2{1, 1});
-    rect->AddComponent<SpriteComponent>(sprite);
-    mainScene->Add(rect);
+    auto& rect = mainScene->Create();
+
+    rect.AddComponent<Transform>(glm::vec2{5, 5}, 45, glm::vec2{1, 1});
+    rect.AddComponent<SpriteComponent>(sprite);
+    rect.AddComponent<ScriptComponent>().Bind<SampleScript>();
+
 
 
     Application::GetSceneManager().Add("main", mainScene);

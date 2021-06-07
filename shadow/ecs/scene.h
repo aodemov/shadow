@@ -28,8 +28,8 @@ public:
         mEventBus.AddListener(function);
     }
 
-    void Add(Ref<GameObject> object);
-    void Destroy(const Ref<GameObject>& object);
+    GameObject& Create();
+    void Destroy(GameObject& object);
 
     void SetCamera(Camera* camera) { mSceneCamera = camera; }
 
