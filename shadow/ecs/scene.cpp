@@ -5,12 +5,25 @@
 #include "shadow/components/sprite_component.h"
 #include "shadow/components/script_component.h"
 #include "shadow/renderer/render.h"
+#include "shadow/events/application_events.h"
+#include "shadow/components/camera_component.h"
+
+#include "shadow/events/application_events.h"
 
 
 namespace Shadow {
 Scene::Scene()
     : mRegistry(this) {
 
+
+    On<WindowResizeEvent>([&](auto e) {
+        for (auto& object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<CameraComponent>())
+                continue;
+
+            object->GetComponent<CameraComponent>().cameraController.Recalculate();
+        }
+    });
 }
 
 GameObject& Scene::Create() {
