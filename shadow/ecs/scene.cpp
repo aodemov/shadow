@@ -7,6 +7,7 @@
 #include "shadow/renderer/render.h"
 #include "shadow/events/application_events.h"
 #include "shadow/components/camera_component.h"
+#include "shadow/components/animator_component.h"
 
 #include "shadow/events/application_events.h"
 
@@ -78,18 +79,35 @@ void Scene::VariableUpdate(float delta) {
     if (mSceneCamera == nullptr)
         return;
 
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<ScriptComponent>())
-            continue;
+    { // Script Variable Update
+        for (auto& object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<ScriptComponent>())
+                continue;
 
-        auto& c = object->GetComponent<ScriptComponent>();
-        if (!c.loaded) {
-            c.script->OnLoad();
-            c.loaded = true;
+            auto& c = object->GetComponent<ScriptComponent>();
+            if (!c.loaded) {
+                c.script->OnLoad();
+                c.loaded = true;
+            }
+
+            c.script->VariableUpdate(delta);
         }
-
-        c.script->VariableUpdate(delta);
     }
+
+    { // Animator update
+        for (auto& object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<AnimatorComponent>())
+                continue;
+
+            auto& c = object->GetComponent<AnimatorComponent>();
+            c.animationController.Update(delta);
+
+            if (!object->HasComponent<SpriteComponent>())
+                return;
+            object->GetComponent<SpriteComponent>().sprite.mTexture = c.animationController.GetAnimation().GetTexture();
+        }
+    }
+
 
     Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
     Render::Clear();

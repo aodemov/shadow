@@ -224,16 +224,31 @@ int main() {
 
     rect.AddComponent<Transform>(glm::vec2{5, 5}, 45, glm::vec2{1, 1});
     rect.AddComponent<SpriteComponent>(sprite);
-//    rect.AddComponent<ScriptComponent>().Bind<SampleScript>();
 
 
+    auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
+    Animation animation(tilemap, 1.5f, {
+        { { 8  * 16, 5 * 16 }, { 16, 32 } },
+        { { 9  * 16, 5 * 16 }, { 16, 32 } },
+        { { 10 * 16, 5 * 16 }, { 16, 32 } },
+        { { 11 * 16, 5 * 16 }, { 16, 32 } },
+        { { 12 * 16, 5 * 16 }, { 16, 32 } },
+        { { 13 * 16, 5 * 16 }, { 16, 32 } },
+        { { 14 * 16, 5 * 16 }, { 16, 32 } },
+        { { 15 * 16, 5 * 16 }, { 16, 32 } },
+    });
+
+    AnimationController animationController({
+        { "default", animation }
+    }, "default");
+
+    auto& anim = mainScene->Create();
+    anim.AddComponent<Transform>(glm::vec2{ -1, -1 }, 0.0f, glm::vec2{ 1, 2 });
+    anim.AddComponent<SpriteComponent>();
+    anim.AddComponent<AnimatorComponent>(animationController);
 
     Application::GetSceneManager().Add("main", mainScene);
     Application::GetSceneManager().Show("main");
-
-//    Application::GetEventBus().AddListener<WindowCloseEvent>([](auto e) {
-//       Application::Stop();
-//    });
 
     Application::Run();
 
