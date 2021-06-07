@@ -19,6 +19,7 @@ public:
     SubTexture mTexture;
 
     float mRotation = 0.0f;
+    float mZ = 0.0f;
     bool mFlipX = false, mFlipY = false;
     glm::vec4 mTint = { 1.0f, 1.0f, 1.0f, 1.0f };
 };

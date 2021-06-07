@@ -34,7 +34,6 @@
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"
 #include "shadow/components/animation.h"
-#include "shadow/components/animated_sprite.h"
 #include "shadow/components/animation_controller.h"
 
 #include "shadow/ui/ui.h"

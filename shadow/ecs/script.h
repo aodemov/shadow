@@ -23,13 +23,25 @@ protected:
         mObject->On<EventType>(function);
     }
 
+    GameObject& CreateObject() {
+        return mObject->mScene->Create();
+    }
+
+    void DestroyObject(GameObject& object) {
+        mObject->mScene->Destroy(object);
+    }
+
+    Scene& GetScene() {
+        return *mObject->mScene;
+    }
+
     template<class T>
     T& GetComponent() const {
         return mObject->GetComponent<T>();
     }
     template<class T, typename... TArgs>
-    void AddComponent(TArgs&&... args) {
-        mObject->AddComponent<T>(std::forward<TArgs>(args)...);
+    T& AddComponent(TArgs&&... args) {
+        return mObject->AddComponent<T>(std::forward<TArgs>(args)...);
     }
     template<class T>
     void RemoveComponent() {
