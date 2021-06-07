@@ -24,6 +24,9 @@
 #include "shadow/ecs/scene_manager.h"
 #include "shadow/ecs/scene.h"
 #include "shadow/ecs/game_object.h"
+#include "shadow/ecs/component.h"
+#include "shadow/components/transform.h"
+#include "shadow/components/sprite_component.h"
 
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"

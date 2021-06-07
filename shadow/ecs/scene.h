@@ -3,37 +3,44 @@
 #include "shadow/events/event.h"
 #include "shadow/events/event_bus.h"
 
+#include "shadow/ecs/registry.h"
+
+#include "shadow/renderer/camera.h"
+
 namespace Shadow {
 class GameObject;
 
 class Scene {
 public:
-    Scene() = default;
+    Scene();
     virtual ~Scene() = default;
 
-    virtual void Load();
-    virtual void OnEnable();
-    virtual void OnDisable();
-    virtual void Destroy();
+    void Load();
+    void OnEnable();
+    void OnDisable();
+    void Destroy();
 
-    virtual void FixedUpdate(float delta);
-    virtual void VariableUpdate(float delta);
+    void FixedUpdate(float delta);
+    void VariableUpdate(float delta);
 
-protected:
     template<class EventType>
     void On(EventBus::Function<EventType> function) {
         mEventBus.AddListener(function);
     }
 
     void Add(Ref<GameObject> object);
-    void Destroy(Ref<GameObject> object);
-private:
-    std::vector<Ref<GameObject>> mGameObjects;
+    void Destroy(const Ref<GameObject>& object);
 
+    void SetCamera(Camera* camera) { mSceneCamera = camera; }
+
+private:
     friend class GameLoop;
     friend class GameObject;
 
+    Registry mRegistry;
     EventBus mEventBus;
+
+    Camera* mSceneCamera = nullptr;
 };
 
 }

@@ -5,6 +5,7 @@
 namespace Shadow {
 class SubTexture {
 public:
+    SubTexture() = default;
     explicit SubTexture(Ref<Texture> texture);
     SubTexture(Ref<Texture> texture, const glm::vec4& texCoords);
     SubTexture(Ref<Texture> texture, const glm::vec2& offset, const glm::vec2& size);
@@ -14,6 +15,6 @@ public:
 
 private:
     Ref<Texture> mTexture;
-    glm::vec4 mTexCoords;
+    glm::vec4 mTexCoords { 0.0f, 0.0f, 1.0f, 1.0f };
 };
 }

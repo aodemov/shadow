@@ -1,7 +1,7 @@
 #pragma once
 
-#include "scene.h"
-#include "component.h"
+#include "shadow/ecs/scene.h"
+#include "shadow/ecs/component.h"
 
 namespace Shadow {
 class GameObject {
@@ -35,22 +35,20 @@ protected:
         mScene->mEventBus.AddListener(function);
     }
 private:
-    friend class Scene;
-    Scene* mScene {nullptr};
-    std::map<Component::ComponentType, Scope<Component>> mComponents;
+    friend class Registry;
+
+    class Scene* mScene {nullptr};
+    std::map<Component::ComponentType, Scope<Component>> mComponents {};
 };
 
 template<class T>
 T& GameObject::GetComponent() const {
-    return mComponents.at(Component::GetComponentType<T>());
+    return *(static_cast<T*>(mComponents.at(Component::GetComponentType<T>()).get()));
 }
 
 template<class T, typename... TArgs>
 void GameObject::AddComponent(TArgs&&... args) {
     Scope<T> component = MakeScope<T>(std::forward<TArgs>(args)...);
-    component->mGameObject = this;
-
-    component->OnLoad();
 
     mComponents.emplace(Component::GetComponentType<T>(), std::move(component));
 }
