@@ -123,7 +123,7 @@ void Scene::VariableUpdate(float delta) {
         glm::vec4 box = { transform.Position.x, transform.Position.y,
                           transform.Position.x + transform.Scale.x, transform.Position.y + transform.Scale.y };
 
-        Render::DrawRect(box, 0.0f, sprite.mTexture.GetTexture(), sprite.mTexture.GetTexCoords(),
+        Render::DrawRect(box, sprite.mZ, sprite.mTexture.GetTexture(), sprite.mTexture.GetTexCoords(),
                          sprite.mRotation, sprite.mFlipX, sprite.mFlipY, sprite.mTint);
     }
 
