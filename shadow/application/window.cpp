@@ -46,8 +46,8 @@ void Window::Init() {
         // TODO throw
     }
 
-    mContext = std::make_unique<GraphicsContext>(mWindow);
-    mContext->Init();
+    glfwMakeContextCurrent(mWindow);
+    gladLoadGL(glfwGetProcAddress);
 
     glfwSetWindowUserPointer(mWindow, this);
 
@@ -149,7 +149,7 @@ void Window::Shutdown() {
 
 void Window::Update() {
     glfwPollEvents();
-    mContext->SwapBuffers();
+    glfwSwapBuffers(mWindow);
 }
 
 void Window::Close() {

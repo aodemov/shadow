@@ -5,8 +5,6 @@
 
 #include "shadow/events/event_bus.h"
 
-#include "shadow/renderer/graphics_context.h"
-
 #include "shadow/events/application_events.h"
 #include "shadow/events/mouse_events.h"
 #include "shadow/events/keyboard_events.h"
@@ -52,8 +50,6 @@ private:
     void Update();
 
     GLFWwindow* mWindow;
-
-    std::unique_ptr<GraphicsContext> mContext;
 
     WindowOptions mOptions;
 
