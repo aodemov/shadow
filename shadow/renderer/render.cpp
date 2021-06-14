@@ -120,6 +120,7 @@ void Render::BeginScene(Camera& camera) {
     renderData->DefaultShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
     renderData->FontShader->Bind();
     renderData->FontShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    UseShader(renderData->DefaultShader.get());
 }
 
 void Render::EndScene() {

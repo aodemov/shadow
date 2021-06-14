@@ -247,6 +247,33 @@ int main() {
     anim.AddComponent<SpriteComponent>();
     anim.AddComponent<AnimatorComponent>(animationController);
 
+    auto& ui = mainScene->Create();
+    ui.AddComponent<UiComponent>();
+    auto& c = ui.GetComponent<UiComponent>().Container;
+    auto bar = MakeRef<ProgressBar>(MakeRef<Font>("assets/fonts/arial.ttf", 25));
+    bar->Width(50, true).Height(30).CenterX().MarginBottom(5, true);
+    c.Add(std::dynamic_pointer_cast<UiBlock, ProgressBar>(bar));
+
+    auto b1 = MakeRef<UiBlock>();
+    b1->MarginLeft(20).MarginTop(20).MarginBottom(20).Width(25, true);
+
+    auto l1 = MakeRef<Label>("The quick brown fox jumps over the lazy dog", MakeRef<Font>("assets/fonts/comic.ttf", 50), glm::vec4{ 1, 0, 1, 0.5f });
+    l1->MarginTop(0).MarginLeft(0);
+
+    auto b2 = MakeRef<UiBlock>();
+    b2->MarginTop(10, true).MarginRight(20).Width(300).Height(200);
+
+    auto b3 = MakeRef<UiBlock>();
+    b3->MarginBottom(0).Width(50, true).Height(30).CenterX();
+
+    auto b4 = MakeRef<UiBlock>();
+    b4->MarginLeft(100).MarginBottom(50, true).Width(50).Height(50).CenterBoth();
+    c.Add(b1);
+    c.Add(b2);
+    c.Add(b3);
+    c.Add(b4);
+    c.Add(l1);
+
     Application::GetSceneManager().Add("main", mainScene);
     Application::GetSceneManager().Show("main");
 

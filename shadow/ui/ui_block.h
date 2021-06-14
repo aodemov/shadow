@@ -37,7 +37,7 @@ public:
     UiBlock& Color(glm::vec4 const& color) { mColor = color; return *this; }
 protected:
     glm::vec4 box {0.0f};
-    glm::vec4 mColor {0.0f};
+    glm::vec4 mColor {1.0f};
 
     std::vector<Ref<UiBlock>> mChildren;
 
@@ -46,6 +46,6 @@ private:
     glm::vec4 margins {1e7};
     glm::vec2 size {1e7};
     bool ch = false, cv = false;
-    UiBlock* parent;
+    UiBlock* parent = nullptr;
 };
 }

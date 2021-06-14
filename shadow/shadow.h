@@ -30,15 +30,16 @@
 #include "shadow/components/camera_component.h"
 #include "shadow/components/script_component.h"
 #include "shadow/components/animator_component.h"
+#include "shadow/components/ui_component.h"
 
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"
 #include "shadow/components/animation.h"
 #include "shadow/components/animation_controller.h"
 
-#include "shadow/ui/ui.h"
 #include "shadow/ui/ui_block.h"
 #include "shadow/ui/label.h"
+#include "shadow/ui/ui_container.h"
 
 #include "shadow/core/math/random.h"
 #include "shadow/core/utils/file.h"

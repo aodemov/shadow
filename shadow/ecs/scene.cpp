@@ -8,6 +8,7 @@
 #include "shadow/events/application_events.h"
 #include "shadow/components/camera_component.h"
 #include "shadow/components/animator_component.h"
+#include "shadow/components/ui_component.h"
 
 #include "shadow/events/application_events.h"
 
@@ -23,6 +24,13 @@ Scene::Scene()
                 continue;
 
             object->GetComponent<CameraComponent>().cameraController.Recalculate();
+        }
+
+        for (auto& object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<UiComponent>())
+                continue;
+
+            object->GetComponent<UiComponent>().Container.SetSize(e.GetWidth(), e.GetHeight());
         }
     });
 }
@@ -108,26 +116,40 @@ void Scene::VariableUpdate(float delta) {
         }
     }
 
+    { // Render
+        Render::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+        Render::Clear();
+        Render::BeginScene(*mSceneCamera);
 
-    Render::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-    Render::Clear();
-    Render::BeginScene(*mSceneCamera);
+        for (auto &object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<SpriteComponent>())
+                continue;
 
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<SpriteComponent>())
-            continue;
+            auto &transform = object->GetComponent<Transform>();
+            auto &sprite = object->GetComponent<SpriteComponent>().sprite;
 
-        auto& transform = object->GetComponent<Transform>();
-        auto& sprite = object->GetComponent<SpriteComponent>().sprite;
+            glm::vec4 box = {transform.Position.x, transform.Position.y,
+                             transform.Position.x + transform.Scale.x, transform.Position.y + transform.Scale.y};
 
-        glm::vec4 box = { transform.Position.x, transform.Position.y,
-                          transform.Position.x + transform.Scale.x, transform.Position.y + transform.Scale.y };
+            Render::DrawRect(box, sprite.mZ, sprite.mTexture.GetTexture(), sprite.mTexture.GetTexCoords(),
+                             sprite.mRotation, sprite.mFlipX, sprite.mFlipY, sprite.mTint);
+        }
 
-        Render::DrawRect(box, sprite.mZ, sprite.mTexture.GetTexture(), sprite.mTexture.GetTexCoords(),
-                         sprite.mRotation, sprite.mFlipX, sprite.mFlipY, sprite.mTint);
+        Render::EndScene();
     }
 
-    Render::EndScene();
+    { // Ui Render
+        for (auto& object : mRegistry.GetObjects()) {
+            if (!object->HasComponent<UiComponent>())
+                continue;
+
+            auto& ui = object->GetComponent<UiComponent>().Container;
+
+            Render::BeginScene(*ui.mUiCamera);
+            ui.Draw();
+            Render::EndScene();
+        }
+    }
 }
 
 void Scene::FixedUpdate(float delta) {
