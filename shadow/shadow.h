@@ -31,6 +31,8 @@
 #include "shadow/components/script_component.h"
 #include "shadow/components/animator_component.h"
 #include "shadow/components/ui_component.h"
+#include "shadow/components/collider_component.h"
+#include "shadow/components/rigidbody_component.h"
 
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"

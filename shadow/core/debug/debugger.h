@@ -4,6 +4,10 @@
 #include "shadow/events/event_bus.h"
 
 namespace Shadow {
+struct Properties {
+    bool ShowColliders = false;
+};
+
 class Debugger {
 public:
     Debugger();
@@ -18,6 +22,7 @@ public:
     void Hide();
 
     static inline Statistics Stats;
+    static inline Properties Props;
 
 private:
     bool mVisible = false;

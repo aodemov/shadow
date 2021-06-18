@@ -31,9 +31,6 @@ void Debugger::Init() {
     ImGui_ImplGlfw_InitForOpenGL(Application::GetWindow().mWindow, true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
-    ImGui::SetWindowPos("Debug", { 0, 0 });
-    ImGui::SetWindowSize("Debug", { 0, 0});
-
     mEventBus.AddListener<KeyPressedEvent>([&](auto& e) {
        if (e.GetKeyCode() == Key::F3) {
             mVisible = !mVisible;
@@ -93,6 +90,10 @@ void Debugger::Update(float delta) {
     ImGui::Text("Constants: ");
     ImGui::Text("Max Rects: %d", Stats.MaxRects);
     ImGui::Text("Max Texture Slots: %d", Stats.MaxTextureSlots);
+
+    ImGui::Separator();
+
+    ImGui::Checkbox("Show colliders: ", &Props.ShowColliders);
 
     ImGui::End();
 
