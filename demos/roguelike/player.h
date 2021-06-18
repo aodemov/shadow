@@ -33,6 +33,9 @@ public:
         AddComponent<SpriteComponent>().sprite.mZ = 1.0f;
         AddComponent<AnimatorComponent>(animationController);
 
+        AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1.2 });
+        AddComponent<RigidbodyComponent>();
+
         auto& camera = CreateObject();
         camera.AddComponent<Transform>();
         auto& c = camera.AddComponent<CameraComponent>();
@@ -46,32 +49,39 @@ public:
         auto& transform = GetComponent<Transform>();
         auto& animationController = GetComponent<AnimatorComponent>().animationController;
         auto& sprite = GetComponent<SpriteComponent>().sprite;
+        auto& collider = GetComponent<ColliderComponent>();
+        auto& rb = GetComponent<RigidbodyComponent>();
 
-        glm::vec2 velocity(0.0f);
 
+        mVelocity = glm::vec2{0.0f};
         if (Input::IsKeyPressed(Key::W))
-            velocity.y += mSpeed;
+            mVelocity.y += mSpeed;
         if (Input::IsKeyPressed(Key::A))
-            velocity.x -= mSpeed;
+            mVelocity.x -= mSpeed;
         if (Input::IsKeyPressed(Key::S))
-            velocity.y -= mSpeed;
+            mVelocity.y -= mSpeed;
         if (Input::IsKeyPressed(Key::D))
-            velocity.x += mSpeed;
+            mVelocity.x += mSpeed;
 
-        transform.Position += velocity * delta;
-
-        if (fabs(velocity.x) + fabs(velocity.y) > 0.01)
+        if (fabs(mVelocity.x) + fabs(mVelocity.y) > 0.01)
             animationController.SetState("run");
         else
             animationController.SetState("idle");
 
-        sprite.mFlipX = velocity.x < 0;
+        sprite.mFlipX = mVelocity.x < 0;
+
+        rb.Velocity = mVelocity;
 
         mCamera->SetPosition({transform.Position.x, transform.Position.y, 0.0f});
+    }
+
+    void FixedUpdate(float delta) override {
+
     }
 
 private:
     float mSpeed = 5;
     CameraController* mCamera;
+    glm::vec2 mVelocity;
 };
 
