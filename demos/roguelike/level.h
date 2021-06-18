@@ -152,6 +152,7 @@ public:
             t.AddComponent<Transform>(tc, 0.0f, glm::vec2{ 1, 2 });
             t.AddComponent<SpriteComponent>().sprite.mZ = 0.5f;
             t.AddComponent<AnimatorComponent>(controller);
+            t.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 2 });
         }
     }
     void VariableUpdate(float delta) override {
