@@ -48,6 +48,14 @@ void Debugger::Update(float delta) {
     if (!mVisible)
         return;
 
+    static float elapsedTime = 0.0f;
+    static float smoothFrameTime = 1.0f;
+    elapsedTime += Stats.FrameTime;
+    if (Stats.ElapsedFrames % 10 == 0) {
+        smoothFrameTime = elapsedTime / 10;
+        elapsedTime = 0;
+    }
+
     auto& io = ImGui::GetIO();
     io.DeltaTime = delta;
     io.DisplaySize = ImVec2((float)Application::GetWindow().GetWidth(), (float)Application::GetWindow().GetHeight());
@@ -66,7 +74,7 @@ void Debugger::Update(float delta) {
     ImGui::Text("Texture Slots Used: %d", Stats.TextureCount);
     ImGui::Separator();
 
-    ImGui::Text("FPS: %d (%fms.)", (int)(1.0f / Stats.FrameTime), Stats.FrameTime);
+    ImGui::Text("FPS: %d (%fms.)", (int)(1.0f / smoothFrameTime), smoothFrameTime);
     ImGui::Text("Fixed Update Time: %fms.", Stats.FixedUpdateTime);
     ImGui::Text("Variable Update Time: %fms.", Stats.VariableUpdateTime);
     ImGui::Text("Fixed FPS: %d", Stats.FixedFPS);
