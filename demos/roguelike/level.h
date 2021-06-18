@@ -5,8 +5,15 @@
 using namespace Shadow;
 
 struct LevelData {
+    enum LayerType {
+        Tilemap,
+        Collider,
+        Object,
+    };
+
     uint8_t width;
     uint8_t height;
+    LayerType type;
     std::vector<int16_t> data;
 };
 
@@ -22,13 +29,19 @@ std::vector<LevelData> LoadLevelData(std::string const& filePath) {
             LevelData level;
             std::stringstream ss(line);
 
-            std::string width, height;
+            std::string width, height, type;
             std::getline(ss, width, ' ');
-            std::getline(ss, height);
+            std::getline(ss, height, ' ');
+            std::getline(ss, type);
             level.width = std::stoi(width);
             level.height = std::stoi(height);
 
-            SH_INFO("W: {0}, H: {1}", level.width, level.height);
+            if (type == "tilemap")
+                level.type = LevelData::LayerType::Tilemap;
+            else if (type == "collider")
+                level.type = LevelData::LayerType::Collider;
+            else if (type == "object")
+                level.type = LevelData::LayerType::Object;
 
             std::string tile;
             while(std::getline(ss,tile,',') )
@@ -116,19 +129,33 @@ public:
 
         int levelIndex = 0;
         for (auto& levelData : LoadLevelData("assets/levels/level2.level")) {
-            for (int row = 0; row < levelData.height; row++) {
-                for (int col = 0; col < levelData.width; col++) {
-                    int index = levelData.data[row * levelData.width + col];
+            if (levelData.type == LevelData::LayerType::Tilemap)
+                for (int row = 0; row < levelData.height; row++) {
+                    for (int col = 0; col < levelData.width; col++) {
+                        int index = levelData.data[row * levelData.width + col];
 
-                    if (index <= 0)
-                        continue;
+                        if (index <= 0)
+                            continue;
 
-                    auto& tile = CreateObject();
-                    tile.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
-                    Sprite s(atlas[index]);
-                    tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = 0.1f * levelIndex;
+                        auto& tile = CreateObject();
+                        tile.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
+                        Sprite s(atlas[index]);
+                        tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = 0.1f * levelIndex;
+                    }
                 }
-            }
+            else if (levelData.type == LevelData::LayerType::Collider)
+                for (int row = 0; row < levelData.height; row++) {
+                    for (int col = 0; col < levelData.width; col++) {
+                        bool value = levelData.data[row * levelData.width + col] == 1;
+
+                        if (!value)
+                            continue;
+
+                        auto& collider = CreateObject();
+                        collider.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
+                        collider.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1 });
+                    }
+                }
             levelIndex++;
         }
 
