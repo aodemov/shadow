@@ -7,7 +7,7 @@ using namespace Shadow;
 struct LevelData {
     uint8_t width;
     uint8_t height;
-    std::vector<uint16_t> data;
+    std::vector<int16_t> data;
 };
 
 std::vector<LevelData> LoadLevelData(std::string const& filePath) {
@@ -28,6 +28,8 @@ std::vector<LevelData> LoadLevelData(std::string const& filePath) {
             level.width = std::stoi(width);
             level.height = std::stoi(height);
 
+            SH_INFO("W: {0}, H: {1}", level.width, level.height);
+
             std::string tile;
             while(std::getline(ss,tile,',') )
             {
@@ -47,67 +49,73 @@ static const uint32_t TILE_SIZE = 16;
 class Level : public Script {
 public:
     void OnLoad() override {
-        auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
+        auto tilemap = MakeRef<Texture>("assets/textures/tilemap2.png");
         TextureAtlas atlas(tilemap,
                            {
-                                   { 1, { 0 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 1 Wall top left
-                                   { 2, { 1 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 2 Wall top center
-                                   { 3, { 2 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 3 Wall top right
-                                   { 4, { 0 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 4 Wall left
-                                   { 5, { 1 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 5 Wall center
-                                   { 6, { 2 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 6 Wall right
-                                   { 7, { 0 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 7 Floor left
-                                   { 8, { 1 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 8 Floor center
-                                   { 9, { 2 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 9 Floor right
+                                   { 1,   { 1 * TILE_SIZE, 31 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 2,   { 2 * TILE_SIZE, 31 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 3,   { 3 * TILE_SIZE, 31 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 33,  { 1 * TILE_SIZE, 30 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 34,  { 2 * TILE_SIZE, 30 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 35,  { 3 * TILE_SIZE, 30 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 65,  { 1 * TILE_SIZE, 29 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 66,  { 2 * TILE_SIZE, 29 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 67,  { 3 * TILE_SIZE, 29 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 97,  { 1 * TILE_SIZE, 28 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 98,  { 2 * TILE_SIZE, 28 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 99,  { 3 * TILE_SIZE, 28 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 129, { 1 * TILE_SIZE, 27 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 130, { 2 * TILE_SIZE, 27 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 131, { 3 * TILE_SIZE, 27 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 161, { 1 * TILE_SIZE, 26 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 162, { 2 * TILE_SIZE, 26 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 163, { 3 * TILE_SIZE, 26 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 193, { 1 * TILE_SIZE, 25 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 194, { 2 * TILE_SIZE, 25 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 195, { 3 * TILE_SIZE, 25 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 224, { 0 * TILE_SIZE, 24 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 225, { 1 * TILE_SIZE, 24 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 226, { 2 * TILE_SIZE, 24 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 227, { 3 * TILE_SIZE, 24 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 256, { 0 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 257, { 1 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 258, { 2 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 259, { 3 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 260, { 4 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 261, { 5 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 262, { 6 * TILE_SIZE, 23 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 288, { 0 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 289, { 1 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 290, { 2 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 291, { 3 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 292, { 4 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 293, { 5 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 294, { 6 * TILE_SIZE, 22 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 322, { 2 * TILE_SIZE, 21 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 323, { 3 * TILE_SIZE, 21 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 417, { 1 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 418, { 2 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 419, { 3 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 420, { 4 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 421, { 5 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 422, { 6 * TILE_SIZE, 18 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 449, { 1 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 450, { 2 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 451, { 3 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 452, { 4 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 453, { 5 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 454, { 6 * TILE_SIZE, 17 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 481, { 1 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 482, { 2 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 483, { 3 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 484, { 4 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 485, { 5 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
+                                   { 486, { 6 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
 
-                                   { 10, { 0 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 10
-                                   { 11, { 1 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 11
-                                   { 12, { 2 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 12
-                                   { 13, { 3 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 13
-                                   { 14, { 0 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 14
-                                   { 15, { 1 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 15
-                                   { 16, { 2 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 16
-                                   { 17, { 3 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 17
-                                   { 18, { 0 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 18
-                                   { 19, { 1 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 19
-                                   { 20, { 2 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 20
-                                   { 21, { 3 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 21
-
-                                   { 22, { 5 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 22
-                                   { 23, { 6 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 23
-                                   { 24, { 5 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 24
-                                   { 25, { 6 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 25
-                                   { 26, { 5 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 26
-                                   { 27, { 6 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 27
-
-                                   { 28, { 8 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 28
-                                   { 29, { 7 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 29
-                                   { 30, { 8 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 30
-
-                                   { 31, { 10 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 31
-                                   { 32, { 11 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 32
-                                   { 33, { 10 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 33
-                                   { 34, { 11 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 34
-                                   { 35, { 10 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 35
-                                   { 36, { 11 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 36
-
-                                   { 37, { 2 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 37
-
-                                   { 38, { 3 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 38
-                                   { 39, { 4 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 39
-
-                                   { 40, { 1 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 40
-
-                                   { 41, { 5 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 41
-                                   { 42, { 6 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 42
-                                   { 43, { 5 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 43
-                                   { 44, { 6 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 44
-
-                                   { 45, { 8 * TILE_SIZE, 5 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 45
                            });
 
-
-        for (auto& levelData : LoadLevelData("assets/levels/level1.level")) {
+        int levelIndex = 0;
+        for (auto& levelData : LoadLevelData("assets/levels/level2.level")) {
             for (int row = 0; row < levelData.height; row++) {
                 for (int col = 0; col < levelData.width; col++) {
                     int index = levelData.data[row * levelData.width + col];
@@ -118,41 +126,42 @@ public:
                     auto& tile = CreateObject();
                     tile.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
                     Sprite s(atlas[index]);
-                    tile.AddComponent<SpriteComponent>(Sprite(atlas[index]));
+                    tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = 0.1f * levelIndex;
                 }
             }
+            levelIndex++;
         }
 
-        // Animated torches
-        Animation torchAnimation(tilemap, 1.5f, {
-            { { 8  * 16, 5 * 16 }, { 16, 32 } },
-            { { 9  * 16, 5 * 16 }, { 16, 32 } },
-            { { 10 * 16, 5 * 16 }, { 16, 32 } },
-            { { 11 * 16, 5 * 16 }, { 16, 32 } },
-            { { 12 * 16, 5 * 16 }, { 16, 32 } },
-            { { 13 * 16, 5 * 16 }, { 16, 32 } },
-            { { 14 * 16, 5 * 16 }, { 16, 32 } },
-            { { 15 * 16, 5 * 16 }, { 16, 32 } },
-        });
-
-        AnimationController controller({
-            { "default", torchAnimation }
-        }, "default");
-
-        const std::vector<glm::vec2> torches {
-                { 8, 22 },
-                { 11, 22 },
-                { 8, 17 },
-                { 11, 17 },
-        };
-
-        for (auto tc : torches) {
-            auto& t = CreateObject();
-            t.AddComponent<Transform>(tc, 0.0f, glm::vec2{ 1, 2 });
-            t.AddComponent<SpriteComponent>().sprite.mZ = 0.5f;
-            t.AddComponent<AnimatorComponent>(controller);
-            t.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 2 });
-        }
+//        // Animated torches
+//        Animation torchAnimation(tilemap, 1.5f, {
+//            { { 8  * 16, 5 * 16 }, { 16, 32 } },
+//            { { 9  * 16, 5 * 16 }, { 16, 32 } },
+//            { { 10 * 16, 5 * 16 }, { 16, 32 } },
+//            { { 11 * 16, 5 * 16 }, { 16, 32 } },
+//            { { 12 * 16, 5 * 16 }, { 16, 32 } },
+//            { { 13 * 16, 5 * 16 }, { 16, 32 } },
+//            { { 14 * 16, 5 * 16 }, { 16, 32 } },
+//            { { 15 * 16, 5 * 16 }, { 16, 32 } },
+//        });
+//
+//        AnimationController controller({
+//            { "default", torchAnimation }
+//        }, "default");
+//
+//        const std::vector<glm::vec2> torches {
+//                { 8, 22 },
+//                { 11, 22 },
+//                { 8, 17 },
+//                { 11, 17 },
+//        };
+//
+//        for (auto tc : torches) {
+//            auto& t = CreateObject();
+//            t.AddComponent<Transform>(tc, 0.0f, glm::vec2{ 1, 2 });
+//            t.AddComponent<SpriteComponent>().sprite.mZ = 0.5f;
+//            t.AddComponent<AnimatorComponent>(controller);
+//            t.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 2 });
+//        }
     }
     void VariableUpdate(float delta) override {
 

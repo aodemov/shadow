@@ -15,7 +15,7 @@ public:
     TextureAtlas(Ref<Texture> const& texture, std::initializer_list<AtlasTile> tiles);
 
     const SubTexture& operator[](size_t i) {
-        return mTiles[i];
+        return mTiles.at(i);
     }
 
 private:
