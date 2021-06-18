@@ -6,7 +6,7 @@
 namespace Shadow {
 
 GameLoop::GameLoop()
-    : mMaxFps(20),
+    : mMaxFps(60),
       mLag(0),
       mInterval(0)
 {
