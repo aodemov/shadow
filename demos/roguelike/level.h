@@ -50,70 +50,69 @@ public:
         auto tilemap = MakeRef<Texture>("assets/textures/tilemap.png");
         TextureAtlas atlas(tilemap,
                            {
+                                   { 1, { 0 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 1 Wall top left
+                                   { 2, { 1 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 2 Wall top center
+                                   { 3, { 2 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 3 Wall top right
+                                   { 4, { 0 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 4 Wall left
+                                   { 5, { 1 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 5 Wall center
+                                   { 6, { 2 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 6 Wall right
+                                   { 7, { 0 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 7 Floor left
+                                   { 8, { 1 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 8 Floor center
+                                   { 9, { 2 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 9 Floor right
 
-                                   {{ 0 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 1 Wall top left
-                                   {{ 1 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 2 Wall top center
-                                   {{ 2 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 3 Wall top right
-                                   {{ 0 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 4 Wall left
-                                   {{ 1 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 5 Wall center
-                                   {{ 2 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 6 Wall right
-                                   {{ 0 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 7 Floor left
-                                   {{ 1 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 8 Floor center
-                                   {{ 2 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 9 Floor right
+                                   { 10, { 0 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 10
+                                   { 11, { 1 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 11
+                                   { 12, { 2 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 12
+                                   { 13, { 3 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 13
+                                   { 14, { 0 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 14
+                                   { 15, { 1 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 15
+                                   { 16, { 2 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 16
+                                   { 17, { 3 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 17
+                                   { 18, { 0 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 18
+                                   { 19, { 1 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 19
+                                   { 20, { 2 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 20
+                                   { 21, { 3 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 21
 
-                                   {{ 0 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 10
-                                   {{ 1 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 11
-                                   {{ 2 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 12
-                                   {{ 3 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 13
-                                   {{ 0 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 14
-                                   {{ 1 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 15
-                                   {{ 2 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 16
-                                   {{ 3 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 17
-                                   {{ 0 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 18
-                                   {{ 1 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 19
-                                   {{ 2 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 20
-                                   {{ 3 * TILE_SIZE, 7 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 21
+                                   { 22, { 5 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 22
+                                   { 23, { 6 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 23
+                                   { 24, { 5 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 24
+                                   { 25, { 6 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 25
+                                   { 26, { 5 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 26
+                                   { 27, { 6 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 27
 
-                                   {{ 5 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 22
-                                   {{ 6 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 23
-                                   {{ 5 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 24
-                                   {{ 6 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 25
-                                   {{ 5 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 26
-                                   {{ 6 * TILE_SIZE, 13 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 27
+                                   { 28, { 8 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 28
+                                   { 29, { 7 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 29
+                                   { 30, { 8 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 30
 
-                                   {{ 8 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 28
-                                   {{ 7 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 29
-                                   {{ 8 * TILE_SIZE, 14 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 30
+                                   { 31, { 10 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 31
+                                   { 32, { 11 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 32
+                                   { 33, { 10 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 33
+                                   { 34, { 11 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 34
+                                   { 35, { 10 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 35
+                                   { 36, { 11 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 36
 
-                                   {{ 10 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 31
-                                   {{ 11 * TILE_SIZE, 11 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 32
-                                   {{ 10 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 33
-                                   {{ 11 * TILE_SIZE, 10 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 34
-                                   {{ 10 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 35
-                                   {{ 11 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 36
+                                   { 37, { 2 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 37
 
-                                   {{ 2 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 37
+                                   { 38, { 3 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 38
+                                   { 39, { 4 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 39
 
-                                   {{ 3 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 38
-                                   {{ 4 * TILE_SIZE, 15 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 39
+                                   { 40, { 1 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 40
 
-                                   {{ 1 * TILE_SIZE, 12 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 40
+                                   { 41, { 5 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 41
+                                   { 42, { 6 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 42
+                                   { 43, { 5 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 43
+                                   { 44, { 6 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 44
 
-                                   {{ 5 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 41
-                                   {{ 6 * TILE_SIZE, 9 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 42
-                                   {{ 5 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 43
-                                   {{ 6 * TILE_SIZE, 8 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 44
-
-                                   {{ 8 * TILE_SIZE, 5 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 45
+                                   { 45, { 8 * TILE_SIZE, 5 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }}, // 45
                            });
 
 
         for (auto& levelData : LoadLevelData("assets/levels/level1.level")) {
             for (int row = 0; row < levelData.height; row++) {
                 for (int col = 0; col < levelData.width; col++) {
-                    int index = levelData.data[row * levelData.width + col] - 1;
+                    int index = levelData.data[row * levelData.width + col];
 
-                    if (index < 0)
+                    if (index <= 0)
                         continue;
 
                     auto& tile = CreateObject();
