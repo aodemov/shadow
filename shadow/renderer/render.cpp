@@ -214,28 +214,28 @@ void Render::DrawRect(const glm::vec3 &position, const glm::vec2 &size, const gl
             glm::rotate(glm::mat4(1.0f), glm::radians(-rotation), { 0.0f, 0.0f, 1.0f }) *
             glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, -0.5f, 1.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = {0.0f, 0.0f };
     renderData->RectVertexBufferPtr->TexIndex = texIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, -0.5f, 1.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = {1.0f, 0.0f };
     renderData->RectVertexBufferPtr->TexIndex = texIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{0.5f, 0.5f, 1.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = {1.0f, 1.0f };
     renderData->RectVertexBufferPtr->TexIndex = texIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 0.0f, 1.0f };
+    renderData->RectVertexBufferPtr->Position = transform * glm::vec4{-0.5f, 0.5f, 1.0f, 1.0f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = {0.0f, 1.0f };
     renderData->RectVertexBufferPtr->TexIndex = texIndex;
