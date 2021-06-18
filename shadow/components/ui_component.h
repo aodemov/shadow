@@ -4,7 +4,7 @@
 #include "shadow/ui/ui_container.h"
 
 namespace Shadow {
-class UiComponent : public Component {
+class UiComponent {
 public:
     UiComponent() = default;
     UiComponent(const UiComponent&) = default;

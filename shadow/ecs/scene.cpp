@@ -1,6 +1,6 @@
 #include "scene.h"
 
-#include "shadow/ecs/game_object.h"
+#include "shadow/ecs/entity.h"
 #include "shadow/components/transform.h"
 #include "shadow/components/sprite_component.h"
 #include "shadow/components/script_component.h"
@@ -13,48 +13,37 @@
 #include "shadow/components/rigidbody_component.h"
 #include "shadow/physics/collision.h"
 
-#include "shadow/events/application_events.h"
-
 #include "shadow/core/debug/debugger.h"
 
 
 namespace Shadow {
 Scene::Scene()
-    : mRegistry(this) {
+    : mRegistry() {
 
 
-    On<WindowResizeEvent>([&](auto e) {
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<CameraComponent>())
-                continue;
-
-            object->GetComponent<CameraComponent>().cameraController.Recalculate();
+    On<WindowResizeEvent>([&](auto event) {
+        for (auto& [e, c] : mRegistry.View<CameraComponent>()) {
+            c.cameraController.Recalculate();
         }
 
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<UiComponent>())
-                continue;
-
-            object->GetComponent<UiComponent>().Container.SetSize(e.GetWidth(), e.GetHeight());
+        for (auto& [e, c] : mRegistry.View<UiComponent>()) {
+            c.Container.SetSize(event.GetWidth(), event.GetHeight());
         }
     });
 }
 
-GameObject& Scene::Create() {
-    return mRegistry.CreateObject();
+Entity Scene::Create() {
+    return Entity(mRegistry.CreateEntity(), this);
 }
 
-void Scene::Destroy(GameObject& object) {
-    mRegistry.RemoveObject(object);
+void Scene::Destroy(Entity& entity) {
+    mRegistry.RemoveEntity(entity.mId);
 }
 
 void Scene::Load() {
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<ScriptComponent>())
-            continue;
-
-        auto& c = object->GetComponent<ScriptComponent>();
+    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
         if (!c.loaded) {
+            c.script->mEntity = Entity(e, this);
             c.script->OnLoad();
             c.loaded = true;
         }
@@ -62,29 +51,20 @@ void Scene::Load() {
 }
 
 void Scene::OnEnable() {
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<ScriptComponent>())
-            continue;
-
-        object->GetComponent<ScriptComponent>().script->OnEnable();
+    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+        c.script->OnEnable();
     }
 }
 
 void Scene::OnDisable() {
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<ScriptComponent>())
-            continue;
-
-        object->GetComponent<ScriptComponent>().script->OnDisable();
+    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+        c.script->OnDisable();
     }
 }
 
 void Scene::Destroy() {
-    for (auto& object : mRegistry.GetObjects()) {
-        if (!object->HasComponent<ScriptComponent>())
-            continue;
-
-        object->GetComponent<ScriptComponent>().script->OnDestroy(); // TODO move to object or sth
+    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+        c.script->OnDestroy();
     }
 }
 
@@ -93,12 +73,9 @@ void Scene::VariableUpdate(float delta) {
         return;
 
     { // Script Variable Update
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<ScriptComponent>())
-                continue;
-
-            auto& c = object->GetComponent<ScriptComponent>();
+        for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
             if (!c.loaded) {
+                c.script->mEntity = Entity(e, this);
                 c.script->OnLoad();
                 c.loaded = true;
             }
@@ -107,67 +84,61 @@ void Scene::VariableUpdate(float delta) {
         }
     }
 
-    { // Collision detection
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<ColliderComponent>())
-                continue;
-
-            auto& c = object->GetComponent<ColliderComponent>();
-            c.IsTouching = false;
-        }
-
-
-        for (auto& object1 : mRegistry.GetObjects()) {
-            if (!object1->HasComponent<ColliderComponent>())
-                continue;
-
-            auto& c1 = object1->GetComponent<ColliderComponent>();
-            auto& t1 = object1->GetComponent<Transform>();
-
-            for (auto& object2 : mRegistry.GetObjects()) {
-                if (object1.get() == object2.get())
-                    continue;
-
-                if (!object2->HasComponent<ColliderComponent>())
-                    continue;
-
-                auto& c2 = object2->GetComponent<ColliderComponent>();
-                auto& t2 = object2->GetComponent<Transform>();
-
-                glm::vec4 box1 = { t1.Position.x + c1.Box.x, t1.Position.y + c1.Box.y,
-                                   t1.Position.x + c1.Box.z, t1.Position.y + c1.Box.w };
-                glm::vec4 box2 = { t2.Position.x + c2.Box.x, t2.Position.y + c2.Box.y,
-                                   t2.Position.x + c2.Box.z, t2.Position.y + c2.Box.w };
-
-                if (Collision::Aabb(box1, box2)) {
-                    c1.IsTouching = c2.IsTouching = true;
-                }
-            }
-        }
-    }
+//    { // Collision detection
+//        for (auto& object : mRegistry.GetObjects()) {
+//            if (!object->HasComponent<ColliderComponent>())
+//                continue;
+//
+//            auto& c = object->GetComponent<ColliderComponent>();
+//            c.IsTouching = false;
+//        }
+//
+//
+//        for (auto& object1 : mRegistry.GetObjects()) {
+//            if (!object1->HasComponent<ColliderComponent>())
+//                continue;
+//
+//            auto& c1 = object1->GetComponent<ColliderComponent>();
+//            auto& t1 = object1->GetComponent<Transform>();
+//
+//            for (auto& object2 : mRegistry.GetObjects()) {
+//                if (object1.get() == object2.get())
+//                    continue;
+//
+//                if (!object2->HasComponent<ColliderComponent>())
+//                    continue;
+//
+//                auto& c2 = object2->GetComponent<ColliderComponent>();
+//                auto& t2 = object2->GetComponent<Transform>();
+//
+//                glm::vec4 box1 = { t1.Position.x + c1.Box.x, t1.Position.y + c1.Box.y,
+//                                   t1.Position.x + c1.Box.z, t1.Position.y + c1.Box.w };
+//                glm::vec4 box2 = { t2.Position.x + c2.Box.x, t2.Position.y + c2.Box.y,
+//                                   t2.Position.x + c2.Box.z, t2.Position.y + c2.Box.w };
+//
+//                if (Collision::Aabb(box1, box2)) {
+//                    c1.IsTouching = c2.IsTouching = true;
+//                }
+//            }
+//        }
+//    }
 
     { // Rigid body collision
-        for (auto& object1 : mRegistry.GetObjects()) {
-            if (!object1->HasComponent<RigidbodyComponent>())
-                continue;
+        for (auto& [entity, component] : mRegistry.View<RigidbodyComponent>()) {
 
-            auto& c1 = object1->GetComponent<ColliderComponent>();
-            auto& t1 = object1->GetComponent<Transform>();
-            auto& r1 = object1->GetComponent<RigidbodyComponent>();
+            auto& c1 = mRegistry.GetComponent<ColliderComponent>(entity);
+            auto& t1 = mRegistry.GetComponent<Transform>(entity);
+            auto& r1 = mRegistry.GetComponent<RigidbodyComponent>(entity);
 
             glm::vec2 movement = r1.Velocity * delta;
             glm::vec2 oldMovement = movement;
 
-
-            for (auto& object2 : mRegistry.GetObjects()) {
-                if (object1.get() == object2.get())
+            for (auto& [entity2, component2] : mRegistry.View<ColliderComponent>()) {
+                if (entity == entity2)
                     continue;
 
-                if (!object2->HasComponent<ColliderComponent>())
-                    continue;
-
-                auto& c2 = object2->GetComponent<ColliderComponent>();
-                auto& t2 = object2->GetComponent<Transform>();
+                auto& c2 = mRegistry.GetComponent<ColliderComponent>(entity2);
+                auto& t2 = mRegistry.GetComponent<Transform>(entity2);
 
                 glm::vec4 box1 = { t1.Position.x + c1.Box.x, t1.Position.y + c1.Box.y,
                                    t1.Position.x + c1.Box.z, t1.Position.y + c1.Box.w };
@@ -209,16 +180,13 @@ void Scene::VariableUpdate(float delta) {
     }
 
     { // Animator update
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<AnimatorComponent>())
-                continue;
-
-            auto& c = object->GetComponent<AnimatorComponent>();
+        for (auto& [e, c] : mRegistry.View<AnimatorComponent>()) {
             c.animationController.Update(delta);
 
-            if (!object->HasComponent<SpriteComponent>())
+            if (!mRegistry.HasComponent<SpriteComponent>(e))
                 return;
-            object->GetComponent<SpriteComponent>().sprite.mTexture = c.animationController.GetAnimation().GetTexture();
+
+            mRegistry.GetComponent<SpriteComponent>(e).sprite.mTexture = c.animationController.GetAnimation().GetTexture();
         }
     }
 
@@ -227,12 +195,9 @@ void Scene::VariableUpdate(float delta) {
         Render::Clear();
         Render::BeginScene(*mSceneCamera);
 
-        for (auto &object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<SpriteComponent>())
-                continue;
-
-            auto &transform = object->GetComponent<Transform>();
-            auto &sprite = object->GetComponent<SpriteComponent>().sprite;
+        for (auto& [e, c] : mRegistry.View<SpriteComponent>()) {
+            auto &transform = mRegistry.GetComponent<Transform>(e);
+            auto &sprite = mRegistry.GetComponent<SpriteComponent>(e).sprite;
 
             glm::vec4 box = {transform.Position.x, transform.Position.y,
                              transform.Position.x + transform.Scale.x, transform.Position.y + transform.Scale.y};
@@ -244,12 +209,8 @@ void Scene::VariableUpdate(float delta) {
 #ifdef SH_DEBUGGER
         {
             if (Debugger::Props.ShowColliders) {
-                for (auto& object : mRegistry.GetObjects()) {
-                    if (!object->HasComponent<ColliderComponent>())
-                        continue;
-
-                    auto& c = object->GetComponent<ColliderComponent>();
-                    auto& t = object->GetComponent<Transform>();
+                for (auto& [e, c] : mRegistry.View<ColliderComponent>()) {
+                    auto& t = mRegistry.GetComponent<Transform>(e);
 
                     glm::vec4 box = { t.Position.x + c.Box.x, t.Position.y + c.Box.y,
                                       t.Position.x + c.Box.z, t.Position.y + c.Box.w };
@@ -267,11 +228,8 @@ void Scene::VariableUpdate(float delta) {
     }
 
     { // Ui Render
-        for (auto& object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<UiComponent>())
-                continue;
-
-            auto& ui = object->GetComponent<UiComponent>().Container;
+        for (auto& [e, c] : mRegistry.View<UiComponent>()) {
+            auto& ui = mRegistry.GetComponent<UiComponent>(e).Container;
 
             Render::BeginScene(*ui.mUiCamera);
             ui.Draw();
@@ -281,13 +239,8 @@ void Scene::VariableUpdate(float delta) {
 }
 
 void Scene::FixedUpdate(float delta) {
-
     { // Script fixed update
-        for (auto &object : mRegistry.GetObjects()) {
-            if (!object->HasComponent<ScriptComponent>())
-                continue;
-
-            auto &c = object->GetComponent<ScriptComponent>();
+        for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
             if (!c.loaded) {
                 c.script->OnLoad();
                 c.loaded = true;

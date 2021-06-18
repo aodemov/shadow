@@ -36,7 +36,7 @@ public:
         AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1.2 });
         AddComponent<RigidbodyComponent>();
 
-        auto& camera = CreateObject();
+        auto camera = CreateObject();
         camera.AddComponent<Transform>();
         auto& c = camera.AddComponent<CameraComponent>();
         c.cameraController.SetPosition({ 0, 0, 0 });

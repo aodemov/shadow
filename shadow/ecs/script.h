@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shadow/ecs/game_object.h"
+#include "shadow/ecs/entity.h"
 
 namespace Shadow {
 class Script {
@@ -20,40 +20,40 @@ public:
 protected:
     template<class EventType>
     void On(EventBus::Function<EventType> function) {
-        mObject->On<EventType>(function);
+        mEntity.On<EventType>(function);
     }
 
-    GameObject& CreateObject() {
-        return mObject->mScene->Create();
+    Entity CreateObject() {
+        return mEntity.mScene->Create();
     }
 
-    void DestroyObject(GameObject& object) {
-        mObject->mScene->Destroy(object);
+    void DestroyObject(Entity& object) {
+        mEntity.mScene->Destroy(object);
     }
 
     Scene& GetScene() {
-        return *mObject->mScene;
+        return *mEntity.mScene;
     }
 
     template<class T>
-    T& GetComponent() const {
-        return mObject->GetComponent<T>();
+    T& GetComponent() {
+        return mEntity.GetComponent<T>();
     }
     template<class T, typename... TArgs>
     T& AddComponent(TArgs&&... args) {
-        return mObject->AddComponent<T>(std::forward<TArgs>(args)...);
+        return mEntity.AddComponent<T>(std::forward<TArgs>(args)...);
     }
     template<class T>
     void RemoveComponent() {
-        mObject->RemoveComponent<T>();
+        mEntity.RemoveComponent<T>();
     }
     template<class T>
     bool HasComponent() {
-        return mObject->HasComponent<T>();
+        return mEntity.HasComponent<T>();
     }
 
 private:
-    friend class ScriptComponent;
-    GameObject* mObject = nullptr;
+    friend class Scene;
+    Entity mEntity;
 };
 }

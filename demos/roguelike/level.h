@@ -124,7 +124,6 @@ public:
                                    { 484, { 4 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
                                    { 485, { 5 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
                                    { 486, { 6 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
-
                            });
 
         int levelIndex = 0;
@@ -137,7 +136,7 @@ public:
                         if (index <= 0)
                             continue;
 
-                        auto& tile = CreateObject();
+                        auto tile = CreateObject();
                         tile.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
                         Sprite s(atlas[index]);
                         tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = 0.1f * levelIndex;
@@ -151,7 +150,7 @@ public:
                         if (!value)
                             continue;
 
-                        auto& collider = CreateObject();
+                        auto collider = CreateObject();
                         collider.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
                         collider.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1 });
                     }

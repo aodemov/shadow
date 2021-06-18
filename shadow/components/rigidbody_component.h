@@ -3,7 +3,7 @@
 #include "shadow/ecs/component.h"
 
 namespace Shadow {
-class RigidbodyComponent : public Component {
+class RigidbodyComponent {
 public:
     RigidbodyComponent() = default;
     RigidbodyComponent(const RigidbodyComponent&) = default;

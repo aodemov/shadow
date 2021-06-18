@@ -1,9 +1,7 @@
 #pragma once
 
-#include "shadow/ecs/component.h"
-
 namespace Shadow {
-class Transform : public Component {
+class Transform {
 public:
     Transform() = default;
     Transform(const Transform&) = default;

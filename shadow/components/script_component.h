@@ -12,7 +12,6 @@ public:
     template<class T, typename... TArgs>
     void Bind(TArgs&&... args) {
         script = static_cast<Script*>(new T(std::forward<TArgs>(args)...));
-        script->mObject = mObject;
     }
 
     Script* script = nullptr;

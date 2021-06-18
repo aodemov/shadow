@@ -4,7 +4,7 @@
 #include "shadow/renderer/camera_controller.h"
 
 namespace Shadow {
-class CameraComponent : public Component {
+class CameraComponent {
 public:
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;

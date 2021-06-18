@@ -1,17 +1,19 @@
 #include "registry.h"
 
-#include "game_object.h"
+uint32_t generateEntityId() {
+    static uint32_t sId = 0;
+    return sId++;
+}
 
 namespace Shadow {
-GameObject& Registry::CreateObject() {
-    auto object = MakeRef<GameObject>(); // TODO ref -> scope
-    object->mScene = mScene;
+uint32_t Registry::CreateEntity() {
 
-    mObjects.emplace_back(object);
-    return *object;
+    uint32_t e = generateEntityId();
+    return e;
 }
 
-void Registry::RemoveObject(GameObject& object) {
-    mObjects.erase(std::remove(mObjects.begin(), mObjects.end(), Ref<GameObject>(&object)));
+void Registry::RemoveEntity(uint32_t entity) {
+
 }
+
 }

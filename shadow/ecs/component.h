@@ -1,6 +1,7 @@
 #pragma once
 
 #include <typeindex>
+#include "shadow/ecs/entity.h"
 
 namespace Shadow {
 class Component {
@@ -10,9 +11,5 @@ public:
     static ComponentType GetComponentType() {
         return typeid(T);
     }
-
-protected:
-    friend class GameObject;
-    GameObject* mObject = nullptr;
 };
 }

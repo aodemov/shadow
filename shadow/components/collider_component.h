@@ -3,7 +3,7 @@
 #include "shadow/ecs/component.h"
 
 namespace Shadow {
-class ColliderComponent : public Component {
+class ColliderComponent {
 public:
     ColliderComponent() = default;
     ColliderComponent(const ColliderComponent&) = default;
