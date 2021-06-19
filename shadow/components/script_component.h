@@ -8,10 +8,15 @@ class ScriptComponent : public Component {
 public:
     ScriptComponent() = default;
     ScriptComponent(const ScriptComponent&) = default;
+    ~ScriptComponent()  {
+        delete script;
+    };
 
     template<class T, typename... TArgs>
-    void Bind(TArgs&&... args) {
-        script = static_cast<Script*>(new T(std::forward<TArgs>(args)...));
+    T& Bind(TArgs&&... args) {
+        T* instance = new T(std::forward<TArgs>(args)...);
+        script = static_cast<Script*>(instance);
+        return *instance;
     }
 
     Script* script = nullptr;
