@@ -2,14 +2,12 @@
 #include <vector>
 #include <type_traits>
 
-
 namespace Shadow {
-
 template <typename TComponent>
 class Pool
 {
 private:
-    std::vector<std::tuple<uint32_t, TComponent>> mComponentList{}; // dense array of components
+    std::vector<std::pair<uint32_t, TComponent>> mComponentList{}; // dense array of components
     std::vector<int32_t> mEntityIndices{}; // objectId to components index
 
     size_t size_ = 0; // Number of components (dense array size)
@@ -18,8 +16,8 @@ private:
 public:
     Pool() = default;
 
-    using iterator       = typename std::vector<std::tuple<uint32_t, TComponent>>::iterator;
-    using const_iterator = typename std::vector<std::tuple<uint32_t, TComponent>>::const_iterator;
+    using iterator       = typename std::vector<std::pair<uint32_t, TComponent>>::iterator;
+    using const_iterator = typename std::vector<std::pair<uint32_t, TComponent>>::const_iterator;
 
     iterator begin() { return mComponentList.begin(); }
     const_iterator begin() const { return mComponentList.begin(); }
@@ -50,7 +48,7 @@ public:
                mEntityIndices[entityId] >= 0;
     }
 
-    void add(uint32_t entityId, TComponent component)
+    void add(uint32_t entityId, TComponent& component)
     {
         if (!has(entityId))
         {
@@ -74,7 +72,7 @@ public:
     }
 
     TComponent& getComponent(uint32_t entityId) {
-        return std::get<1>(mComponentList[mEntityIndices[entityId]]);
+        return mComponentList[mEntityIndices[entityId]].second;
     }
 };
 }

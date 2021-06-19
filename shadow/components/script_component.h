@@ -7,7 +7,14 @@ namespace Shadow {
 class ScriptComponent : public Component {
 public:
     ScriptComponent() = default;
-    ScriptComponent(const ScriptComponent&) = default;
+    ScriptComponent(const ScriptComponent&) = delete;
+    ScriptComponent(ScriptComponent&& other) noexcept {
+        script = other.script;
+        other.script = nullptr;
+        loaded = other.loaded;
+        magic = other.magic;
+        other.magic = 666;
+    }
     ~ScriptComponent()  {
         delete script;
     };
@@ -21,5 +28,6 @@ public:
 
     Script* script = nullptr;
     bool loaded = false;
+    int magic = 0;
 };
 }

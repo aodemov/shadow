@@ -41,7 +41,9 @@ void Scene::Destroy(Entity& entity) {
 }
 
 void Scene::Load() {
-    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+    auto& scriptPool = mRegistry.View<ScriptComponent>();
+    for (int i = 0; i < scriptPool.size(); i++) {
+        auto& [e, c] = *(scriptPool.begin() + i);
         if (!c.loaded) {
             c.script->mEntity = Entity(e, this);
             c.script->OnLoad();
@@ -57,13 +59,17 @@ void Scene::OnEnable() {
 }
 
 void Scene::OnDisable() {
-    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+    auto& scriptPool = mRegistry.View<ScriptComponent>();
+    for (int i = 0; i < scriptPool.size(); i++) {
+        auto& [e, c] = *(scriptPool.begin() + i);
         c.script->OnDisable();
     }
 }
 
 void Scene::Destroy() {
-    for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+    auto& scriptPool = mRegistry.View<ScriptComponent>();
+    for (int i = 0; i < scriptPool.size(); i++) {
+        auto& [e, c] = *(scriptPool.begin() + i);
         c.script->OnDestroy();
     }
 }
@@ -73,7 +79,9 @@ void Scene::VariableUpdate(float delta) {
         return;
 
     { // Script Variable Update
-        for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+        auto& scriptPool = mRegistry.View<ScriptComponent>();
+        for (int i = 0; i < scriptPool.size(); i++) {
+            auto& [e, c] = *(scriptPool.begin() + i);
             if (!c.loaded) {
                 c.script->mEntity = Entity(e, this);
                 c.script->OnLoad();
@@ -240,8 +248,11 @@ void Scene::VariableUpdate(float delta) {
 
 void Scene::FixedUpdate(float delta) {
     { // Script fixed update
-        for (auto& [e, c] : mRegistry.View<ScriptComponent>()) {
+        auto& scriptPool = mRegistry.View<ScriptComponent>();
+        for (int i = 0; i < scriptPool.size(); i++) {
+            auto& [e, c] = *(scriptPool.begin() + i);
             if (!c.loaded) {
+                c.script->mEntity = Entity(e, this);
                 c.script->OnLoad();
                 c.loaded = true;
             }
