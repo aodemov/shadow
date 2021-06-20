@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shadow/shadow.h"
+#include "enemy.h"
 
 using namespace Shadow;
 
@@ -13,6 +14,7 @@ struct LevelData {
 
     uint8_t width;
     uint8_t height;
+    float z;
     LayerType type;
     std::vector<int16_t> data;
 };
@@ -29,12 +31,14 @@ std::vector<LevelData> LoadLevelData(std::string const& filePath) {
             LevelData level;
             std::stringstream ss(line);
 
-            std::string width, height, type;
+            std::string width, height, type, z;
             std::getline(ss, width, ' ');
             std::getline(ss, height, ' ');
-            std::getline(ss, type);
+            std::getline(ss, type, ' ');
+            std::getline(ss, z);
             level.width = std::stoi(width);
             level.height = std::stoi(height);
+            level.z = std::stof(z);
 
             if (type == "tilemap")
                 level.type = LevelData::LayerType::Tilemap;
@@ -126,7 +130,6 @@ public:
                                    { 486, { 6 * TILE_SIZE, 16 * TILE_SIZE }, { TILE_SIZE, TILE_SIZE }},
                            });
 
-        int levelIndex = 0;
         for (auto& levelData : LoadLevelData("assets/levels/level2.level")) {
             if (levelData.type == LevelData::LayerType::Tilemap)
                 for (int row = 0; row < levelData.height; row++) {
@@ -139,7 +142,7 @@ public:
                         auto tile = CreateObject();
                         tile.AddComponent<Transform>(glm::vec2{ col, levelData.width - row }, 0.0f, glm::vec2{ 1, 1 });
                         Sprite s(atlas[index]);
-                        tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = 0.1f * levelIndex;
+                        tile.AddComponent<SpriteComponent>(Sprite(atlas[index])).sprite.mZ = levelData.z;
                     }
                 }
             else if (levelData.type == LevelData::LayerType::Collider)
@@ -155,8 +158,11 @@ public:
                         collider.AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1 });
                     }
                 }
-            levelIndex++;
         }
+
+        auto enemy = CreateObject();
+        auto& script = enemy.AddComponent<ScriptComponent>().Bind<Enemy>();
+
 
 //        // Animated torches
 //        Animation torchAnimation(tilemap, 1.5f, {

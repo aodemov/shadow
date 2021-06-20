@@ -17,7 +17,6 @@ void Label::Calculate() {
 }
 
 void Label::Draw() {
-//    Render::DrawRect(box, {1,1,1, 0.5f});
     Render::DrawText(mText, { box.x, box.q + mFont->GetDescent(), 1.0f }, mFont, mColor);
 }
 

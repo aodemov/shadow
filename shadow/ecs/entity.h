@@ -24,6 +24,8 @@ public:
     template<class T>
     bool HasComponent();
 
+    Entity GetEntityWithTag(const std::string& tag);
+
     bool operator==(Entity& other) const {
         return mId == other.mId;
     }

@@ -1,12 +1,15 @@
 #pragma once
 
 #include <shadow/shadow.h>
+#include "health_bar.h"
 
 using namespace Shadow;
 
 class Player : public Script {
 public:
     void OnLoad() override {
+        AddComponent<TagComponent>("Player");
+
         auto tilemap = MakeRef<Texture>("assets/textures/tilemap2.png");
 
         const int P = 28;
@@ -29,11 +32,12 @@ public:
             { "idle", idleAnimation },
         }, "idle");
 
-        AddComponent<Transform>(glm::vec2{ 10, 17 }, 0.0f, glm::vec2{ 1, 2 });
+        AddComponent<Transform>(glm::vec2{ 15, 20 }, 0.0f, glm::vec2{ 1, 2 });
         AddComponent<SpriteComponent>().sprite.mZ = 1.0f;
         AddComponent<AnimatorComponent>(animationController);
 
-        AddComponent<ColliderComponent>(glm::vec4{ 0, 0, 1, 1.2 });
+        AddComponent<ColliderComponent>(glm::vec4{ 0.1, 0, 0.9, 0.9 });
+        AddComponent<TriggerComponent>(glm::vec4{ 0.1, 0, 0.9, 0.9 });
         AddComponent<RigidbodyComponent>();
 
         auto camera = CreateObject();
@@ -44,6 +48,13 @@ public:
         c.cameraController.SetZoom(6);
         GetScene().SetCamera(&c.cameraController.GetCamera());
         mCamera = &c.cameraController;
+
+        // Ui
+        auto ui = CreateObject();
+        auto& container = ui.AddComponent<UiComponent>().Container;
+        healthBar = MakeRef<HealthBar>(MakeRef<Font>("assets/fonts/nintendo.ttf", 22));
+        healthBar->Width(300).Height(30).MarginLeft(50).MarginBottom(35);
+        container.Add(healthBar);
     }
     void VariableUpdate(float delta) override {
         auto& transform = GetComponent<Transform>();
@@ -72,16 +83,21 @@ public:
 
         rb.Velocity = mVelocity;
 
+        healthBar->SetValue(100.0f * health / maxHealth);
+
         mCamera->SetPosition({transform.Position.x, transform.Position.y, 0.0f});
     }
 
-    void FixedUpdate(float delta) override {
-
+    void Damage(float damage) {
+        health -= damage;
     }
 
 private:
     float mSpeed = 5;
     CameraController* mCamera;
     glm::vec2 mVelocity;
+    float maxHealth = 100;
+    float health = maxHealth;
+    Ref<HealthBar> healthBar;
 };
 

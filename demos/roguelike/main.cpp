@@ -64,11 +64,11 @@ int main() {
     auto mainScene = new Scene();
 
 
-    auto level = mainScene->Create();
-    level.AddComponent<ScriptComponent>().Bind<Level>();
-
     auto player = mainScene->Create();
     player.AddComponent<ScriptComponent>().Bind<Player>();
+
+    auto level = mainScene->Create();
+    level.AddComponent<ScriptComponent>().Bind<Level>();
 
     Application::GetSceneManager().Add("main", mainScene);
     Application::GetSceneManager().Show("main");

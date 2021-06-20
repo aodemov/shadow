@@ -188,8 +188,8 @@ void Scene::VariableUpdate(float delta) {
                 if (Collision::Aabb(box1 + glm::vec4{movement, movement}, box2)) {
                     auto distance = Collision::AabbDistance(box1, box2);
                     glm::vec2 velocity = r1.Velocity;
-                    float xAxisTimeToCollide = velocity.x != 0 ? fabs(distance.x / velocity.x) : 0;
-                    float yAxisTimeToCollide = velocity.y != 0 ? fabs(distance.y / velocity.y) : 0;
+                    float xAxisTimeToCollide = velocity.x != 0 ? std::fabs(distance.x / velocity.x) : 0;
+                    float yAxisTimeToCollide = velocity.y != 0 ? std::fabs(distance.y / velocity.y) : 0;
 
                     float shortestTime = 0;
 
@@ -207,9 +207,15 @@ void Scene::VariableUpdate(float delta) {
                     {
                         if (xAxisTimeToCollide < yAxisTimeToCollide) {
                             movement.x = xAxisTimeToCollide * velocity.x;
+                            if (Collision::Aabb(box1 + glm::vec4{movement, movement}, box2))
+                                movement.y = xAxisTimeToCollide * velocity.y;
                         } else {
                             movement.y = yAxisTimeToCollide * velocity.y;
+                            if (Collision::Aabb(box1 + glm::vec4{movement, movement}, box2))
+                                movement.x = yAxisTimeToCollide * velocity.x;
                         }
+
+
                     }
                 }
             }
