@@ -34,6 +34,7 @@
 #include "shadow/components/collider_component.h"
 #include "shadow/components/rigidbody_component.h"
 #include "shadow/components/trigger_component.h"
+#include "shadow/components/tag_component.h"
 
 #include "shadow/components/sprite.h"
 #include "shadow/components/texture_atlas.h"
