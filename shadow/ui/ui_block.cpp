@@ -72,11 +72,10 @@ void UiBlock::Calculate() {
 }
 
 void UiBlock::Draw() {
-    Render::DrawRect(box, mColor);
-
     for (auto& child : mChildren) {
         child->Draw();
     }
+    Render::DrawRect(box, mColor);
 }
 
 void UiBlock::Add(Ref<UiBlock> child) {

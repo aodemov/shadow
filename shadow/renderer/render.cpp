@@ -170,28 +170,28 @@ void Render::DrawRect(const glm::vec4 &box, const glm::vec4 &color) {
     const float tilingFactor = 1.0f;
 
 
-    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.y, 1.0f };
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.y, 0.8f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { 0, 0 };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.y, 1.0f };
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.y, 0.8f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { 1, 0 };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.w, 1.0f };
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.z, box.w, 0.8f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { 1, 1 };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
     renderData->RectVertexBufferPtr->TilingFactor = tilingFactor;
     renderData->RectVertexBufferPtr++;
 
-    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.w, 1.0f };
+    renderData->RectVertexBufferPtr->Position = glm::vec3{ box.x, box.w, 0.8f };
     renderData->RectVertexBufferPtr->Color = color;
     renderData->RectVertexBufferPtr->TexCoords = { 0, 1 };
     renderData->RectVertexBufferPtr->TexIndex = textureIndex;
