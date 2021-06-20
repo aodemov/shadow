@@ -22,6 +22,8 @@ public:
     template<class T>
     bool HasComponent(uint32_t entity);
 
+    uint32_t GetEntityWithTag(const std::string& tag);
+
     template<class T>
     Pool<T>& View();
 

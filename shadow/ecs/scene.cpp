@@ -308,4 +308,8 @@ void Scene::FixedUpdate(float delta) {
         }
     }
 }
+
+Entity Entity::GetEntityWithTag(const std::string &tag) {
+    return Entity(mScene->mRegistry.GetEntityWithTag(tag), mScene);
+}
 }

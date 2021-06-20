@@ -52,6 +52,10 @@ protected:
         return mEntity.HasComponent<T>();
     }
 
+    Entity GetEntityWithTag(const std::string& tag) {
+        return mEntity.GetEntityWithTag(tag);
+    }
+
 private:
     friend class Scene;
     Entity mEntity;
