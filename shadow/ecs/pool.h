@@ -25,6 +25,10 @@ public:
     iterator end() { return mComponentList.begin() + size_; }
     const_iterator end() const { return mComponentList.begin() + size_; }
 
+    std::pair<uint32_t, TComponent>& operator[](uint32_t index) {
+        return mComponentList[index];
+    }
+
     size_t size() const { return size_; }
     size_t capacity() const	{ return capacity_; }
 

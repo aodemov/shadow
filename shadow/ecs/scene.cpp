@@ -12,6 +12,7 @@
 #include "shadow/components/collider_component.h"
 #include "shadow/components/rigidbody_component.h"
 #include "shadow/physics/collision.h"
+#include "shadow/components/trigger_component.h"
 
 #include "shadow/core/debug/debugger.h"
 
@@ -44,10 +45,11 @@ void Scene::Load() {
     auto& scriptPool = mRegistry.View<ScriptComponent>();
     for (int i = 0; i < scriptPool.size(); i++) {
         auto& [e, c] = *(scriptPool.begin() + i);
+
         if (!c.loaded) {
             c.script->mEntity = Entity(e, this);
-            c.script->OnLoad();
             c.loaded = true;
+            c.script->OnLoad();
         }
     }
 }
@@ -84,11 +86,40 @@ void Scene::VariableUpdate(float delta) {
             auto& [e, c] = *(scriptPool.begin() + i);
             if (!c.loaded) {
                 c.script->mEntity = Entity(e, this);
-                c.script->OnLoad();
                 c.loaded = true;
+                c.script->OnLoad();
             }
 
             c.script->VariableUpdate(delta);
+        }
+    }
+
+    { // Triggers
+        auto& triggersPool = mRegistry.View<TriggerComponent>();
+
+        for (auto& [e, c] : triggersPool) {
+            c.Hits.clear();
+        }
+
+        for (int i = 0; i < triggersPool.size(); i++) {
+            for (int j = i + 1; j < triggersPool.size(); j++) {
+                auto& [e1, c1] = triggersPool[i];
+                auto& [e2, c2] = triggersPool[j];
+                if (e1 == e2)
+                    continue;
+                auto& t1 = mRegistry.GetComponent<Transform>(e1);
+                auto& t2 = mRegistry.GetComponent<Transform>(e2);
+
+                glm::vec4 box1 = { t1.Position.x + c1.Box.x, t1.Position.y + c1.Box.y,
+                                   t1.Position.x + c1.Box.z, t1.Position.y + c1.Box.w };
+                glm::vec4 box2 = { t2.Position.x + c2.Box.x, t2.Position.y + c2.Box.y,
+                                   t2.Position.x + c2.Box.z, t2.Position.y + c2.Box.w };
+
+                if (Collision::Aabb(box1, box2)) {
+                    c1.Hits.emplace_back(e2, this);
+                    c2.Hits.emplace_back(e1, this);
+                }
+            }
         }
     }
 
@@ -253,8 +284,8 @@ void Scene::FixedUpdate(float delta) {
             auto& [e, c] = *(scriptPool.begin() + i);
             if (!c.loaded) {
                 c.script->mEntity = Entity(e, this);
-                c.script->OnLoad();
                 c.loaded = true;
+                c.script->OnLoad();
             }
 
             c.script->FixedUpdate(delta);

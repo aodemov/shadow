@@ -12,8 +12,6 @@ public:
         script = other.script;
         other.script = nullptr;
         loaded = other.loaded;
-        magic = other.magic;
-        other.magic = 666;
     }
     ~ScriptComponent()  {
         delete script;
@@ -28,6 +26,5 @@ public:
 
     Script* script = nullptr;
     bool loaded = false;
-    int magic = 0;
 };
 }
