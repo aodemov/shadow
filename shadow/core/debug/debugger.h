@@ -6,6 +6,7 @@
 namespace Shadow {
 struct Properties {
     bool ShowColliders = false;
+    bool ShowTriggers = false;
 };
 
 class Debugger {

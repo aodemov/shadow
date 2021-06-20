@@ -261,6 +261,22 @@ void Scene::VariableUpdate(float delta) {
                 }
             }
         }
+
+        {
+            if (Debugger::Props.ShowTriggers) {
+                for (auto& [e, c] : mRegistry.View<TriggerComponent>()) {
+                    auto& t = mRegistry.GetComponent<Transform>(e);
+
+                    glm::vec4 box = { t.Position.x + c.Box.x, t.Position.y + c.Box.y,
+                                      t.Position.x + c.Box.z, t.Position.y + c.Box.w };
+
+                    Render::DrawLine({box.x, box.y}, {box.x, box.w}, 0.01, { 0, 1, 0, 1 });
+                    Render::DrawLine({box.x, box.w}, {box.z, box.w}, 0.01, { 0, 1, 0, 1 });
+                    Render::DrawLine({box.z, box.w}, {box.z, box.y}, 0.01, { 0, 1, 0, 1 });
+                    Render::DrawLine({box.z, box.y}, {box.x, box.y}, 0.01, { 0, 1, 0, 1 });
+                }
+            }
+        }
 #endif
 
         Render::EndScene();

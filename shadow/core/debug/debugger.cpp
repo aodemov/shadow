@@ -34,6 +34,8 @@ void Debugger::Init() {
     mEventBus.AddListener<KeyPressedEvent>([&](auto& e) {
        if (e.GetKeyCode() == Key::F3) {
             mVisible = !mVisible;
+       } else if (e.GetKeyCode() == Key::F4) {
+           Props.ShowColliders = Props.ShowTriggers = !Props.ShowColliders;
        }
     });
 }
@@ -102,6 +104,7 @@ void Debugger::Update(float delta) {
     ImGui::Separator();
 
     ImGui::Checkbox("Show colliders: ", &Props.ShowColliders);
+    ImGui::Checkbox("Show triggers: ", &Props.ShowTriggers);
 
     ImGui::End();
 
